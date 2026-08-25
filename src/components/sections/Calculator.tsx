@@ -20,11 +20,11 @@ import type { InvestmentPath } from "@/lib/tokens";
 const COLOR_Y_MIN = -0.55;
 const COLOR_Y_MAX = 0.65;
 
-export function Calculator() {
+export function Calculator({ defaultType = "income" }: { defaultType?: InvestmentPath }) {
   const [capital, setCapital] = useState(2_000_000);
   const [ltv, setLtv] = useState(30);
   const [horizonYears, setHorizonYears] = useState(5);
-  const [type, setType] = useState<InvestmentPath>("income");
+  const [type, setType] = useState<InvestmentPath>(defaultType);
 
   const output = useMemo(
     () => computeCalculator({ capital, ltv, horizonYears, type }),

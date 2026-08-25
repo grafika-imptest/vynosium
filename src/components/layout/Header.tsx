@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { MobileMenu } from "@/components/layout/MobileMenu";
+import { useHeaderVariant } from "@/components/layout/HeaderVariantContext";
 
 const NAV_LINKS = [
   { href: "/", label: "Domů" },
@@ -21,7 +22,8 @@ const NAV_LINKS = [
  * 80px scroll it always compacts into the navy/blur bar so it stays
  * legible over whatever section is currently underneath it.
  */
-export function Header({ startVariant = "dark" }: { startVariant?: "dark" | "light" }) {
+export function Header() {
+  const { variant: startVariant } = useHeaderVariant();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [progress, setProgress] = useState(0);

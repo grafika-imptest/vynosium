@@ -3,16 +3,24 @@
 import { useRef, useState } from "react";
 import { gsap, ensureGsapRegistered, prefersReducedMotion } from "@/lib/motion";
 import { SectionIndex } from "@/components/ui/SectionIndex";
-import { FAQ_ITEMS } from "@/lib/data/faq";
+import { FAQ_ITEMS, type FaqItem } from "@/lib/data/faq";
 
-export function FAQ() {
+export function FAQ({
+  items = FAQ_ITEMS,
+  index = "12",
+  title = "Otázky, které si investoři kladou nejčastěji",
+}: {
+  items?: FaqItem[];
+  index?: string;
+  title?: string;
+}) {
   return (
     <section className="bg-white py-[var(--space-10)]" data-scene="faq">
       <div className="mx-auto max-w-[var(--max-w-text)] px-[var(--gutter)]">
-        <SectionIndex index="12" label="ČASTÉ OTÁZKY" tone="light" className="mb-8" />
-        <h2 className="text-heading mb-8 text-navy">Otázky, které si investoři kladou nejčastěji</h2>
+        <SectionIndex index={index} label="ČASTÉ OTÁZKY" tone="light" className="mb-8" />
+        <h2 className="text-heading mb-8 text-navy">{title}</h2>
         <div className="border-t border-light-gray">
-          {FAQ_ITEMS.map((item, i) => (
+          {items.map((item, i) => (
             <FaqRow key={item.q} question={item.q} answer={item.a} defaultOpen={Boolean(item.defaultOpen)} index={i} />
           ))}
         </div>

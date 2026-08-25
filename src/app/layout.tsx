@@ -6,6 +6,7 @@ import { GLStageProvider } from "@/components/gl/GLStage";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Preloader } from "@/components/sections/Preloader";
+import { HeaderVariantProvider } from "@/components/layout/HeaderVariantContext";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -40,12 +41,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full">
         <GLStageProvider>
           <SmoothScroll>
-            <Preloader />
-            <Header />
-            <main className="relative z-10">{children}</main>
-            <div className="relative z-10">
-              <Footer />
-            </div>
+            <HeaderVariantProvider>
+              <Preloader />
+              <Header />
+              <main className="relative z-10">{children}</main>
+              <div className="relative z-10">
+                <Footer />
+              </div>
+            </HeaderVariantProvider>
           </SmoothScroll>
         </GLStageProvider>
       </body>
