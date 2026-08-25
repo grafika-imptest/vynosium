@@ -21,7 +21,7 @@ jobs:
       # Origin only — absoluteUrl() in src/lib/seo.ts appends BASE_PATH
       # itself, so a site URL that already contained /vynosium would
       # double it in canonicals, sitemap and JSON-LD.
-      NEXT_PUBLIC_SITE_URL: https://grafikadva-maker.github.io
+      NEXT_PUBLIC_SITE_URL: https://grafika-imptest.github.io
       NEXT_PUBLIC_BASE_PATH: /vynosium
     steps:
       - name: Checkout
