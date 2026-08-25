@@ -1,26 +1,339 @@
 @import "tailwindcss";
 
+/* ============================================================================
+   VYNOSIUM — design tokens
+   Single source of truth: VYNOSIUM-STYLE-REFERENCE.md §5. Every colour,
+   space, radius and duration used in the app resolves to a token defined
+   here — components never carry ad-hoc hex values.
+   ========================================================================== */
+
+@theme {
+  /* Fonts — next/font variables are set on <html> in layout.tsx */
+  --font-sans: var(--font-jakarta), "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Primary */
+  --color-navy: #102a43;
+  --color-emerald: #1f8a70;
+  --color-emerald-hover: #25a184;
+  --color-emerald-active: #187059;
+  --color-white: #ffffff;
+  --color-mist: #f5f7fa;
+
+  /* Dark-surface extensions */
+  --color-abyss: #0b1d2e;
+  --color-surface-1: #16324b;
+  --color-surface-2: #1b3a54;
+  --color-line-deep: #243b53;
+  --color-snow: #f8f8f8;
+
+  /* Secondary */
+  --color-steel: #486581;
+  --color-slate: #627d98;
+  --color-silver: #bcccdc;
+  --color-light-gray: #e4e7eb;
+
+  /* Text */
+  --color-text-primary: #102a43;
+  --color-text-secondary: #52606d;
+  --color-text-muted: #7b8794;
+
+  /* Investment paths — accents only (§5: never a fill) */
+  --color-path-flip: #1f8a70;
+  --color-path-income: #2f6fed;
+  --color-path-capital: #f59e0b;
+  --color-path-wealth: #6d5bd0;
+
+  /* Functional */
+  --color-fn-positive: #3fb950;
+  --color-fn-warning: #f59e0b;
+  --color-fn-risk: #d64545;
+
+  /* Radii — exactly two values exist */
+  --radius-pill: 9999px;
+  --radius-card: 10px;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Space — 4px base, fluid at section level */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 40px;
+  --space-8: 56px;
+  --space-9: 72px;
+  --space-10: 96px;
+  --space-11: 128px;
+  --space-12: 176px;
+  --space-section: clamp(80px, 12vw, 176px);
+  --gutter: clamp(20px, 4vw, 88px);
+  --max-w: 1440px;
+  --max-w-text: 68ch;
+  --max-w-panel: 46ch;
+
+  /* Lines — 1px system, no exceptions. The site has no shadows. */
+  --border-dark: 1px solid var(--color-steel);
+  --border-dark-soft: 1px solid rgba(72, 101, 129, 0.5);
+  --border-light: 1px solid var(--color-light-gray);
+  --shadow: none;
+
+  /* The identity angle — every gradient, reveal and flow maps to it */
+  --vector-angle: 38.5deg;
+  --gradient-core: linear-gradient(38.5deg, #102a43 0%, #16506b 46%, #1f8a70 100%);
+
+  /* Motion */
+  --dur-micro: 180ms;
+  --dur-ui: 350ms;
+  --dur-reveal: 900ms;
+  --dur-cinematic: 1400ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-inout: cubic-bezier(0.83, 0, 0.17, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+
+  /* WebGL baseline */
+  --gl-drift: 0.06;
+  --gl-grain: 0.035;
+  --gl-accent-ease: 500ms;
+  --gl-dpr-cap: 1.75;
+  --gl-idle-fps: 30;
+
+  /* Fluid type scale */
+  --text-display-xl: clamp(2.4rem, 7vw, 7rem);
+  --text-display-lg: clamp(2rem, 5vw, 4.4rem);
+  --text-display: clamp(1.75rem, 3.4vw, 3rem);
+  --text-heading: clamp(1.375rem, 2.1vw, 2rem);
+  --text-subheading: 1.3125rem;
+  --text-lede: clamp(1.0625rem, 1.4vw, 1.375rem);
+  --text-body: 1rem;
+  --text-body-sm: 0.9375rem;
+  --text-metric-xl: clamp(2.4rem, 6vw, 6rem);
+  --text-metric: 1.5rem;
+  --text-data: 0.875rem;
+  --text-label: 0.6875rem;
+  --text-disclaimer: 0.75rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ============================================================================
+   Base
+   ========================================================================== */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-text-size-adjust: 100%;
+  /* Lenis owns scrolling — native smooth scrolling would fight it */
+  scroll-behavior: auto;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-white);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+::selection {
+  background: rgba(31, 138, 112, 0.25);
+}
+
+/* ============================================================================
+   Type scale (§5). Negative tracking belongs to display, loose tracking to
+   data. Anything numeric is mono; anything read in sentences is Jakarta.
+   Headings never exceed weight 600.
+   ========================================================================== */
+
+.text-display-xl {
+  font-size: var(--text-display-xl);
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+.text-display-lg {
+  font-size: var(--text-display-lg);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+}
+.text-display {
+  font-size: var(--text-display);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.text-heading {
+  font-size: var(--text-heading);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+.text-subheading {
+  font-size: var(--text-subheading);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+.text-lede {
+  font-size: var(--text-lede);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+}
+.text-body {
+  font-size: var(--text-body);
+  line-height: 1.6;
+}
+.text-body-sm {
+  font-size: var(--text-body-sm);
+  line-height: 1.55;
+}
+.text-metric-xl {
+  font-family: var(--font-mono);
+  font-size: var(--text-metric-xl);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.text-metric {
+  font-family: var(--font-mono);
+  font-size: var(--text-metric);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.text-data {
+  font-family: var(--font-mono);
+  font-size: var(--text-data);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+.text-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.text-disclaimer {
+  font-size: var(--text-disclaimer);
+  line-height: 1.5;
+  max-width: 80ch;
+}
+
+/* ============================================================================
+   Primitives
+   ========================================================================== */
+
+/* Focus ring — 2px Emerald @0.4, offset 3px (§4.5). Never removed. */
+.focus-ring:focus-visible {
+  outline: 2px solid rgba(31, 138, 112, 0.4);
+  outline-offset: 3px;
+  border-radius: var(--radius-card);
+}
+
+/* Line-mask reveal: the inner span rides y:110% → 0 under GSAP. */
+.mask-line {
+  display: block;
+  overflow: hidden;
+}
+.mask-line > span {
+  display: block;
+  will-change: transform;
+}
+
+/* Native cursor is hidden only once CustomCursor has mounted, and only
+   where a fine pointer exists — a JS failure can never leave the page
+   without a pointer. */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor *,
+  html.has-custom-cursor *::before,
+  html.has-custom-cursor *::after {
+    cursor: none !important;
+  }
+}
+
+/* Range inputs — 4px #243B53 track, emerald fill, 20px pill thumb (§4.3).
+   --fill is written by the calculator's rAF loop, never by React. */
+.calc-range {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  min-height: 44px;
+  background: transparent;
+  display: block;
+}
+.calc-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    to right,
+    var(--color-emerald) 0%,
+    var(--color-emerald) var(--fill, 0%),
+    var(--color-line-deep) var(--fill, 0%),
+    var(--color-line-deep) 100%
+  );
+}
+.calc-range::-moz-range-track {
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    to right,
+    var(--color-emerald) 0%,
+    var(--color-emerald) var(--fill, 0%),
+    var(--color-line-deep) var(--fill, 0%),
+    var(--color-line-deep) 100%
+  );
+}
+.calc-range::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: -8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-navy);
+  border: 1.5px solid var(--color-emerald);
+  cursor: pointer;
+}
+.calc-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-pill);
+  background: var(--color-navy);
+  border: 1.5px solid var(--color-emerald);
+  cursor: pointer;
+}
+
+/* Accordion rows animate height via grid-rows, so no JS measurement is
+   needed and the hairline below never jumps. */
+.accordion-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-ui) var(--ease-inout);
+}
+.accordion-body[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+.accordion-body > div {
+  overflow: hidden;
+}
+
+/* Reduced motion: the layout is designed to be complete without movement. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

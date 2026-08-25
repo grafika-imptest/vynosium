@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vynósium — web
 
-## Getting Started
+Investiční platforma pro nemovitosti. Next.js 15 (App Router, statický
+export) · Tailwind v4 · GSAP 3 (ScrollTrigger, Flip) · Three.js · Lenis.
 
-First, run the development server:
+Zdroj pravdy pro design je `VYNOSIUM-STYLE-REFERENCE.md` (design.md).
+Každá barva, mezera, rádius a doba trvání v kódu se musí dát dohledat
+v §5 toho dokumentu.
+
+## Spuštění
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+npm run build
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Build zapisuje statický export do `out/`. **Nepouštěj `npm run build`,
+zatímco běží `npm run dev`** — sdílejí složku `.next` a přepíšou si
+artefakty (projeví se to jako 404 na chunky a nefunkční hydratace).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Architektura
 
-## Learn More
+| Vrstva | Kde | Poznámka |
+|---|---|---|
+| Tokeny | `src/app/globals.css` | `@theme` + `:root`, jediný zdroj hodnot |
+| WebGL | `src/components/gl/` | **jeden** kontext (`GLStage`), sekce registrují scény |
+| Motion | `src/lib/motion.ts`, `src/components/motion/` | GSAP + Lenis, `prefers-reduced-motion` vypíná vše |
+| Data | `src/lib/data/` | tvar odpovídá CMS modelu (§6) — výměna za CMS dotaz nevyžaduje změnu komponent |
+| Sekce | `src/components/sections/` | pořadí odpovídá narativu §2 |
+| SEO | `src/lib/seo.ts`, `src/app/sitemap.ts`, `robots.ts` | Organization, WebSite, BreadcrumbList, FAQPage, Article, RealEstateListing |
 
-To learn more about Next.js, take a look at the following resources:
+### Pravidla, která se nesmí porušit
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Jeden WebGL kontext.** Sekce nikdy nevytváří vlastní `<canvas>` —
+   registruje se přes `useGLScene`. Víc kontextů shodí mobilní Safari.
+2. **Žádné stíny.** Struktura vzniká z 1px linek (`#486581` na tmavé,
+   `#E4E7EB` na světlé) a dvou rádiusů (10px / 9999px).
+3. **Úhel 38,5°.** Každý gradient, odhalení i vektor toku má tento úhel
+   (`--vector-angle`, `VECTOR_ANGLE_DEG`).
+4. **Žádný React state na pointermove.** Kurzor, parallax i slidery píší
+   do refů a čtou se v `requestAnimationFrame` (INP ≤ 150 ms).
+5. **Modelová čísla nesou `ᴹ` a disclaimer je v layoutu**, nikdy
+   v tooltipu ani pod foldem.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Co je zástupné a musí se doplnit před spuštěním
 
-## Deploy on Vercel
+- **Všechna čísla** v `src/lib/data/` (projekty, reference, důvěryhodnostní
+  čísla, historie obchodů) — jde o placeholdery, ne o data Vynósium.
+- **Tým** v `src/lib/data/team.ts` — jména, pozice, portréty, LinkedIn.
+- **Kontakty** v `src/lib/data/site.ts` — telefon, e-mail, adresa, IČO.
+- **Fotografie** — dnes jsou všude duotone gradienty. Art direction: současná
+  architektura, reálné rekonstrukce, půdorysy, grafy. Žádná fotobanka.
+- **Právní texty** (`/gdpr`, `/cookies`, `/obchodni-podminky`) — kostra
+  k doplnění právníkem.
+- **Napojení formulářů**: `NEXT_PUBLIC_LEAD_ENDPOINT` (CRM webhook). Bez něj
+  formulář validuje a potvrdí, ale otevřeně přizná, že data neodešla.
+- **Měření**: GTM kontejner + Consent Mode v2, události `path_card_click`,
+  `calculator_interact`, `calculator_submit`, `lead_submit`, `phone_click`.
+- **Mapy** na detailu projektu a kontaktu — dnes vlasový placeholder.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Proměnné prostředí
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Proměnná | Výchozí | Účel |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | `https://www.vynosium.cz` | kanonické URL, sitemap, schema |
+| `NEXT_PUBLIC_BASE_PATH` | prázdné | hosting v podadresáři (GitHub Pages) |
+| `NEXT_PUBLIC_LEAD_ENDPOINT` | prázdné | CRM webhook pro formuláře |
+
+## Routy
+
+```
+/                                 narativní homepage (14 sekcí)
+/investicni-prilezitosti          přehled + filtr + tabulkový režim
+/investicni-prilezitosti/[slug]   detail projektu
+/jak-investujeme                  6krokový proces
+/kalkulacka                       samostatná kalkulačka pro remarketing
+/o-nas                            tým, historie obchodů, zázemí skupiny
+/reference · /reference/[slug]    případové studie
+/magazin · /magazin/[slug]        magazín
+/kontakt                          formulář a spojení
+/zhodnotit-byt · /pasivni-prijem · /zhodnoceni-kapitalu · /budovani-majetku
+                                  PPC landing pages
+/gdpr · /cookies · /obchodni-podminky
+```
