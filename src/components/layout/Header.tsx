@@ -7,8 +7,8 @@ import { MobileMenu } from "@/components/layout/MobileMenu";
 import { useHeaderVariant } from "@/components/layout/HeaderVariantContext";
 import { withBasePath } from "@/lib/basePath";
 
+// "Domů" is intentionally absent — the logo is the home link.
 const NAV_LINKS = [
-  { href: "/", label: "Domů" },
   { href: "/investicni-prilezitosti", label: "Investiční příležitosti" },
   { href: "/jak-investujeme", label: "Jak investujeme" },
   { href: "/o-nas", label: "O nás" },
@@ -78,29 +78,18 @@ export function Header() {
           }}
         >
           <div className="mx-auto flex h-full max-w-[var(--max-w)] items-center justify-between px-[var(--gutter)]">
-            <div className="flex items-center gap-4">
-              <Link href="/" className="focus-ring shrink-0" aria-label="Vynosium — domů">
-                <Image
-                  src={withBasePath(dark ? "/brand/logo-horizontal-white.svg" : "/brand/logo-horizontal-color.svg")}
-                  alt="Vynosium"
-                  width={132}
-                  height={35}
-                  priority
-                  className="h-[26px] w-auto"
-                />
-              </Link>
-              <div
-                className="hidden items-center gap-4 min-[1180px]:flex"
-                style={{ borderLeft: dark ? "1px solid var(--color-steel)" : "1px solid var(--color-light-gray)" }}
-              >
-                <span
-                  className="pl-4 text-[10px] font-medium"
-                  style={{ letterSpacing: "0.22em", color: dark ? "#9fb3c8" : "var(--color-text-muted)" }}
-                >
-                  CHYTRÁ CESTA K VÝNOSŮM
-                </span>
-              </div>
-            </div>
+            {/* The claim is drawn inside the logo SVG itself — no text duplicate. */}
+            <Link href="/" className="focus-ring shrink-0" aria-label="Vynósium — domů">
+              <Image
+                src={withBasePath(dark ? "/brand/logo-horizontal-white.svg" : "/brand/logo-horizontal-color.svg")}
+                alt="Vynósium — chytrá cesta k výnosům"
+                width={224}
+                height={60}
+                priority
+                className="w-auto transition-[height] duration-350"
+                style={{ height: scrolled ? 34 : 44 }}
+              />
+            </Link>
 
             <nav className="hidden items-center gap-7 lg:flex" aria-label="Hlavní navigace">
               {NAV_LINKS.map((link) => (
@@ -120,13 +109,6 @@ export function Header() {
             </nav>
 
             <div className="hidden items-center gap-5 lg:flex">
-              <a
-                href="tel:+420000000000"
-                className="focus-ring text-sm"
-                style={{ color: dark ? "rgba(248,248,248,0.72)" : "var(--color-navy)" }}
-              >
-                +420 000 000 000
-              </a>
               <Link
                 href="/kontakt"
                 className="focus-ring inline-flex min-h-12 items-center rounded-[9999px] bg-emerald px-6 text-[15px] font-medium text-white transition-colors hover:bg-emerald-hover"

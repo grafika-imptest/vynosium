@@ -290,6 +290,20 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/*
+ * Native cursor is hidden only once CustomCursor has mounted and added
+ * .has-custom-cursor, and only where a fine pointer exists — so touch
+ * devices and any JS failure keep the normal pointer.
+ */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor *,
+  html.has-custom-cursor *::before,
+  html.has-custom-cursor *::after {
+    cursor: none !important;
+  }
+}
+
 /* Focus ring — 2px Emerald @0.4 alpha, offset 3px, per §4.5 */
 .focus-ring:focus-visible {
   outline: 2px solid rgba(31, 138, 112, 0.4);

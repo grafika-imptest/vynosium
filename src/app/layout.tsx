@@ -6,6 +6,7 @@ import { GLStageProvider } from "@/components/gl/GLStage";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Preloader } from "@/components/sections/Preloader";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 import { HeaderVariantProvider } from "@/components/layout/HeaderVariantContext";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SITE_URL, organizationSchema, websiteSchema } from "@/lib/seo";
@@ -68,6 +69,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <GLStageProvider>
           <SmoothScroll>
             <HeaderVariantProvider>
+              <CustomCursor />
               <Preloader />
               <Header />
               <main className="relative z-10">{children}</main>

@@ -8,16 +8,14 @@ import { withBasePath } from "@/lib/basePath";
 export const PRELOADER_EXIT_EVENT = "vynosium:preloader-exit";
 
 /**
- * "Zážeh kapitálu" — converts the unavoidable first-paint wait into a
- * branded, data-forward moment. Removed from the DOM entirely on
- * completion (never display:none) so it can't affect CLS. Skipped
- * outright under reduced-motion or Save-Data.
+ * Minimal brand hold: just the monogram, fading in and out. Removed from
+ * the DOM entirely on completion (never display:none) so it can't affect
+ * CLS, and skipped outright under reduced-motion or Save-Data.
  */
 export function Preloader() {
   const [mounted, setMounted] = useState(true);
   const rootRef = useRef<HTMLDivElement>(null);
   const markRef = useRef<HTMLDivElement>(null);
-  const counterRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     if (prefersReducedMotion() || prefersSaveData()) {
@@ -27,44 +25,21 @@ export function Preloader() {
     }
 
     ensureGsapRegistered();
-    const isMobile = window.innerWidth < 768;
-    const cap = isMobile ? 1.0 : 1.4;
 
-    const counterTarget = { value: 0 };
     const tl = gsap.timeline({
       onComplete: () => {
         window.dispatchEvent(new CustomEvent(PRELOADER_EXIT_EVENT));
-        setTimeout(() => setMounted(false), 950);
+        setMounted(false);
       },
     });
 
-    tl.set(markRef.current, {
-      clipPath: "polygon(0% 0%, 0% 0%, -20% 100%, 0% 100%)",
-    })
-      .to(markRef.current, {
-        clipPath: "polygon(0% 0%, 120% 0%, 100% 100%, 0% 100%)",
-        duration: Math.min(0.9, cap * 0.65),
-        ease: "power2.inOut",
-      })
-      .to(
-        counterTarget,
-        {
-          value: 1.2,
-          duration: Math.min(0.9, cap * 0.65),
-          ease: "power1.out",
-          onUpdate: () => {
-            if (counterRef.current) {
-              counterRef.current.textContent = counterTarget.value.toFixed(1).replace(".", ",");
-            }
-          },
-        },
-        "<"
-      )
-      .to(rootRef.current, {
-        clipPath: "polygon(0% 0%, 130% 0%, 100% 100%, 0% 100%)",
-        duration: 0.9,
-        ease: "expo.inOut",
-      });
+    tl.fromTo(
+      markRef.current,
+      { opacity: 0, scale: 0.96 },
+      { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }
+    )
+      .to({}, { duration: 0.25 })
+      .to(rootRef.current, { opacity: 0, duration: 0.5, ease: "power2.inOut" });
 
     return () => {
       tl.kill();
@@ -76,20 +51,11 @@ export function Preloader() {
   return (
     <div
       ref={rootRef}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 bg-abyss"
-      style={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 0%)" }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-abyss"
       aria-hidden="true"
     >
-      <div ref={markRef} className="relative h-24 w-24">
+      <div ref={markRef} className="relative h-24 w-24 opacity-0">
         <Image src={withBasePath("/brand/symbol-color.svg")} alt="" fill priority className="object-contain" />
-      </div>
-      <div className="flex flex-col items-center gap-2">
-        <p className="text-[11px] font-medium text-slate" style={{ letterSpacing: "0.18em" }}>
-          CHYTRÁ CESTA K VÝNOSŮM
-        </p>
-        <p className="font-mono text-sm text-snow">
-          <span ref={counterRef}>0,0</span> mld. Kč
-        </p>
       </div>
     </div>
   );
