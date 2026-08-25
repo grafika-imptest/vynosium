@@ -3,6 +3,8 @@
 import { useRef, useState } from "react";
 import { gsap, ensureGsapRegistered, prefersReducedMotion } from "@/lib/motion";
 import { SectionIndex } from "@/components/ui/SectionIndex";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { faqPageSchema } from "@/lib/seo";
 import { FAQ_ITEMS, type FaqItem } from "@/lib/data/faq";
 
 export function FAQ({
@@ -16,6 +18,7 @@ export function FAQ({
 }) {
   return (
     <section className="bg-white py-[var(--space-10)]" data-scene="faq">
+      <JsonLd data={faqPageSchema(items.map((i) => ({ q: i.q, a: i.a })))} />
       <div className="mx-auto max-w-[var(--max-w-text)] px-[var(--gutter)]">
         <SectionIndex index={index} label="ČASTÉ OTÁZKY" tone="light" className="mb-8" />
         <h2 className="text-heading mb-8 text-navy">{title}</h2>

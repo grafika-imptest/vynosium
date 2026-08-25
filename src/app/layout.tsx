@@ -7,6 +7,8 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Preloader } from "@/components/sections/Preloader";
 import { HeaderVariantProvider } from "@/components/layout/HeaderVariantContext";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { SITE_URL, organizationSchema, websiteSchema } from "@/lib/seo";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -22,14 +24,37 @@ const ibmPlexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
+const DEFAULT_TITLE = "Vynósium | Chytrá cesta k výnosům z nemovitostí";
+const DEFAULT_DESCRIPTION =
+  "Vynósium pomáhá investorům zhodnotit byt, vybudovat pasivní příjem, zhodnotit kapitál nebo budovat dlouhodobé portfolio nemovitostí — na základě čísel, ne slibů.";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.vynosium.cz"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Vynósium | Investujte do nemovitostí způsobem, který odpovídá vašim cílům",
+    default: DEFAULT_TITLE,
     template: "%s | Vynósium",
   },
-  description:
-    "Vynósium pomáhá investorům zhodnotit byt, vybudovat pasivní příjem, zhodnotit kapitál nebo budovat dlouhodobé portfolio nemovitostí — na základě čísel, ne slibů.",
+  description: DEFAULT_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "cs_CZ",
+    siteName: "Vynósium",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -39,6 +64,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${plusJakartaSans.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full">
+        <JsonLd data={[organizationSchema(), websiteSchema()]} />
         <GLStageProvider>
           <SmoothScroll>
             <HeaderVariantProvider>

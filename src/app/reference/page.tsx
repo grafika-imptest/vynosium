@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { SetHeaderVariant } from "@/components/layout/HeaderVariantContext";
 import { PageIntro } from "@/components/layout/PageIntro";
 import { ReferenceExplorer } from "@/components/sections/ReferenceExplorer";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Reference",
@@ -12,6 +14,7 @@ export default function ReferencesPage() {
   return (
     <>
       <SetHeaderVariant variant="light" />
+      <JsonLd data={breadcrumbSchema([{ name: "Domů", path: "/" }, { name: "Reference", path: "/reference" }])} />
       <PageIntro
         index="—"
         label="REFERENCE"

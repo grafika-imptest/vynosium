@@ -5,6 +5,8 @@ import { SectionIndex } from "@/components/ui/SectionIndex";
 import { Pill } from "@/components/ui/Pill";
 import { ARTICLES, getArticleBySlug } from "@/lib/data/articles";
 import { INVESTMENT_PATHS } from "@/lib/data/paths";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { articleSchema, breadcrumbSchema } from "@/lib/seo";
 
 export function generateStaticParams() {
   return ARTICLES.map((a) => ({ slug: a.slug }));
@@ -18,7 +20,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const article = getArticleBySlug(slug);
   if (!article) return {};
-  return { title: article.title, description: article.perex };
+  return { title: article.metaTitle ?? article.title, description: article.perex };
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -27,20 +29,19 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   if (!article) notFound();
   const path = INVESTMENT_PATHS.find((p) => p.id === article.relatedPath)!;
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: article.title,
-    description: article.perex,
-    datePublished: article.publishedAt,
-    author: { "@type": "Organization", name: "Vynósium" },
-  };
-
   return (
     <>
       <SetHeaderVariant variant="light" />
-      {/* eslint-disable-next-line react/no-danger */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd
+        data={[
+          articleSchema(article),
+          breadcrumbSchema([
+            { name: "Domů", path: "/" },
+            { name: "Magazín", path: "/magazin" },
+            { name: article.title, path: `/magazin/${article.slug}` },
+          ]),
+        ]}
+      />
 
       <section className="bg-white pb-[var(--space-10)] pt-36">
         <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">

@@ -7,6 +7,8 @@ import { Pill } from "@/components/ui/Pill";
 import { Disclaimer, DISCLAIMERS } from "@/components/ui/Disclaimer";
 import { CASE_STUDIES, CASE_STUDY_CATEGORY_LABEL } from "@/lib/data/caseStudies";
 import { INVESTMENT_PATHS } from "@/lib/data/paths";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbSchema } from "@/lib/seo";
 
 export function generateStaticParams() {
   return CASE_STUDIES.map((c) => ({ slug: c.slug }));
@@ -32,6 +34,13 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
   return (
     <>
       <SetHeaderVariant variant="light" />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Domů", path: "/" },
+          { name: "Reference", path: "/reference" },
+          { name: study.name, path: `/reference/${study.slug}` },
+        ])}
+      />
       <PageIntro index={CASE_STUDY_CATEGORY_LABEL[study.category]} label="REFERENCE" title={study.name} lede={study.description} />
 
       <section className="bg-white pb-[var(--space-9)]">

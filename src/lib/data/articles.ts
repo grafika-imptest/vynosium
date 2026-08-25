@@ -16,6 +16,8 @@ export type ArticleCategory = (typeof ARTICLE_CATEGORIES)[number];
 export type Article = {
   slug: string;
   title: string;
+  /** Shorter <title>-tag text for articles whose full H1 exceeds the ~60-char §6 SEO budget once " | Vynósium" is appended. Falls back to `title`. */
+  metaTitle?: string;
   category: ArticleCategory;
   perex: string;
   content: { heading: string; text: string }[];
@@ -27,6 +29,7 @@ export const ARTICLES: Article[] = [
   {
     slug: "jak-zacit-investovat-do-nemovitosti",
     title: "Jak začít investovat do nemovitostí, když máte první volný kapitál",
+    metaTitle: "Jak začít investovat do nemovitostí",
     category: "Jak investovat",
     perex:
       "Než vyberete konkrétní nemovitost, vyplatí se ujasnit si cíl — chcete jednorázový zisk, pravidelný příjem, nebo obojí postupně.",
@@ -50,6 +53,7 @@ export const ARTICLES: Article[] = [
   {
     slug: "financovani-investicniho-bytu-hypotekou",
     title: "Financování investičního bytu hypotékou — na co si dát pozor",
+    metaTitle: "Financování investičního bytu hypotékou",
     category: "Financování",
     perex: "Financování může zvýšit výnos vlastního kapitálu, ale mění i rizikový profil celé investice.",
     relatedPath: "income",
@@ -68,6 +72,7 @@ export const ARTICLES: Article[] = [
   {
     slug: "dlouhodoby-pronajem-vs-kratkodoby",
     title: "Dlouhodobý pronájem vs. rekonstrukce a prodej — co se komu vyplatí",
+    metaTitle: "Dlouhodobý pronájem vs. rekonstrukce a prodej",
     category: "Pronájem",
     perex: "Obě strategie mají jiný poměr rizika, výnosu a časové náročnosti — výběr závisí na vašem cíli a kapacitě.",
     relatedPath: "income",
@@ -86,6 +91,7 @@ export const ARTICLES: Article[] = [
   {
     slug: "na-co-si-dat-pozor-pri-rekonstrukci",
     title: "Na co si dát pozor při rekonstrukci investičního bytu",
+    metaTitle: "Rekonstrukce investičního bytu: na co dát pozor",
     category: "Rekonstrukce",
     perex: "Rozpočet, harmonogram a výběr dodavatele rozhodují o tom, jestli se rekonstrukce vyplatí.",
     relatedPath: "flip",
@@ -118,6 +124,7 @@ export const ARTICLES: Article[] = [
   {
     slug: "dane-z-prijmu-pronajem-nemovitosti",
     title: "Zdanění příjmů z pronájmu nemovitosti — základní přehled",
+    metaTitle: "Zdanění příjmů z pronájmu nemovitosti",
     category: "Daně a legislativa",
     perex: "Obecný přehled principů zdanění příjmů z pronájmu — vždy doporučujeme konzultaci s daňovým poradcem.",
     relatedPath: "income",

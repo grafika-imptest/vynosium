@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { PageIntro } from "@/components/layout/PageIntro";
 import { SetHeaderVariant } from "@/components/layout/HeaderVariantContext";
 import { OpportunitiesExplorer } from "@/components/sections/OpportunitiesExplorer";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Investiční příležitosti",
@@ -19,6 +21,7 @@ export default async function OpportunitiesPage({
   return (
     <>
       <SetHeaderVariant variant="light" />
+      <JsonLd data={breadcrumbSchema([{ name: "Domů", path: "/" }, { name: "Investiční příležitosti", path: "/investicni-prilezitosti" }])} />
       <PageIntro
         index="—"
         label="INVESTIČNÍ PŘÍLEŽITOSTI"

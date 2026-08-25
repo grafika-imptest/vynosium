@@ -3,6 +3,8 @@ import { SetHeaderVariant } from "@/components/layout/HeaderVariantContext";
 import { PageIntro } from "@/components/layout/PageIntro";
 import { SectionIndex } from "@/components/ui/SectionIndex";
 import { TEAM } from "@/lib/data/team";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "O nás",
@@ -22,6 +24,7 @@ export default function AboutPage() {
   return (
     <>
       <SetHeaderVariant variant="light" />
+      <JsonLd data={breadcrumbSchema([{ name: "Domů", path: "/" }, { name: "O nás", path: "/o-nas" }])} />
       <PageIntro
         index="—"
         label="O NÁS"

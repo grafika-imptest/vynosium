@@ -9,6 +9,8 @@ import { INVESTMENT_PATHS } from "@/lib/data/paths";
 import { PROJECTS, PROJECT_STATUS_LABEL, getProjectBySlug } from "@/lib/data/projects";
 import { computeCalculator } from "@/lib/calculator";
 import { formatCzk, formatPercent } from "@/lib/format";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbSchema, realEstateListingSchema } from "@/lib/seo";
 
 export function generateStaticParams() {
   return PROJECTS.map((p) => ({ slug: p.slug }));
@@ -48,6 +50,16 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   return (
     <>
       <SetHeaderVariant variant="light" />
+      <JsonLd
+        data={[
+          realEstateListingSchema(project),
+          breadcrumbSchema([
+            { name: "Domů", path: "/" },
+            { name: "Investiční příležitosti", path: "/investicni-prilezitosti" },
+            { name: project.name, path: `/investicni-prilezitosti/${project.slug}` },
+          ]),
+        ]}
+      />
 
       {/* 1 · Hero projektu */}
       <section className="relative flex min-h-[70svh] flex-col justify-end overflow-hidden bg-navy px-[var(--gutter)] pb-14 pt-32">
