@@ -7,13 +7,13 @@ import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { FAQ } from "@/lib/data/site";
-import { breadcrumbSchema, faqSchema } from "@/lib/seo";
+import { absoluteUrl, breadcrumbSchema, faqSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Jak investujeme",
   description:
     "Šest kroků od první konzultace k výnosu: cíl, příležitost, ekonomika, realizace, pronájem nebo prodej a pokračování portfolia.",
-  alternates: { canonical: "/jak-investujeme" },
+  alternates: { canonical: absoluteUrl("/jak-investujeme") },
 };
 
 export default function ProcessPage() {

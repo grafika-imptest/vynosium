@@ -5,13 +5,13 @@ import { ContactForm } from "@/components/sections/ContactForm";
 import { SectionIndex } from "@/components/ui/primitives";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SITE } from "@/lib/data/site";
-import { breadcrumbSchema } from "@/lib/seo";
+import { absoluteUrl, breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Kontakt",
   description:
     "Domluvte si nezávaznou konzultaci. Řekněte nám, kolik chcete investovat a co od investice čekáte — připravíme modelový propočet.",
-  alternates: { canonical: "/kontakt" },
+  alternates: { canonical: absoluteUrl("/kontakt") },
 };
 
 export default function ContactPage() {

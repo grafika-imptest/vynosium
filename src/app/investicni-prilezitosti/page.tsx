@@ -4,13 +4,13 @@ import { PageIntro } from "@/components/layout/PageIntro";
 import { Opportunities } from "@/components/sections/Opportunities";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { breadcrumbSchema } from "@/lib/seo";
+import { absoluteUrl, breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Investiční příležitosti",
   description:
     "Aktuální investiční byty a projekty s uvedenými čísly: kupní cena, investiční náklady, očekávané nájemné, orientační výnos a investiční horizont.",
-  alternates: { canonical: "/investicni-prilezitosti" },
+  alternates: { canonical: absoluteUrl("/investicni-prilezitosti") },
 };
 
 export default function OpportunitiesPage() {

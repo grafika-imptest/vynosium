@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/layout/LegalPage";
+import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Zpracování osobních údajů",
   description: "Jak Vynósium zpracovává osobní údaje zájemců o investici a jaká máte práva.",
-  alternates: { canonical: "/gdpr" },
+  alternates: { canonical: absoluteUrl("/gdpr") },
   robots: { index: false, follow: true },
 };
 

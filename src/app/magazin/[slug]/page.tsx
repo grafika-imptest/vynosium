@@ -6,7 +6,7 @@ import { Pill, SectionIndex } from "@/components/ui/primitives";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ARTICLES, getArticle } from "@/lib/data/articles";
 import { formatDate } from "@/lib/format";
-import { articleSchema, breadcrumbSchema } from "@/lib/seo";
+import { absoluteUrl, articleSchema, breadcrumbSchema } from "@/lib/seo";
 
 export function generateStaticParams() {
   return ARTICLES.map((article) => ({ slug: article.slug }));
@@ -23,7 +23,7 @@ export async function generateMetadata({
   return {
     title: article.title,
     description: article.perex,
-    alternates: { canonical: `/magazin/${article.slug}` },
+    alternates: { canonical: absoluteUrl(`/magazin/${article.slug}`) },
     openGraph: { type: "article", title: article.title, description: article.perex },
   };
 }

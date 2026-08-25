@@ -4,13 +4,13 @@ import { PageIntro } from "@/components/layout/PageIntro";
 import { ReferenceExplorer } from "@/components/sections/ReferenceExplorer";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { breadcrumbSchema } from "@/lib/seo";
+import { absoluteUrl, breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Reference",
   description:
     "Realizované projekty s konkrétními čísly: pořizovací cena, náklady na rekonstrukci, délka realizace a výsledek projektu.",
-  alternates: { canonical: "/reference" },
+  alternates: { canonical: absoluteUrl("/reference") },
 };
 
 export default function ReferencesPage() {

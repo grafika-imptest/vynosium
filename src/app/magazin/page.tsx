@@ -6,13 +6,13 @@ import { FinalCta } from "@/components/sections/FinalCta";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ARTICLES } from "@/lib/data/articles";
 import { formatDate } from "@/lib/format";
-import { breadcrumbSchema } from "@/lib/seo";
+import { absoluteUrl, breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Magazín",
   description:
     "Jak investovat do nemovitostí, financování, pronájem, rekonstrukce, lokality a daně — texty psané pro investora, ne pro vyhledávač.",
-  alternates: { canonical: "/magazin" },
+  alternates: { canonical: absoluteUrl("/magazin") },
 };
 
 /**

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/layout/LegalPage";
+import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Cookies",
   description: "Jaké cookies web používá a jak spravovat souhlas.",
-  alternates: { canonical: "/cookies" },
+  alternates: { canonical: absoluteUrl("/cookies") },
   robots: { index: false, follow: true },
 };
 

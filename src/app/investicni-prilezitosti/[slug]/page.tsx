@@ -17,7 +17,7 @@ import { PATH_FAQ } from "@/lib/data/pathFaq";
 import { PROJECTS, STATUS_LABEL, getProject } from "@/lib/data/projects";
 import { DISCLAIMERS } from "@/lib/data/site";
 import { formatCzk } from "@/lib/format";
-import { breadcrumbSchema, realEstateListingSchema } from "@/lib/seo";
+import { absoluteUrl, breadcrumbSchema, realEstateListingSchema } from "@/lib/seo";
 
 export function generateStaticParams() {
   return PROJECTS.map((project) => ({ slug: project.slug }));
@@ -34,7 +34,7 @@ export async function generateMetadata({
   return {
     title: project.name,
     description: project.summary,
-    alternates: { canonical: `/investicni-prilezitosti/${project.slug}` },
+    alternates: { canonical: absoluteUrl(`/investicni-prilezitosti/${project.slug}`) },
   };
 }
 

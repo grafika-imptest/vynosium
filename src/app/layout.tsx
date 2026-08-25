@@ -12,7 +12,7 @@ import { Preloader } from "@/components/sections/Preloader";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SITE } from "@/lib/data/site";
-import { SITE_URL, organizationSchema, websiteSchema } from "@/lib/seo";
+import { SITE_URL, absoluteUrl, organizationSchema, websiteSchema } from "@/lib/seo";
 
 /**
  * Two families, no third. latin-ext is mandatory — Czech diacritics
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
       "Vyberte si investiční cestu, spočítejte si modelový výnos a prohlédněte si aktuální příležitosti.",
   },
   robots: { index: true, follow: true },
-  alternates: { canonical: "/" },
+  alternates: { canonical: absoluteUrl("/") },
 };
 
 export const viewport: Viewport = {

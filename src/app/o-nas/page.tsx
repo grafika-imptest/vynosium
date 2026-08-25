@@ -6,13 +6,13 @@ import { Disclaimer, SectionIndex } from "@/components/ui/primitives";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { DEAL_HISTORY, TEAM } from "@/lib/data/team";
 import { SITE, DISCLAIMERS } from "@/lib/data/site";
-import { breadcrumbSchema } from "@/lib/seo";
+import { absoluteUrl, breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "O nás",
   description:
     "Kdo za Vynósium stojí, jaké projekty jsme realizovali a jaké zázemí máme. Zkušenosti, data a dlouhodobý pohled místo prezentací.",
-  alternates: { canonical: "/o-nas" },
+  alternates: { canonical: absoluteUrl("/o-nas") },
 };
 
 export default function AboutPage() {

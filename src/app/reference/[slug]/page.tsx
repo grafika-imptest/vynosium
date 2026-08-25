@@ -6,7 +6,7 @@ import { BeforeAfterSlider } from "@/components/ui/BeforeAfterSlider";
 import { Pill, SectionIndex } from "@/components/ui/primitives";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { CASE_STUDIES, CASE_CATEGORY_LABEL, getCaseStudy } from "@/lib/data/caseStudies";
-import { breadcrumbSchema } from "@/lib/seo";
+import { absoluteUrl, breadcrumbSchema } from "@/lib/seo";
 
 export function generateStaticParams() {
   return CASE_STUDIES.map((study) => ({ slug: study.slug }));
@@ -23,7 +23,7 @@ export async function generateMetadata({
   return {
     title: study.name,
     description: study.summary,
-    alternates: { canonical: `/reference/${study.slug}` },
+    alternates: { canonical: absoluteUrl(`/reference/${study.slug}`) },
   };
 }
 

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/layout/LegalPage";
+import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Obchodní podmínky",
   description: "Podmínky poskytování služeb a rozsah odpovědnosti.",
-  alternates: { canonical: "/obchodni-podminky" },
+  alternates: { canonical: absoluteUrl("/obchodni-podminky") },
   robots: { index: false, follow: true },
 };
 

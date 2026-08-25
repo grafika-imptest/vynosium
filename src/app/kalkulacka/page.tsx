@@ -6,13 +6,13 @@ import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { FAQ } from "@/lib/data/site";
-import { breadcrumbSchema } from "@/lib/seo";
+import { absoluteUrl, breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Investiční kalkulačka",
   description:
     "Spočítejte si modelovou velikost investice, orientační cashflow, zhodnocení a hodnotu majetku podle vlastního kapitálu, financování a horizontu.",
-  alternates: { canonical: "/kalkulacka" },
+  alternates: { canonical: absoluteUrl("/kalkulacka") },
 };
 
 /**
