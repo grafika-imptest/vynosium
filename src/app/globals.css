@@ -1,26 +1,311 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   VYNOSIUM — design tokens
+   Source of truth: design.md §5. Every value here must trace back to a
+   token in that section — no ad-hoc colors/spacing anywhere in components.
+   ========================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ---- Primary surfaces ---- */
+  --color-navy: #102a43;
+  --color-emerald: #1f8a70;
+  --color-emerald-hover: #25a184;
+  --color-emerald-active: #187059;
+  --color-white: #ffffff;
+  --color-mist: #f5f7fa;
+
+  /* ---- Dark-surface extensions ---- */
+  --color-abyss: #0b1d2e;
+  --color-surface-1: #16324b;
+  --color-surface-2: #1b3a54;
+  --color-line-deep: #243b53;
+  --color-snow: #f8f8f8;
+
+  /* ---- Secondary ---- */
+  --color-steel: #486581;
+  --color-slate: #627d98;
+  --color-silver: #bcccdc;
+  --color-light-gray: #e4e7eb;
+
+  /* ---- Text ---- */
+  --color-text-primary: #102a43;
+  --color-text-secondary: #52606d;
+  --color-text-muted: #7b8794;
+
+  /* ---- Investment path colors (accents only, see §5 rules) ---- */
+  --color-path-flip: #1f8a70;
+  --color-path-income: #2f6fed;
+  --color-path-capital: #f59e0b;
+  --color-path-wealth: #6d5bd0;
+
+  /* ---- Functional ---- */
+  --color-fn-positive: #3fb950;
+  --color-fn-warning: #f59e0b;
+  --color-fn-risk: #d64545;
+
+  /* ---- Core gradient (data viz / progress only — never buttons/bg) ---- */
+  --gradient-core: linear-gradient(
+    38.5deg,
+    #102a43 0%,
+    #16506b 46%,
+    #1f8a70 100%
+  );
+
+  /* ---- Space — base 4px ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 40px;
+  --space-8: 56px;
+  --space-9: 72px;
+  --space-10: 96px;
+  --space-11: 128px;
+  --space-12: 176px;
+  --space-section: clamp(80px, 12vw, 176px);
+  --gutter: clamp(20px, 4vw, 88px);
+  --max-w: 1440px;
+  --max-w-text: 68ch;
+  --max-w-panel: 46ch;
+
+  /* ---- Radii — exactly two values ---- */
+  --radius-pill: 9999px;
+  --radius-card: 10px;
+
+  /* ---- Borders — 1px system, no exceptions ---- */
+  --border-dark: 1px solid var(--color-steel);
+  --border-dark-soft: 1px solid rgba(72, 101, 129, 0.5);
+  --border-light: 1px solid var(--color-light-gray);
+
+  /* ---- Motion ---- */
+  --dur-micro: 180ms;
+  --dur-ui: 350ms;
+  --dur-reveal: 900ms;
+  --dur-cinematic: 1400ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-inout: cubic-bezier(0.83, 0, 0.17, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --vector-angle: 38.5deg;
+
+  /* ---- WebGL baseline ---- */
+  --gl-drift: 0.06;
+  --gl-grain: 0.035;
+  --gl-accent-ease: 500ms;
+  --gl-dpr-cap: 1.75;
+  --gl-idle-fps: 30;
+
+  --background: var(--color-white);
+  --foreground: var(--color-text-primary);
 }
 
 @theme inline {
+  /* Fonts (populated with next/font CSS vars in layout.tsx) */
+  --font-sans: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Colors → Tailwind utilities (bg-navy, text-emerald, border-steel, …) */
+  --color-navy: var(--color-navy);
+  --color-emerald: var(--color-emerald);
+  --color-emerald-hover: var(--color-emerald-hover);
+  --color-emerald-active: var(--color-emerald-active);
+  --color-white: var(--color-white);
+  --color-mist: var(--color-mist);
+  --color-abyss: var(--color-abyss);
+  --color-surface-1: var(--color-surface-1);
+  --color-surface-2: var(--color-surface-2);
+  --color-line-deep: var(--color-line-deep);
+  --color-snow: var(--color-snow);
+  --color-steel: var(--color-steel);
+  --color-slate: var(--color-slate);
+  --color-silver: var(--color-silver);
+  --color-light-gray: var(--color-light-gray);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-path-flip: var(--color-path-flip);
+  --color-path-income: var(--color-path-income);
+  --color-path-capital: var(--color-path-capital);
+  --color-path-wealth: var(--color-path-wealth);
+  --color-fn-positive: var(--color-fn-positive);
+  --color-fn-warning: var(--color-fn-warning);
+  --color-fn-risk: var(--color-fn-risk);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* Radii */
+  --radius-pill: var(--radius-pill);
+  --radius-card: var(--radius-card);
+
+  /*
+   * NOTE: deliberately NOT mapping --spacing-1..12 here. Tailwind v4 looks
+   * up an exact --spacing-{n} theme key before falling back to its default
+   * calc(var(--spacing) * n); our §5 scale is non-linear after step 4
+   * (24, 32, 40, 56, 72, 96...) while every bare-number utility already
+   * used across components (px-7, gap-5, min-h-12, ...) assumes Tailwind's
+   * standard linear 4px scale. Mapping bare 1-12 here silently hijacked
+   * those utilities (min-h-12 became 176px instead of 48px). Section-level
+   * non-linear values are consumed via var(--space-N) / var(--gutter) /
+   * var(--space-section) directly in component code instead.
+   */
+
+}
+
+/*
+ * Fluid typography scale — §5 typography table. These are NOT fed into
+ * @theme: Tailwind v4 only auto-pairs --text-*--line-height with a
+ * text-* utility, it does not pair letter-spacing or font-weight. Each
+ * role below is instead a single composed utility class so one className
+ * reliably gets size + line-height + tracking + weight together.
+ */
+:root {
+  --fs-display-xl: clamp(2.4rem, 7vw, 7rem);
+  --fs-display-lg: clamp(2rem, 5vw, 4.4rem);
+  --fs-display: clamp(1.75rem, 3.4vw, 3rem);
+  --fs-heading: clamp(1.375rem, 2.1vw, 2rem);
+  --fs-subheading: 1.3125rem;
+  --fs-lede: clamp(1.0625rem, 1.4vw, 1.375rem);
+  --fs-body: 1rem;
+  --fs-body-sm: 0.9375rem;
+  --fs-metric-xl: clamp(2.4rem, 6vw, 6rem);
+  --fs-metric: 1.5rem;
+  --fs-data: 0.875rem;
+  --fs-label: 0.6875rem;
+  --fs-disclaimer: 0.75rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* The system is explicitly dual-mode by section (navy vs. white/mist),
+       not by OS color-scheme — sections declare their own surface, so no
+       automatic dark-mode remap happens here. */
   }
 }
 
+@layer utilities {
+  .text-display-xl {
+    font-size: var(--fs-display-xl);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    font-weight: 500;
+  }
+  .text-display-lg {
+    font-size: var(--fs-display-lg);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    font-weight: 500;
+  }
+  .text-display {
+    font-size: var(--fs-display);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+  }
+  .text-heading {
+    font-size: var(--fs-heading);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    font-weight: 500;
+  }
+  .text-subheading {
+    font-size: var(--fs-subheading);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+  }
+  .text-lede {
+    font-size: var(--fs-lede);
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+    font-weight: 400;
+  }
+  .text-body {
+    font-size: var(--fs-body);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .text-body-sm {
+    font-size: var(--fs-body-sm);
+    line-height: 1.55;
+    font-weight: 400;
+  }
+  .text-metric-xl {
+    font-family: var(--font-mono);
+    font-size: var(--fs-metric-xl);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+  }
+  .text-metric {
+    font-family: var(--font-mono);
+    font-size: var(--fs-metric);
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    font-weight: 500;
+  }
+  .text-data {
+    font-family: var(--font-mono);
+    font-size: var(--fs-data);
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    font-weight: 400;
+  }
+  .text-label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    line-height: 1;
+    letter-spacing: 0.16em;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  .text-disclaimer {
+    font-size: var(--fs-disclaimer);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+}
+
+html {
+  scroll-behavior: auto; /* Lenis owns smooth scroll */
+  background: var(--color-white);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-white);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-feature-settings: "tnum" 1;
+}
+
+::selection {
+  background: var(--color-emerald);
+  color: var(--color-white);
+}
+
+/* Mono is mandatory for every number/metric/index/status label (§5 "zákon") */
+.font-data,
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Focus ring — 2px Emerald @0.4 alpha, offset 3px, per §4.5 */
+.focus-ring:focus-visible {
+  outline: 2px solid rgba(31, 138, 112, 0.4);
+  outline-offset: 3px;
+}
+
+/* Hairline divider primitives */
+.hairline-dark {
+  border-color: var(--color-steel);
+}
+.hairline-light {
+  border-color: var(--color-light-gray);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
