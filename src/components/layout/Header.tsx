@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { useHeaderVariant } from "@/components/layout/HeaderVariantContext";
+import { withBasePath } from "@/lib/basePath";
 
 const NAV_LINKS = [
   { href: "/", label: "Domů" },
@@ -80,7 +81,7 @@ export function Header() {
             <div className="flex items-center gap-4">
               <Link href="/" className="focus-ring shrink-0" aria-label="Vynosium — domů">
                 <Image
-                  src={dark ? "/brand/logo-horizontal-white.svg" : "/brand/logo-horizontal-color.svg"}
+                  src={withBasePath(dark ? "/brand/logo-horizontal-white.svg" : "/brand/logo-horizontal-color.svg")}
                   alt="Vynosium"
                   width={132}
                   height={35}

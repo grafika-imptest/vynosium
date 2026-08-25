@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { INVESTMENT_PATHS } from "@/lib/data/paths";
+import { withBasePath } from "@/lib/basePath";
 
 const NAV_LINKS = [
   { href: "/", label: "Domů" },
@@ -25,7 +26,7 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
           <div className="flex flex-col gap-5">
             <Image
-              src="/brand/logo-horizontal-white.svg"
+              src={withBasePath("/brand/logo-horizontal-white.svg")}
               alt="Vynosium"
               width={140}
               height={37}

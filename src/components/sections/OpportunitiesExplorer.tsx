@@ -22,11 +22,11 @@ const SORT_OPTIONS: { value: SortKey; label: string }[] = [
 
 const LOCATIONS = Array.from(new Set(PROJECTS.map((p) => p.location))).sort();
 
-export function OpportunitiesExplorer({ initialStrategy }: { initialStrategy?: string }) {
+export function OpportunitiesExplorer() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [strategy, setStrategy] = useState<string>(initialStrategy ?? searchParams.get("strategie") ?? "all");
+  const [strategy, setStrategy] = useState<string>(searchParams.get("strategie") ?? "all");
   const [location, setLocation] = useState<string>("all");
   const [minCapital, setMinCapital] = useState<number>(0);
   const [sort, setSort] = useState<SortKey>("yield-desc");

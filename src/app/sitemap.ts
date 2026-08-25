@@ -4,6 +4,10 @@ import { PROJECTS } from "@/lib/data/projects";
 import { CASE_STUDIES } from "@/lib/data/caseStudies";
 import { ARTICLES } from "@/lib/data/articles";
 
+// Required for `output: "export"` — safe since every entry comes from
+// static data, not per-request state.
+export const dynamic = "force-static";
+
 const STATIC_ROUTES = [
   { path: "/", priority: 1, changeFrequency: "weekly" as const },
   { path: "/investicni-prilezitosti", priority: 0.9, changeFrequency: "daily" as const },

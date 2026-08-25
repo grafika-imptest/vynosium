@@ -12,12 +12,7 @@ export const metadata: Metadata = {
     "Aktuální investiční příležitosti do nemovitostí — konkrétní čísla, scénáře a očekávaný vývoj pro každou strategii.",
 };
 
-export default async function OpportunitiesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ strategie?: string }>;
-}) {
-  const params = await searchParams;
+export default function OpportunitiesPage() {
   return (
     <>
       <SetHeaderVariant variant="light" />
@@ -28,8 +23,10 @@ export default async function OpportunitiesPage({
         title="Investiční příležitosti"
         lede="Vybrané projekty prezentujeme prostřednictvím konkrétních čísel, scénářů a očekávaného vývoje — filtrujte podle strategie, lokality nebo minimálního kapitálu."
       />
+      {/* Static export has no server-side searchParams; OpportunitiesExplorer
+          reads the real query string client-side via useSearchParams(). */}
       <Suspense>
-        <OpportunitiesExplorer initialStrategy={params.strategie} />
+        <OpportunitiesExplorer />
       </Suspense>
     </>
   );

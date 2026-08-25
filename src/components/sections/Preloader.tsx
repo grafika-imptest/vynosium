@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap, ensureGsapRegistered, prefersReducedMotion, prefersSaveData } from "@/lib/motion";
+import { withBasePath } from "@/lib/basePath";
 
 export const PRELOADER_EXIT_EVENT = "vynosium:preloader-exit";
 
@@ -80,7 +81,7 @@ export function Preloader() {
       aria-hidden="true"
     >
       <div ref={markRef} className="relative h-24 w-24">
-        <Image src="/brand/symbol-color.svg" alt="" fill priority className="object-contain" />
+        <Image src={withBasePath("/brand/symbol-color.svg")} alt="" fill priority className="object-contain" />
       </div>
       <div className="flex flex-col items-center gap-2">
         <p className="text-[11px] font-medium text-slate" style={{ letterSpacing: "0.18em" }}>
