@@ -207,7 +207,7 @@ function FilterPill({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className="focus-ring text-label shrink-0 snap-start rounded-[var(--radius-pill)] border px-4 py-2.5 transition-colors duration-[var(--dur-micro)]"
+      className="focus-ring text-label shrink-0 snap-start whitespace-nowrap rounded-[var(--radius-pill)] border px-4 py-2.5 transition-colors duration-[var(--dur-micro)]"
       style={{
         borderColor: active ? accent ?? "var(--color-emerald)" : "var(--color-light-gray)",
         color: active ? accent ?? "var(--color-emerald-on-light)" : "var(--color-text-muted)",

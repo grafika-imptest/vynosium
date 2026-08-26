@@ -38,13 +38,13 @@ export function MobileCta() {
       <div className="flex h-16 items-center gap-3 px-[var(--gutter)]">
         <a
           href={SITE.phoneHref}
-          className="focus-ring flex h-11 flex-1 items-center justify-center rounded-[var(--radius-pill)] border border-snow/50 text-sm text-snow no-underline"
+          className="focus-ring flex h-11 flex-1 items-center justify-center whitespace-nowrap rounded-[var(--radius-pill)] border border-snow/50 text-sm text-snow no-underline"
         >
           Zavolat
         </a>
         <Link
           href="/kontakt"
-          className="focus-ring flex h-11 flex-[1.4] items-center justify-center rounded-[var(--radius-pill)] bg-emerald-cta text-sm font-medium text-white no-underline"
+          className="focus-ring flex h-11 flex-[1.4] items-center justify-center whitespace-nowrap rounded-[var(--radius-pill)] bg-emerald-cta text-sm font-medium text-white no-underline"
         >
           Nezávazná konzultace
         </Link>

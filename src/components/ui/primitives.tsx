@@ -10,7 +10,7 @@ import type { InvestmentPath } from "@/lib/tokens";
 type PillVariant = "emerald" | "ghost-dark" | "ghost-light";
 
 const PILL_BASE =
-  "focus-ring inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-pill)] px-7 text-[15px] font-medium no-underline transition-all duration-[var(--dur-micro)]";
+  "focus-ring inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-pill)] px-7 text-[15px] font-medium no-underline transition-all duration-[var(--dur-micro)]";
 
 const PILL_VARIANTS: Record<PillVariant, string> = {
   emerald:

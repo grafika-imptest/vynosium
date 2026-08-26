@@ -193,7 +193,7 @@ export function ContactForm({ defaultPriority }: { defaultPriority?: string }) {
       <button
         type="submit"
         disabled={sending}
-        className="focus-ring inline-flex min-h-12 items-center justify-center rounded-[var(--radius-pill)] bg-emerald-cta px-7 text-[15px] font-medium text-white transition-colors duration-[var(--dur-micro)] hover:bg-emerald-cta-hover disabled:opacity-60"
+        className="focus-ring inline-flex min-h-12 items-center justify-center whitespace-nowrap rounded-[var(--radius-pill)] bg-emerald-cta px-7 text-[15px] font-medium text-white transition-colors duration-[var(--dur-micro)] hover:bg-emerald-cta-hover disabled:opacity-60"
       >
         {sending ? "Odesílám…" : "Chci nezávaznou konzultaci"}
       </button>

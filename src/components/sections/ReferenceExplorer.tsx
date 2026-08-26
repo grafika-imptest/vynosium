@@ -44,7 +44,7 @@ export function ReferenceExplorer() {
                 type="button"
                 aria-pressed={active}
                 onClick={() => change(option)}
-                className="focus-ring text-label shrink-0 snap-start rounded-[var(--radius-pill)] border px-4 py-2.5 transition-colors duration-[var(--dur-micro)]"
+                className="focus-ring text-label shrink-0 snap-start whitespace-nowrap rounded-[var(--radius-pill)] border px-4 py-2.5 transition-colors duration-[var(--dur-micro)]"
                 style={{
                   borderColor: active ? "var(--color-emerald)" : "var(--color-light-gray)",
                   color: active ? "var(--color-emerald-on-light)" : "var(--color-text-muted)",

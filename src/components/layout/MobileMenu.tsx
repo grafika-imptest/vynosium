@@ -130,7 +130,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
         <Link
           href="/kontakt"
           onClick={onClose}
-          className="focus-ring flex min-h-12 w-full items-center justify-center rounded-[var(--radius-pill)] bg-emerald-cta px-6 text-[15px] font-medium text-white no-underline"
+          className="focus-ring flex min-h-12 w-full items-center justify-center whitespace-nowrap rounded-[var(--radius-pill)] bg-emerald-cta px-6 text-[15px] font-medium text-white no-underline"
         >
           Nezávazná konzultace
         </Link>

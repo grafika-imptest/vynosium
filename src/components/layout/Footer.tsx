@@ -101,7 +101,7 @@ export function Footer() {
             </ul>
             <Link
               href="/kontakt"
-              className="focus-ring mt-6 inline-flex min-h-12 items-center rounded-[var(--radius-pill)] border border-snow/50 px-6 text-[15px] text-snow no-underline transition-colors duration-[var(--dur-micro)] hover:border-snow"
+              className="focus-ring mt-6 inline-flex min-h-12 items-center whitespace-nowrap rounded-[var(--radius-pill)] border border-snow/50 px-6 text-[15px] text-snow no-underline transition-colors duration-[var(--dur-micro)] hover:border-snow"
             >
               Nezávazná konzultace
             </Link>

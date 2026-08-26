@@ -332,7 +332,7 @@ export function Calculator({
                         typeRef.current = path.id;
                                 commit();
                       }}
-                      className="focus-ring text-label rounded-[var(--radius-pill)] border px-4 py-2.5 transition-colors duration-[var(--dur-micro)]"
+                      className="focus-ring text-label whitespace-nowrap rounded-[var(--radius-pill)] border px-4 py-2.5 transition-colors duration-[var(--dur-micro)]"
                       style={{
                         borderColor: active ? `var(--color-${path.colorVar})` : "rgba(72,101,129,0.6)",
                         color: active ? `var(--color-${path.colorVar}-on-dark)` : "var(--color-slate-on-dark)",
