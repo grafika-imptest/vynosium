@@ -239,6 +239,26 @@ body {
   border-radius: var(--radius-card);
 }
 
+/**
+ * Hero headline measure guard.
+ *
+ * The hero grid stops growing at --max-w (1440px) and the gutters keep
+ * widening past it, so the H1 column actually *shrinks* on very wide
+ * screens while a purely viewport-based size (--text-display-xl: 7vw)
+ * keeps growing. Past ~1024px the three authored lines then wrap into
+ * five, which pushes the CTA pair and the data rail below the fold.
+ *
+ * From 1024px up the size is therefore capped to what the 8-column
+ * measure can actually hold on one line each (~0.08 × column width),
+ * which also lands the H1 baseline near the 58% mark the layout wants.
+ * Below 1024px the token behaves exactly as §5 specifies.
+ */
+@media (min-width: 1024px) {
+  .hero-title {
+    font-size: clamp(2.75rem, 4.5vw, 3.875rem);
+  }
+}
+
 /* Line-mask reveal: the inner span rides y:110% → 0 under GSAP. */
 .mask-line {
   display: block;

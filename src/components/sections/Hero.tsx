@@ -87,12 +87,19 @@ export function Hero() {
 
       <div
         ref={contentRef}
-        className="relative z-[2] mx-auto grid w-full max-w-[var(--max-w)] grid-cols-1 gap-10 px-[var(--gutter)] pb-[var(--space-10)] pt-[var(--space-12)] lg:grid-cols-12"
+        /*
+         * The stack is bottom-aligned, so the bottom padding is what puts
+         * the H1 baseline at the 58% mark the layout calls for. A fluid
+         * value keeps that ratio on tall screens instead of jamming the
+         * CTA against the fold.
+         */
+        className="relative z-[2] mx-auto grid w-full max-w-[var(--max-w)] grid-cols-1 gap-10 px-[var(--gutter)] pb-[var(--space-10)] pt-[var(--space-12)] lg:grid-cols-12 lg:pb-[clamp(96px,22vh,260px)]"
       >
         <div className="lg:col-span-8">
           <p className="text-label hero-fade text-slate">01 — TEZE</p>
 
-          <h1 className="text-display-xl mt-6 text-snow">
+          {/* hero-title caps the size to the 8-column measure — see globals.css */}
+          <h1 className="text-display-xl hero-title mt-6 text-snow">
             <span className="mask-line hero-line">
               <span>Investujte do nemovitostí</span>
             </span>
