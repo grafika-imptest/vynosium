@@ -43,6 +43,19 @@ export function ProcessSteps() {
      */
     section.classList.add("process-anim");
 
+    /*
+     * The sweep is an instruction ("this scrolls sideways"), so it retires
+     * the moment it is obeyed. Threshold rather than zero: a trackpad's
+     * inertia can register a pixel or two without the reader meaning it.
+     */
+    const rail = section.querySelector<HTMLElement>(".process-rail");
+    const onRailScroll = () => {
+      if (!rail || rail.scrollLeft < 24) return;
+      section.classList.add("process-scrolled");
+      rail.removeEventListener("scroll", onRailScroll);
+    };
+    rail?.addEventListener("scroll", onRailScroll, { passive: true });
+
     const reveal = () => section.classList.add("process-in");
     const observer = new IntersectionObserver(
       (entries) => {
@@ -59,6 +72,7 @@ export function ProcessSteps() {
     return () => {
       observer.disconnect();
       window.clearTimeout(fallback);
+      rail?.removeEventListener("scroll", onRailScroll);
     };
   }, []);
 
@@ -80,6 +94,9 @@ export function ProcessSteps() {
           "--step-w": "clamp(300px, 30vw, 460px)",
           /* Vertical centre of the index row: where the connector runs. */
           "--step-line-y": "14px",
+          /* Length of the travelling segment. Long enough to read as a
+             gesture, short enough to stay a hint and not a progress bar. */
+          "--sweep-w": "clamp(160px, 22vw, 320px)",
         } as React.CSSProperties
       }
     >
@@ -97,22 +114,24 @@ export function ProcessSteps() {
         className="process-rail mt-12 flex snap-x snap-mandatory overflow-x-auto pb-8 pl-[var(--track-pad)] pr-[var(--gutter)]"
         style={{ scrollPaddingLeft: "var(--track-pad)" }}
       >
-        {/* Connector: one line through every step number, drawn on arrival. */}
+        {/*
+          Connector: one dim rail through every step number, drawn on arrival,
+          with a bright segment sweeping along it to say the rail scrolls
+          sideways. Both live in .process-line — see globals.css. z-0 with the
+          panels above it, so it reads as ground rather than as a rule laid
+          over the content.
+        */}
         <div
           aria-hidden="true"
-          className="process-line pointer-events-none absolute left-[var(--track-pad)] right-0 top-0 h-px origin-left"
-          style={{
-            background:
-              "linear-gradient(90deg, var(--color-line-deep) 0%, #16506b 30%, var(--color-emerald-on-dark) 100%)",
-          }}
+          className="process-line pointer-events-none absolute left-[var(--track-pad)] right-0 top-0 z-0 h-px origin-left"
         />
 
         {PROCESS_STEPS.map((step) => (
           <article
             key={step.index}
-            className="process-panel w-[var(--step-w)] shrink-0 snap-start pr-[var(--space-8)]"
+            className="process-panel relative z-[1] w-[var(--step-w)] shrink-0 snap-start pr-[var(--space-8)]"
           >
-            <p className="text-label flex h-7 items-center gap-3 text-emerald-on-dark">
+            <p className="text-label flex h-7 w-fit items-center gap-3 bg-navy pr-3 text-emerald-on-dark">
               {/* Node sitting on the connector, at the number's own baseline. */}
               <span
                 aria-hidden="true"
@@ -140,7 +159,7 @@ export function ProcessSteps() {
           </article>
         ))}
 
-        <div className="process-panel flex w-[var(--step-w)] shrink-0 snap-start flex-col justify-center gap-5 pr-[var(--gutter)]">
+        <div className="process-panel relative z-[1] flex w-[var(--step-w)] shrink-0 snap-start flex-col justify-center gap-5 pr-[var(--gutter)]">
           <p className="text-body max-w-[36ch] text-slate-on-dark">
             Každý krok má vlastní výstup, který dostanete písemně. Žádná fáze nezačíná dřív, než je
             uzavřená ta předchozí.
