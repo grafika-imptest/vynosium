@@ -32,7 +32,7 @@ export function TrustNumbers() {
       gsap.utils.toArray<HTMLElement>(".trust-value").forEach((el, i) => {
         const target = Number(el.dataset.value ?? 0);
         const decimals = Number(el.dataset.decimals ?? 0);
-        const suffix = el.dataset.suffix ?? "";
+        const glue = el.dataset.glue ?? "";
         const counter = { v: 0 };
 
         gsap.to(counter, {
@@ -47,7 +47,7 @@ export function TrustNumbers() {
               counter.v.toLocaleString("cs-CZ", {
                 minimumFractionDigits: decimals,
                 maximumFractionDigits: decimals,
-              }) + suffix;
+              }) + glue;
           },
         });
       });
@@ -72,20 +72,32 @@ export function TrustNumbers() {
                   className="trust-line absolute left-0 top-0 hidden h-full w-px bg-steel/50 lg:block"
                 />
               )}
-              <p
-                className="text-metric-xl trust-value text-snow"
-                data-value={item.value}
-                data-decimals={item.decimals}
-                data-suffix={item.suffix}
-              >
-                {item.value.toLocaleString("cs-CZ", {
-                  minimumFractionDigits: item.decimals,
-                  maximumFractionDigits: item.decimals,
-                })}
-                {item.suffix}
+              {/*
+                Digits and unit are separate lines: the unit is a word, not
+                part of the number, and letting it share the metric size
+                wrapped "mld. Kč" across three lines in a 250px column.
+                The counter writes only into .trust-value, so the unit
+                never moves while the number rolls.
+              */}
+              <p className="text-metric-xl metric-value whitespace-nowrap text-snow">
+                <span
+                  className="trust-value"
+                  data-value={item.value}
+                  data-decimals={item.decimals}
+                  data-glue={item.glue}
+                >
+                  {item.value.toLocaleString("cs-CZ", {
+                    minimumFractionDigits: item.decimals,
+                    maximumFractionDigits: item.decimals,
+                  })}
+                  {item.glue}
+                </span>
               </p>
-              <p className="text-label mt-5 text-snow/80">{item.label}</p>
-              <p className="text-label mt-3 text-steel">{item.basis}</p>
+              {item.unit && <p className="text-metric mt-1 text-snow/90">{item.unit}</p>}
+              {/* Labels here wrap to two lines, so they need leading the
+                  single-line label token does not carry. */}
+              <p className="text-label text-label-wrap mt-5 text-snow/80">{item.label}</p>
+              <p className="text-label text-label-wrap mt-3 text-steel">{item.basis}</p>
             </div>
           ))}
         </div>

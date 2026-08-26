@@ -79,7 +79,7 @@ export function Preloader() {
               counterRef.current.textContent = `${counterValue.v.toLocaleString("cs-CZ", {
                 minimumFractionDigits: 1,
                 maximumFractionDigits: 1,
-              })} mld. Kč`;
+              })} ${TRUST_NUMBERS[0].unit}`;
             }
           },
         },

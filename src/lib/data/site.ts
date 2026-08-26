@@ -24,33 +24,43 @@ export const SITE = {
   },
 } as const;
 
-/** §3/02 — four numbers, each with a stated basis. */
+/**
+ * §3/02 — four numbers, each with a stated basis.
+ *
+ * `glue` is a symbol that belongs to the digits and must never be split
+ * from them ("+"); `unit` is a word that is set on its own, smaller line
+ * so a long unit ("mld. Kč") cannot wrap the number itself.
+ */
 export const TRUST_NUMBERS = [
   {
     value: 2.4,
-    suffix: " mld. Kč",
     decimals: 1,
+    glue: "",
+    unit: "mld. Kč",
     label: "Hodnota realizovaných obchodů",
     basis: "kumulativně 2016–2025 · interní evidence",
   },
   {
     value: 64,
-    suffix: "+",
     decimals: 0,
+    glue: "+",
+    unit: "",
     label: "Realizovaných projektů",
     basis: "dokončené projekty k 12/2025",
   },
   {
     value: 9,
-    suffix: " let",
     decimals: 0,
+    glue: "",
+    unit: "let",
     label: "Zkušeností na trhu",
     basis: "od založení 2016",
   },
   {
     value: 96,
-    suffix: " %",
     decimals: 0,
+    glue: "",
+    unit: "%",
     label: "Obsazenost spravovaných nemovitostí",
     basis: "průměr 2025 · portfolio ve správě",
   },

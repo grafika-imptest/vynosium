@@ -136,7 +136,8 @@ export function Hero() {
                   minimumFractionDigits: item.decimals,
                   maximumFractionDigits: item.decimals,
                 })}
-                {item.suffix}
+                {item.glue}
+                {item.unit && ` ${item.unit}`}
               </dd>
             </div>
           ))}

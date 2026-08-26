@@ -228,6 +228,17 @@ body {
   max-width: 80ch;
 }
 
+/**
+ * Label token with leading. §5 sets label line-height to 1, which is right
+ * for the single-line labels it was written for; a label that wraps needs
+ * leading or the two lines collide. Declared here rather than as a
+ * Tailwind `leading-*` utility because these type classes sit outside
+ * Tailwind's layers and would otherwise win over it.
+ */
+.text-label-wrap {
+  line-height: 1.5;
+}
+
 /* ============================================================================
    Primitives
    ========================================================================== */
@@ -256,6 +267,20 @@ body {
 @media (min-width: 1024px) {
   .hero-title {
     font-size: clamp(2.75rem, 4.5vw, 3.875rem);
+  }
+}
+
+/**
+ * Metric measure guard — the same problem as .hero-title, one level down.
+ *
+ * The four credibility columns are ~250px wide at every viewport above
+ * --max-w (the container is capped, the gutters keep growing), so a 6vw
+ * metric outgrows its column and wraps the digits themselves. Above
+ * 1024px the size is capped to what one column holds on a single line.
+ */
+@media (min-width: 1024px) {
+  .metric-value {
+    font-size: clamp(2.75rem, 3.4vw, 4.5rem);
   }
 }
 
