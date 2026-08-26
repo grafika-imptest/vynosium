@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useGLScene } from "@/components/gl/useGLScene";
-import { buildHeroScene, type HeroSceneState } from "@/components/gl/scenes/heroScene";
 import { Pill } from "@/components/ui/primitives";
 import { TRUST_NUMBERS } from "@/lib/data/site";
+import { withBasePath } from "@/lib/seo";
 import { gsap, ensureGsapRegistered, ScrollTrigger, prefersReducedMotion } from "@/lib/motion";
 
 /**
@@ -13,30 +12,35 @@ import { gsap, ensureGsapRegistered, ScrollTrigger, prefersReducedMotion } from 
  * H1 sits in columns 1–8, deliberately off-centre, with the hairline data
  * rail bottom-aligned in 10–12. The asymmetry between the monumental left
  * mass and the thin right line is the entire composition.
+ *
+ * Layer 1 is a muted, looping video of the real product; the shader field
+ * it replaced stays in use for the closing CTA reprise (§3/13). The clip
+ * is over-scaled so the pointer parallax never exposes its edges, and the
+ * scrim above it keeps AA contrast on the copy.
  */
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const state = useRef<HeroSceneState>({ x: 0, y: 0, progress: 0 });
-
-  const { hostRef, disabled } = useGLScene("hero", buildHeroScene(state, "hero"));
+  const mediaRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
     ensureGsapRegistered();
 
-    // Pointer parallax is written to a ref and consumed by the GL loop —
-    // never React state (§6 INP).
-    const onMove = (e: PointerEvent) => {
-      const rect = section.getBoundingClientRect();
-      state.current.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      state.current.y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-    };
-    section.addEventListener("pointermove", onMove, { passive: true });
+    const reduced = prefersReducedMotion();
+    const video = videoRef.current;
+
+    // Reduced motion keeps the first frame as a still backdrop.
+    if (reduced) video?.pause();
 
     const ctx = gsap.context(() => {
-      const reduced = prefersReducedMotion();
+      const media = mediaRef.current;
+
+      if (media) {
+        gsap.fromTo(media, { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2, ease: "power2.out" });
+      }
 
       if (!reduced) {
         const tl = gsap.timeline({ delay: 0.15 });
@@ -55,15 +59,30 @@ export function Hero() {
           end: "bottom top",
           scrub: 1,
           onUpdate: (self) => {
-            state.current.progress = self.progress;
             gsap.set(contentRef.current, { yPercent: -18 * self.progress, autoAlpha: 1 - self.progress * 0.9 });
+            if (media) gsap.set(media, { scale: 1.08 + 0.1 * self.progress });
           },
         });
       }
     }, sectionRef);
 
+    // Pointer parallax is driven straight through gsap — never React state
+    // (§6 INP). The clip drifts against the pointer, never with it.
+    let onMove: ((e: PointerEvent) => void) | undefined;
+    const media = mediaRef.current;
+    if (!reduced && media) {
+      const xTo = gsap.quickTo(media, "xPercent", { duration: 0.9, ease: "power3.out" });
+      const yTo = gsap.quickTo(media, "yPercent", { duration: 0.9, ease: "power3.out" });
+      onMove = (e: PointerEvent) => {
+        const rect = section.getBoundingClientRect();
+        xTo(-(((e.clientX - rect.left) / rect.width) * 2 - 1) * 2.2);
+        yTo(-(((e.clientY - rect.top) / rect.height) * 2 - 1) * 2.2);
+      };
+      section.addEventListener("pointermove", onMove, { passive: true });
+    }
+
     return () => {
-      section.removeEventListener("pointermove", onMove);
+      if (onMove) section.removeEventListener("pointermove", onMove);
       ctx.revert();
     };
   }, []);
@@ -74,7 +93,20 @@ export function Hero() {
       className="relative flex min-h-[100svh] items-end overflow-hidden bg-navy"
       data-scene="hero"
     >
-      {!disabled && <div ref={hostRef} aria-hidden="true" className="absolute inset-0" />}
+      <div ref={mediaRef} aria-hidden="true" className="absolute inset-0 scale-[1.08]">
+        <video
+          ref={videoRef}
+          className="h-full w-full object-cover"
+          src={withBasePath("/video/hero.mp4")}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          disablePictureInPicture
+          tabIndex={-1}
+        />
+      </div>
 
       {/* Scrim keeps AA contrast over the field (§3/01 layer 4). */}
       <div

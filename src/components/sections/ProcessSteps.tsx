@@ -40,6 +40,16 @@ export function ProcessSteps() {
 
         const distance = () => track.scrollWidth - window.innerWidth + 80;
 
+        /*
+         * The connector is written straight from the trigger's progress
+         * rather than tweened. As a tween in this timeline it stayed pinned
+         * at scaleX(0) on the deployed build while the track tween in the
+         * same timeline advanced normally — one assignment per update has no
+         * such failure mode, and progress is exactly the value we want.
+         */
+        const line = lineRef.current;
+        if (line) line.style.transform = "scaleX(0)";
+
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: section,
@@ -54,17 +64,14 @@ export function ProcessSteps() {
             pin: true,
             scrub: 1,
             invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              if (line) line.style.transform = `scaleX(${self.progress.toFixed(4)})`;
+            },
           },
         });
 
         // Scrubbed movement never eases (§5).
         tl.to(track, { x: () => -distance(), ease: "none" }, 0);
-
-        const line = lineRef.current;
-        if (line) {
-          gsap.set(line, { scaleX: 0 });
-          tl.to(line, { scaleX: 1, ease: "none" }, 0);
-        }
 
         /*
          * Panel copy fades in when the panel itself arrives — which means
