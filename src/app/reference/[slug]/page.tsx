@@ -56,6 +56,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
           <div className="mt-10 max-w-[820px]">
             <BeforeAfterSlider
+              beforeImage={study.beforeImage}
+              afterImage={study.afterImage}
+              alt={study.name}
               beforeFrom={study.beforeFrom}
               beforeTo={study.beforeTo}
               afterFrom={study.afterFrom}

@@ -50,8 +50,18 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
 
     ScrollTrigger.refresh();
 
+    /*
+     * Anything that changes document height after the first measurement
+     * invalidates every trigger's start/end. Fonts swapping in and images
+     * decoding both do, so refresh once each has settled.
+     */
+    const refresh = () => ScrollTrigger.refresh();
+    document.fonts?.ready.then(refresh);
+    window.addEventListener("load", refresh);
+
     return () => {
       document.removeEventListener("click", onClick);
+      window.removeEventListener("load", refresh);
       gsap.ticker.remove(raf);
       lenis.destroy();
     };

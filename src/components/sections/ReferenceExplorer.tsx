@@ -1,8 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import { Flip, ensureGsapRegistered, prefersReducedMotion } from "@/lib/motion";
+import { withBasePath } from "@/lib/seo";
 import { CASE_STUDIES, CASE_CATEGORY_LABEL, type CaseCategory } from "@/lib/data/caseStudies";
 
 type Filter = CaseCategory | "all";
@@ -62,9 +64,23 @@ export function ReferenceExplorer() {
               className="group relative flex flex-col rounded-[var(--radius-card)] border border-light-gray bg-white transition-[border-color,transform] duration-[var(--dur-ui)] hover:-translate-y-1.5 hover:border-emerald"
             >
               <div
-                className="aspect-[16/10] w-full rounded-t-[var(--radius-card)]"
-                style={{ background: `linear-gradient(38.5deg, ${study.afterFrom}, ${study.afterTo})` }}
-              />
+                className="relative aspect-[16/10] w-full overflow-hidden rounded-t-[var(--radius-card)]"
+                style={
+                  study.afterImage
+                    ? undefined
+                    : { background: `linear-gradient(38.5deg, ${study.afterFrom}, ${study.afterTo})` }
+                }
+              >
+                {study.afterImage && (
+                  <Image
+                    src={withBasePath(study.afterImage)}
+                    alt={`${study.name} — po realizaci`}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                )}
+              </div>
               <div className="flex flex-1 flex-col p-6">
                 <p className="text-label text-text-muted">
                   {CASE_CATEGORY_LABEL[study.category]} · {study.year}

@@ -21,6 +21,17 @@ export interface RibbonTarget {
   high: number[];
 }
 
+/**
+ * Vertex count, fixed on both sides.
+ *
+ * The scene used to size its buffers from `target.current.median.length`,
+ * which is empty until the component's first rAF tick — and the GL stage
+ * builds scenes on an idle callback, so whichever ran first decided the
+ * geometry. When the scene won, the ribbon was built with two vertices and
+ * rendered as a straight line between the first and last sample.
+ */
+export const RIBBON_SAMPLES = 60;
+
 const BASE_Y = -0.85;
 const LERP = 0.12;
 
@@ -56,6 +67,39 @@ const BAND_VERTEX = /* glsl */ `
   }
 `;
 
+/**
+ * Panel ground.
+ *
+ * The scene has to paint its own surface: the core gradient starts at Navy,
+ * which is exactly the section's background, so on a bare navy ground the
+ * lower half of the ribbon was invisible. A DOM wash cannot do this job —
+ * the canvas renders *behind* the content layer, so any CSS background on
+ * the frame would cover the ribbon instead of sitting under it.
+ */
+const GROUND_FRAGMENT = /* glsl */ `
+  precision mediump float;
+  varying vec2 vUv;
+
+  float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+  }
+
+  void main() {
+    // Surface 1 → Surface 2, lifted slightly toward the top of the panel.
+    vec3 base = mix(vec3(0.086, 0.196, 0.294), vec3(0.106, 0.227, 0.329), vUv.y * 0.8);
+    float grain = hash(vUv * 700.0);
+    gl_FragColor = vec4(base + (grain - 0.5) * 0.02, 1.0);
+  }
+`;
+
+const GROUND_VERTEX = /* glsl */ `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = vec4(position.xy, 0.0, 1.0);
+  }
+`;
+
 const BAND_FRAGMENT = /* glsl */ `
   precision mediump float;
   void main() {
@@ -78,7 +122,7 @@ export function buildCalculatorRibbonScene(target: { current: RibbonTarget }): G
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-    const count = Math.max(target.current.median.length, 2);
+    const count = RIBBON_SAMPLES + 1;
     const xs = Array.from({ length: count }, (_, i) => -0.94 + (i / (count - 1)) * 1.88);
 
     // Current (eased) values — targets are written by the component.
@@ -129,7 +173,18 @@ export function buildCalculatorRibbonScene(target: { current: RibbonTarget }): G
       new THREE.LineBasicMaterial({ color: 0x1f8a70, transparent: true, opacity: 0.95 })
     );
 
-    scene.add(band, fill, edge);
+    /* ---- Panel ground, drawn first ---- */
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(2, 2),
+      new THREE.ShaderMaterial({
+        vertexShader: GROUND_VERTEX,
+        fragmentShader: GROUND_FRAGMENT,
+        depthTest: false,
+        depthWrite: false,
+      })
+    );
+
+    scene.add(ground, band, fill, edge);
 
     let idleTime = 0;
     let lastSignature = 0;
@@ -188,9 +243,11 @@ export function buildCalculatorRibbonScene(target: { current: RibbonTarget }): G
         fillGeometry.dispose();
         bandGeometry.dispose();
         edgeGeometry.dispose();
+        ground.geometry.dispose();
         (fill.material as THREE.Material).dispose();
         (band.material as THREE.Material).dispose();
         (edge.material as THREE.Material).dispose();
+        (ground.material as THREE.Material).dispose();
       },
     };
   };

@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { gsap, ensureGsapRegistered, prefersReducedMotion } from "@/lib/motion";
+import { gsap, ensureGsapRegistered, prefersReducedMotion, ScrollTrigger } from "@/lib/motion";
 import { TRUST_NUMBERS } from "@/lib/data/site";
 
 /**
@@ -52,6 +52,14 @@ export function Preloader() {
       onComplete: () => {
         document.body.style.overflow = "";
         setMounted(false);
+        /*
+         * MUST refresh: while the overlay is up the body is scroll-locked,
+         * so the document is one viewport tall and every ScrollTrigger
+         * start/end computed during that window is wrong. Without this the
+         * pinned process track was already at its end state by the time the
+         * section actually reached the viewport.
+         */
+        ScrollTrigger.refresh();
       },
     });
 

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SetHeaderVariant } from "@/components/layout/HeaderVariantContext";
@@ -17,7 +18,7 @@ import { PATH_FAQ } from "@/lib/data/pathFaq";
 import { PROJECTS, STATUS_LABEL, getProject } from "@/lib/data/projects";
 import { DISCLAIMERS } from "@/lib/data/site";
 import { formatCzk } from "@/lib/format";
-import { absoluteUrl, breadcrumbSchema, realEstateListingSchema } from "@/lib/seo";
+import { absoluteUrl, breadcrumbSchema, realEstateListingSchema, withBasePath } from "@/lib/seo";
 
 export function generateStaticParams() {
   return PROJECTS.map((project) => ({ slug: project.slug }));
@@ -69,14 +70,26 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <p className="text-body mt-6 max-w-[64ch] text-slate-on-dark">{project.summary}</p>
         </div>
 
-        <div
-          className="mx-auto mt-10 h-[46vh] max-w-[var(--max-w)] px-[var(--gutter)]"
-          aria-hidden="true"
-        >
+        <div className="mx-auto mt-10 h-[46vh] max-w-[var(--max-w)] px-[var(--gutter)]">
           <div
-            className="h-full w-full rounded-[var(--radius-card)] border border-steel/50"
-            style={{ background: `linear-gradient(38.5deg, ${project.imageFrom}, ${project.imageTo})` }}
-          />
+            className="relative h-full w-full overflow-hidden rounded-[var(--radius-card)] border border-steel/50"
+            style={
+              project.image
+                ? undefined
+                : { background: `linear-gradient(38.5deg, ${project.imageFrom}, ${project.imageTo})` }
+            }
+          >
+            {project.image && (
+              <Image
+                src={withBasePath(project.image)}
+                alt={`${project.name} — ${project.location}`}
+                fill
+                priority
+                sizes="(min-width: 1440px) 1264px, 92vw"
+                className="object-cover"
+              />
+            )}
+          </div>
         </div>
       </section>
 
@@ -180,22 +193,42 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <div className="lg:col-span-7">
             <SectionIndex index="05" label="GALERIE" tone="light" />
             <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {project.gallery.map((item) => (
-                <figure key={item.caption}>
-                  <div
-                    className="aspect-[4/3] w-full rounded-[var(--radius-card)] border border-light-gray"
-                    style={{
-                      background:
-                        item.kind === "půdorys"
-                          ? "repeating-linear-gradient(38.5deg, #ffffff 0 18px, #f5f7fa 18px 36px)"
-                          : `linear-gradient(38.5deg, ${project.imageFrom}, ${project.imageTo})`,
-                    }}
-                  />
-                  <figcaption className="text-label mt-3 text-text-muted">
-                    {item.kind} — {item.caption}
-                  </figcaption>
-                </figure>
-              ))}
+              {project.gallery.map((item) => {
+                // Only the photo slot has real photography so far; the plan
+                // and the visualisation stay drafting-board placeholders
+                // until the client supplies them.
+                const usePhoto = item.kind === "foto" && Boolean(project.image);
+                return (
+                  <figure key={item.caption}>
+                    <div
+                      className="relative aspect-[4/3] w-full overflow-hidden rounded-[var(--radius-card)] border border-light-gray"
+                      style={
+                        usePhoto
+                          ? undefined
+                          : {
+                              background:
+                                item.kind === "půdorys"
+                                  ? "repeating-linear-gradient(38.5deg, #ffffff 0 18px, #f5f7fa 18px 36px)"
+                                  : `linear-gradient(38.5deg, ${project.imageFrom}, ${project.imageTo})`,
+                            }
+                      }
+                    >
+                      {usePhoto && (
+                        <Image
+                          src={withBasePath(project.image as string)}
+                          alt={item.caption}
+                          fill
+                          sizes="(min-width: 1024px) 360px, 90vw"
+                          className="object-cover"
+                        />
+                      )}
+                    </div>
+                    <figcaption className="text-label mt-3 text-text-muted">
+                      {item.kind} — {item.caption}
+                    </figcaption>
+                  </figure>
+                );
+              })}
             </div>
           </div>
         </div>

@@ -83,6 +83,9 @@ export function References() {
             style={{ background: "rgba(22,50,75,0.55)" }}
           >
             <BeforeAfterSlider
+              beforeImage={study.beforeImage}
+              afterImage={study.afterImage}
+              alt={study.name}
               beforeFrom={study.beforeFrom}
               beforeTo={study.beforeTo}
               afterFrom={study.afterFrom}

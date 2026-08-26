@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useGLScene } from "@/components/gl/useGLScene";
 import {
   buildCalculatorRibbonScene,
+  RIBBON_SAMPLES,
   type RibbonTarget,
 } from "@/components/gl/scenes/calculatorRibbonScene";
 import { Disclaimer, ModelMark, Pill, SectionIndex } from "@/components/ui/primitives";
@@ -87,7 +88,9 @@ export function Calculator({
       // Slider value labels are written by their own input handler; this
       // loop owns the ledger and the ribbon.
       write("investmentSize", formatCzk(output.investmentSize));
-      write("cashflow", `${formatCzk(output.monthlyCashflow)} / měs.`);
+      // Unit lives in the label ("Cashflow měsíčně"), not glued to the
+      // digits — a "/ měs." suffix pushed the number out of its column.
+      write("cashflow", formatCzk(output.monthlyCashflow));
       write("yield", `${formatPercent(output.modelYieldPercent)} p.a.`);
       write("finalValue", formatCzk(output.finalValue));
 
@@ -105,7 +108,8 @@ export function Calculator({
       setFill("ltv", input.ltv / 80);
       setFill("horizon", (input.horizonYears - 1) / 14);
 
-      const series = sampleRibbonSeries(input);
+      // Same sample count the scene sized its buffers with.
+      const series = sampleRibbonSeries(input, RIBBON_SAMPLES);
       const all = [...series.median, ...series.low, ...series.high];
       const min = Math.min(...all);
       const max = Math.max(...all);
@@ -145,8 +149,14 @@ export function Calculator({
   const ctaHref = `/kontakt?kapital=${committed.capital}&ltv=${committed.ltv}&horizont=${committed.horizonYears}&typ=${committed.type}`;
 
   return (
-    <section className="relative z-[2] bg-navy py-[var(--space-10)]" data-scene="calculator">
-      <div ref={rootRef} className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
+    /*
+      No z-index on the section itself: the single GL canvas sits at z-1 and
+      has to paint OVER this navy background, with the content lifted above
+      it. Carrying z-2 here hid the whole ribbon behind the section's own
+      background — every other shader section leaves the section at z-auto.
+    */
+    <section className="relative bg-navy py-[var(--space-10)]" data-scene="calculator">
+      <div ref={rootRef} className="relative z-[2] mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
         <SectionIndex index={index} label="KALKULAČKA" tone="dark" />
         <h2 className="text-display-lg mt-6 max-w-[18ch] text-snow">
           Co mohou vaše peníze v nemovitostech dokázat?
@@ -157,7 +167,10 @@ export function Calculator({
           <div className="order-1 lg:order-2 lg:col-span-8">
             <div
               className="relative aspect-[16/10] w-full overflow-hidden rounded-[var(--radius-card)] border border-steel/50"
-              style={{ background: "rgba(22,50,75,0.55)" }}
+              // Transparent while the GL stage is live: the ribbon is painted
+              // by the canvas *behind* this content layer, so any wash here
+              // would sit on top of it. The static fallback brings its own.
+              style={disabled ? { background: "rgba(22,50,75,0.55)" } : undefined}
               role="img"
               aria-label="Modelový vývoj hodnoty investice včetně pásma scénářů P10 až P90."
             >
@@ -195,7 +208,7 @@ export function Calculator({
               </tbody>
             </table>
 
-            <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-steel/50 pt-6 lg:grid-cols-4">
+            <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-steel/50 pt-6 xl:grid-cols-4">
               <LedgerRow
                 out="investmentSize"
                 label="Velikost investice"
@@ -205,7 +218,7 @@ export function Calculator({
               <LedgerRow
                 out="cashflow"
                 label="Cashflow měsíčně"
-                initial={`${formatCzk(initialOutput.monthlyCashflow)} / měs.`}
+                initial={formatCzk(initialOutput.monthlyCashflow)}
                 basis="po nákladech a splátce"
               />
               <LedgerRow
@@ -342,10 +355,22 @@ function LedgerRow({
   return (
     <div>
       <dt className="text-label text-silver">{label}</dt>
+      {/*
+        Fluid size and no wrapping: a nine-digit result ("13 866 371 Kč") at
+        a fixed 2rem overran its column and lost the currency off the right
+        edge. The number is the point of this section — it may shrink, it
+        may not break.
+      */}
       <dd
         data-out={out}
-        className={`text-metric mt-3 ${emphasise ? "text-emerald-on-dark" : "text-snow"}`}
-        style={emphasise ? { fontSize: "2rem" } : undefined}
+        className={`text-metric mt-3 whitespace-nowrap ${
+          emphasise ? "text-emerald-on-dark" : "text-snow"
+        }`}
+        style={
+          emphasise
+            ? { fontSize: "clamp(1.25rem, 1.6vw, 2rem)" }
+            : { fontSize: "clamp(1.0625rem, 1.15vw, 1.5rem)" }
+        }
       >
         {initial}
       </dd>

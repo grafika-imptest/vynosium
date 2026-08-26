@@ -113,32 +113,44 @@ export function ProcessSteps() {
         <h2 className="text-display-lg mt-6 max-w-[16ch] text-snow">Od první konzultace k výnosu.</h2>
       </div>
 
-      {/* Desktop: the vector runs the full length of the pinned track. */}
-      <svg
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-1/2 hidden h-[420px] w-full lg:block"
-        viewBox="0 0 1000 420"
-        preserveAspectRatio="none"
-      >
-        <line
-          ref={lineRef}
-          x1="0"
-          y1="400"
-          x2="1000"
-          y2={400 - 1000 * Math.tan((VECTOR_ANGLE_DEG * Math.PI) / 180) * 0.12}
-          stroke="url(#process-gradient)"
-          strokeWidth="1.5"
-        />
-        <defs>
-          <linearGradient id="process-gradient" x1="0" y1="1" x2="1" y2="0">
-            <stop offset="0%" stopColor="#243b53" />
-            <stop offset="46%" stopColor="#16506b" />
-            <stop offset="100%" stopColor="#1f8a70" />
-          </linearGradient>
-        </defs>
-      </svg>
-
       <div className="relative mt-12 lg:mt-16 lg:h-[62vh]">
+        {/*
+          Desktop: the vector runs under the panels, inside the track area —
+          not the section. Anchored to the section it sat at 50% of a
+          viewport-tall box and ran off below the fold, so the one thing that
+          is supposed to draw itself as you scroll was never on screen.
+        */}
+        <svg
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block"
+          viewBox="0 0 1000 420"
+          preserveAspectRatio="none"
+        >
+          {/*
+            The vector climbs across the whole track box, behind the panels.
+            preserveAspectRatio="none" stretches it, so the drawn angle is a
+            projection of 38.5° onto a box that is ten times wider than it is
+            tall — the ratio is what carries the metaphor here, not the
+            on-screen degrees.
+          */}
+          <line
+            ref={lineRef}
+            x1="0"
+            y1="410"
+            x2="1000"
+            y2={410 - 1000 * Math.tan((VECTOR_ANGLE_DEG * Math.PI) / 180) * 0.44}
+            stroke="url(#process-gradient)"
+            strokeWidth="2"
+          />
+          <defs>
+            <linearGradient id="process-gradient" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stopColor="#243b53" />
+              <stop offset="46%" stopColor="#16506b" />
+              <stop offset="100%" stopColor="#1f8a70" />
+            </linearGradient>
+          </defs>
+        </svg>
+
         {/* Mobile: same vector, drawn vertically in the left margin. */}
         <svg
           aria-hidden="true"

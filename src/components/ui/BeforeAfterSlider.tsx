@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
+import { withBasePath } from "@/lib/seo";
 
 /**
  * Before/after split (§3/11).
@@ -10,17 +12,24 @@ import { useEffect, useRef } from "react";
  * frame instead of a render. Works with tap-and-hold, drag and keyboard.
  */
 export function BeforeAfterSlider({
+  beforeImage,
+  afterImage,
   beforeFrom,
   beforeTo,
   afterFrom,
   afterTo,
   label,
+  alt,
 }: {
+  /** Photo pair; falls back to the duotone gradients when absent. */
+  beforeImage?: string;
+  afterImage?: string;
   beforeFrom: string;
   beforeTo: string;
   afterFrom: string;
   afterTo: string;
   label: string;
+  alt?: string;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const afterRef = useRef<HTMLDivElement>(null);
@@ -82,16 +91,44 @@ export function BeforeAfterSlider({
       <div
         ref={rootRef}
         className="relative aspect-[16/10] w-full touch-none overflow-hidden rounded-[var(--radius-card)] border border-steel/50"
-        style={{ background: `linear-gradient(38.5deg, ${beforeFrom}, ${beforeTo})` }}
+        style={
+          beforeImage
+            ? undefined
+            : { background: `linear-gradient(38.5deg, ${beforeFrom}, ${beforeTo})` }
+        }
       >
-        <span className="text-label absolute left-4 top-4 z-[2] text-snow/70">Před</span>
+        {beforeImage && (
+          <Image
+            src={withBasePath(beforeImage)}
+            alt={alt ? `${alt} — před rekonstrukcí` : "Stav před rekonstrukcí"}
+            fill
+            sizes="(min-width: 640px) 520px, 86vw"
+            className="object-cover"
+          />
+        )}
+        {/* Labels ride above both layers, so they stay readable either side
+            of the divider. */}
+        <span className="text-label absolute left-4 top-4 z-[2] text-snow">Před</span>
 
         <div
           ref={afterRef}
           className="absolute inset-0"
-          style={{ background: `linear-gradient(38.5deg, ${afterFrom}, ${afterTo})` }}
+          style={
+            afterImage
+              ? undefined
+              : { background: `linear-gradient(38.5deg, ${afterFrom}, ${afterTo})` }
+          }
         >
-          <span className="text-label absolute right-4 top-4 text-snow">Po</span>
+          {afterImage && (
+            <Image
+              src={withBasePath(afterImage)}
+              alt={alt ? `${alt} — po rekonstrukci` : "Stav po rekonstrukci"}
+              fill
+              sizes="(min-width: 640px) 520px, 86vw"
+              className="object-cover"
+            />
+          )}
+          <span className="text-label absolute right-4 top-4 z-[2] text-snow">Po</span>
         </div>
 
         <div

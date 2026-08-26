@@ -1,7 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ModelMark, PathBadge, StatusPill } from "@/components/ui/primitives";
 import { STATUS_LABEL, type Project } from "@/lib/data/projects";
 import { getPathById } from "@/lib/data/paths";
+import { withBasePath } from "@/lib/seo";
 
 /**
  * Investment card (§4.4).
@@ -25,10 +27,21 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
     >
       <div
         className="relative aspect-[16/10] w-full overflow-hidden"
-        style={{
-          background: `linear-gradient(38.5deg, ${project.imageFrom}, ${project.imageTo})`,
-        }}
+        style={
+          project.image
+            ? undefined
+            : { background: `linear-gradient(38.5deg, ${project.imageFrom}, ${project.imageTo})` }
+        }
       >
+        {project.image && (
+          <Image
+            src={withBasePath(project.image)}
+            alt={`${project.name} — ${project.location}`}
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        )}
         {/* Navy duotone lifts to full colour on hover (§4.4). */}
         <div
           aria-hidden="true"
