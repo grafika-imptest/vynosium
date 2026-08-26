@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef } from "react";
+import { HeroPhoto } from "@/components/sections/HeroPhoto";
 import { Pill } from "@/components/ui/primitives";
-import { withBasePath } from "@/lib/seo";
 import { gsap, ensureGsapRegistered, prefersReducedMotion } from "@/lib/motion";
 
 /**
@@ -16,9 +15,10 @@ import { gsap, ensureGsapRegistered, prefersReducedMotion } from "@/lib/motion";
  * The photograph carries pure white highlights, so the scrim is measured
  * rather than eyeballed; see the SCRIM note below for the numbers.
  *
- * No GL and no entrance transform on the photo: the browser paints it from
- * the first frame, so nothing about the closing pitch depends on a context,
- * an idle callback or a tween that might not run.
+ * No GL here: the photograph is a plain image layer (see HeroPhoto, which
+ * also carries the scroll parallax and is shared with the four path heroes),
+ * so nothing about the closing pitch depends on a context or an idle
+ * callback.
  */
 
 /*
@@ -37,18 +37,8 @@ const SCRIM_BASE = "rgba(11,29,46,0.62)";
 const SCRIM_WASH =
   "radial-gradient(ellipse 78% 62% at 50% 46%, rgba(11,29,46,0.45) 0%, rgba(11,29,46,0.28) 58%, rgba(11,29,46,0) 100%)";
 
-/**
- * Over-scale of the photo layer. It has to cover the frame at both ends of
- * the drift: PHOTO_TRAVEL of 9% each way needs 1.18, with the rest as slack
- * for the sub-pixel rounding of a scaled, translated layer.
- */
-const PHOTO_SCALE = 1.2;
-/** Drift in percent of the layer height, from -x on entry to +x on exit. */
-const PHOTO_TRAVEL = 9;
-
 export function FinalCta() {
   const sectionRef = useRef<HTMLElement>(null);
-  const photoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -57,29 +47,6 @@ export function FinalCta() {
 
     const ctx = gsap.context(() => {
       if (prefersReducedMotion()) return;
-
-      /*
-       * Parallax: the photo drifts against the copy, which stays put. Scrubbed
-       * to scroll rather than timed, so the depth reads on the way back up as
-       * well. yPercent leaves the inline scale alone — GSAP composes the two,
-       * so a failed tween degrades to the static, already-correct frame.
-       */
-      if (photoRef.current) {
-        gsap.fromTo(
-          photoRef.current,
-          { yPercent: -PHOTO_TRAVEL },
-          {
-            yPercent: PHOTO_TRAVEL,
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            },
-          }
-        );
-      }
 
       gsap.fromTo(
         ".final-cta-button",
@@ -114,31 +81,13 @@ export function FinalCta() {
       data-scene="final-cta"
     >
       {/*
-        Parallax layer. The over-scale is an inline transform, not a tween:
-        GSAP reads it as the starting value, and if the scroll driver never
-        runs the photograph still sits there, centred and full-bleed. The
-        scale is what buys the travel room — without it the drift would pull
-        the frame edge into view.
-
-        Decorative: the copy already names what this is, so the photograph is
-        hidden from assistive technology rather than described twice.
+        Portrait crops so tightly that dead centre is just the table between
+        the two people, so the frame shifts left to keep one of them in shot.
       */}
-      <div
-        ref={photoRef}
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{ transform: `scale(${PHOTO_SCALE})`, willChange: "transform" }}
-      >
-        <Image
-          src={withBasePath("/photo/rozhovor.jpg")}
-          alt=""
-          fill
-          sizes="100vw"
-          /* Portrait crops so tightly that dead centre is just the table:
-             shift the frame left so one of the two people stays in shot. */
-          className="object-cover object-[38%_50%] sm:object-center"
-        />
-      </div>
+      <HeroPhoto
+        src="/photo/rozhovor.jpg"
+        imageClassName="object-cover object-[38%_50%] sm:object-center"
+      />
       <div aria-hidden="true" className="absolute inset-0" style={{ background: SCRIM_BASE }} />
       <div aria-hidden="true" className="absolute inset-0" style={{ background: SCRIM_WASH }} />
 

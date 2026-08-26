@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { SetHeaderVariant } from "@/components/layout/HeaderVariantContext";
 import { Calculator } from "@/components/sections/Calculator";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { Faq } from "@/components/sections/Faq";
+import { HeroPhoto } from "@/components/sections/HeroPhoto";
 import { Opportunities } from "@/components/sections/Opportunities";
 import {
   Disclaimer,
@@ -16,7 +16,7 @@ import { PROCESS_STEPS, DISCLAIMERS } from "@/lib/data/site";
 import { CASE_STUDIES } from "@/lib/data/caseStudies";
 import { PATH_FAQ } from "@/lib/data/pathFaq";
 import type { PathDefinition } from "@/lib/data/paths";
-import { breadcrumbSchema, faqSchema, withBasePath } from "@/lib/seo";
+import { breadcrumbSchema, faqSchema } from "@/lib/seo";
 
 /*
  * HERO SCRIM — two layers over the photograph.
@@ -75,19 +75,11 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
       {/* 1 — hero */}
       <section className="relative z-[2] overflow-hidden bg-navy pb-[var(--space-10)] pt-[calc(var(--space-12)+40px)]">
         {/*
-          The strategy's own photograph. Decorative: the H1 over it names the
-          strategy, so a described image would say it twice. `priority`
-          because this is the LCP element on a page paid traffic lands on.
+          The strategy's own photograph, drifting against the copy on scroll.
+          `priority` because this is the LCP element on a page that paid
+          traffic lands on directly.
         */}
-        <Image
-          src={withBasePath(`/photo/cesty/${path.slug}.jpg`)}
-          alt=""
-          aria-hidden="true"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
+        <HeroPhoto src={`/photo/cesty/${path.slug}.jpg`} priority />
         <div aria-hidden="true" className="absolute inset-0" style={{ background: HERO_SCRIM_BASE }} />
         <div aria-hidden="true" className="absolute inset-0" style={{ background: HERO_SCRIM_VECTOR }} />
 
