@@ -554,3 +554,34 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/**
+ * Paths mega menu (§4.1).
+ *
+ * Hand-written rather than Tailwind variants: `group-has-[...]` with a class
+ * selector inside produced no CSS at all, and a mega menu that silently never
+ * opens is the worst kind of failure — nothing is broken on screen to notice.
+ *
+ * The panel spans the header container, so it cannot hang off either edge the
+ * way a panel centred on its trigger does. It opens from the trigger through
+ * :has(), stays open while the pointer or the keyboard is inside it, and its
+ * own top padding covers the gap under the bar so the pointer never crosses
+ * dead space on the way down.
+ *
+ * Where :has() is unsupported the panel simply never shows and the trigger
+ * stays what it already is: a link to the selector section.
+ */
+.paths-panel {
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--dur-ui) var(--ease-out),
+    visibility var(--dur-ui) var(--ease-out);
+}
+.nav-bar:has(.paths-trigger:hover) .paths-panel,
+.nav-bar:has(.paths-trigger:focus-visible) .paths-panel,
+.paths-panel:hover,
+.paths-panel:focus-within {
+  visibility: visible;
+  opacity: 1;
+}
