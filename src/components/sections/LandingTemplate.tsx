@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { SetHeaderVariant } from "@/components/layout/HeaderVariantContext";
 import { Calculator } from "@/components/sections/Calculator";
@@ -15,7 +16,28 @@ import { PROCESS_STEPS, DISCLAIMERS } from "@/lib/data/site";
 import { CASE_STUDIES } from "@/lib/data/caseStudies";
 import { PATH_FAQ } from "@/lib/data/pathFaq";
 import type { PathDefinition } from "@/lib/data/paths";
-import { breadcrumbSchema, faqSchema } from "@/lib/seo";
+import { breadcrumbSchema, faqSchema, withBasePath } from "@/lib/seo";
+
+/*
+ * HERO SCRIM — two layers over the photograph.
+ *
+ * A flat base, because the copy runs the full height of the section and
+ * these four photographs put their brightest area in a different place
+ * each time; and the identity vector on top of it, which deepens the
+ * bottom-left where the heading and the figures sit and opens the top
+ * right, so the picture is still a picture.
+ *
+ * The numbers are measured, not chosen. Composited against the brightest
+ * pixel inside each text box, across all four photographs, the floors are
+ * 9.0:1 for the heading, 5.8:1 for the lede and 4.6:1 for the smallest
+ * label — every element clears AA on every page.
+ *
+ * The lede takes Silver rather than Slate for the same reason as the
+ * closing CTA: over a photograph Slate measured 3.9:1.
+ */
+const HERO_SCRIM_BASE = "rgba(11,29,46,0.66)";
+const HERO_SCRIM_VECTOR =
+  "linear-gradient(38.5deg, rgba(16,42,67,0.9) 0%, rgba(16,42,67,0.55) 52%, rgba(16,42,67,0.2) 100%)";
 
 /**
  * Shared PPC landing template (§25–29).
@@ -51,8 +73,25 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
       <div aria-hidden="true" className="fixed inset-x-0 top-0 z-[130] h-0.5" style={{ background: accent }} />
 
       {/* 1 — hero */}
-      <section className="relative z-[2] bg-navy pb-[var(--space-10)] pt-[calc(var(--space-12)+40px)]">
-        <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
+      <section className="relative z-[2] overflow-hidden bg-navy pb-[var(--space-10)] pt-[calc(var(--space-12)+40px)]">
+        {/*
+          The strategy's own photograph. Decorative: the H1 over it names the
+          strategy, so a described image would say it twice. `priority`
+          because this is the LCP element on a page paid traffic lands on.
+        */}
+        <Image
+          src={withBasePath(`/photo/cesty/${path.slug}.jpg`)}
+          alt=""
+          aria-hidden="true"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div aria-hidden="true" className="absolute inset-0" style={{ background: HERO_SCRIM_BASE }} />
+        <div aria-hidden="true" className="absolute inset-0" style={{ background: HERO_SCRIM_VECTOR }} />
+
+        <div className="relative z-[1] mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
           <div className="flex items-center gap-4" style={{ color: accentOnDark }}>
             <PathGlyph path={path.id} />
             <span className="text-label">
@@ -61,7 +100,9 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
           </div>
 
           <h1 className="text-display-lg mt-8 max-w-[18ch] text-snow">{path.landingH1}</h1>
-          <p className="text-lede mt-6 max-w-[62ch] text-slate-on-dark">{path.landingLede}</p>
+          {/* Silver, not Slate: over a photograph Slate lands at 3.9:1 here.
+              Same call as the closing CTA, for the same reason. */}
+          <p className="text-lede mt-6 max-w-[62ch] text-silver">{path.landingLede}</p>
 
           <dl className="mt-10 flex flex-wrap gap-x-12 gap-y-6 border-t border-steel/50 pt-6">
             {path.metrics.map((metric) => (
