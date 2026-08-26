@@ -4,7 +4,7 @@ import { Disclaimer } from "@/components/ui/primitives";
 
 /**
  * Shell for the legal pages. The copy in these pages is a PLACEHOLDER
- * skeleton — the wording must be supplied and approved by Vynósium's
+ * skeleton — the wording must be supplied and approved by Vynosium's
  * legal counsel before launch.
  */
 export function LegalPage({

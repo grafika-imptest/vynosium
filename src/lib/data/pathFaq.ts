@@ -13,7 +13,7 @@ export const PATH_FAQ: Record<InvestmentPath, { q: string; a: string }[]> = {
     },
     {
       q: "Kdo hlídá rozpočet rekonstrukce?",
-      a: "Projektový tým Vynósium. Rozpočet vzniká před koupí a jeho čerpání vidíte průběžně.",
+      a: "Projektový tým Vynosium. Rozpočet vzniká před koupí a jeho čerpání vidíte průběžně.",
     },
     {
       q: "Mohu projekt financovat úvěrem?",
@@ -35,7 +35,7 @@ export const PATH_FAQ: Record<InvestmentPath, { q: string; a: string }[]> = {
     },
     {
       q: "Kdo řeší havárie a revize?",
-      a: "Správa Vynósium. Investor dostává přehled a vyúčtování, ne úkoly.",
+      a: "Správa Vynosium. Investor dostává přehled a vyúčtování, ne úkoly.",
     },
     {
       q: "Kolik potřebuji vlastního kapitálu?",

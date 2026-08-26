@@ -1,4 +1,4 @@
-# Vynósium — web
+# Vynosium — web
 
 Investiční platforma pro nemovitosti. Next.js 15 (App Router, statický
 export) · Tailwind v4 · GSAP 3 (ScrollTrigger, Flip) · Three.js · Lenis.
@@ -48,7 +48,7 @@ artefakty (projeví se to jako 404 na chunky a nefunkční hydratace).
 ## Co je zástupné a musí se doplnit před spuštěním
 
 - **Všechna čísla** v `src/lib/data/` (projekty, reference, důvěryhodnostní
-  čísla, historie obchodů) — jde o placeholdery, ne o data Vynósium.
+  čísla, historie obchodů) — jde o placeholdery, ne o data Vynosium.
 - **Tým** v `src/lib/data/team.ts` — jména, pozice, portréty, LinkedIn.
 - **Kontakty** v `src/lib/data/site.ts` — telefon, e-mail, adresa, IČO.
 - **Fotografie** — dnes jsou všude duotone gradienty. Art direction: současná

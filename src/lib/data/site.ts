@@ -8,11 +8,11 @@
  */
 
 export const SITE = {
-  name: "Vynósium",
-  legalName: "Vynósium s.r.o.",
+  name: "Vynosium",
+  legalName: "Vynosium s.r.o.",
   claim: "CHYTRÁ CESTA K VÝNOSŮM",
   tagline: "Investujte do nemovitostí způsobem, který odpovídá vašim cílům.",
-  group: "Vynósium je součástí skupiny Real Luxembourg.",
+  group: "Vynosium je součástí skupiny Real Luxembourg.",
   phone: "+420 000 000 000",
   phoneHref: "tel:+420000000000",
   email: "info@vynosium.cz",
@@ -213,7 +213,7 @@ export const FAQ = [
 
 export const DISCLAIMERS = {
   general:
-    "Uvedené informace jsou obecného charakteru a nepředstavují investiční doporučení. Vynósium negarantuje výnos.",
+    "Uvedené informace jsou obecného charakteru a nepředstavují investiční doporučení. Vynosium negarantuje výnos.",
   calculator:
     "Orientační model. Nejde o garantovaný výsledek ani investiční doporučení.",
   modelValues:

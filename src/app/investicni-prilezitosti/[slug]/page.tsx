@@ -145,7 +145,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   "repeating-linear-gradient(38.5deg, #f5f7fa 0 22px, #ffffff 22px 44px)",
               }}
               role="img"
-              aria-label={`Mapa lokality ${project.location} — v produkci nahrazena mapou se stylem Vynósium.`}
+              aria-label={`Mapa lokality ${project.location} — v produkci nahrazena mapou se stylem Vynosium.`}
             >
               <div className="flex h-full items-center justify-center">
                 <span className="inline-block h-3 w-3 rounded-full border-2 border-emerald" />

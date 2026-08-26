@@ -27,11 +27,16 @@ export function Footer() {
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div>
+            {/*
+              The same claim-free mark as the header, so the brand reads
+              identically at both ends of the page. The claim under it is live
+              text, which is why the logo that carries its own is not used.
+            */}
             <Image
-              src={withBasePath("/brand/logo-horizontal-white.svg")}
+              src={withBasePath("/brand/logo-navbar-white.svg")}
               alt={SITE.name}
-              width={160}
-              height={43}
+              width={185}
+              height={35}
               className="h-8 w-auto"
             />
             <p className="text-label mt-5 text-silver">{SITE.claim}</p>

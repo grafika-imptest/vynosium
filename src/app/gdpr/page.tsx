@@ -4,7 +4,7 @@ import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Zpracování osobních údajů",
-  description: "Jak Vynósium zpracovává osobní údaje zájemců o investici a jaká máte práva.",
+  description: "Jak Vynosium zpracovává osobní údaje zájemců o investici a jaká máte práva.",
   alternates: { canonical: absoluteUrl("/gdpr") },
   robots: { index: false, follow: true },
 };

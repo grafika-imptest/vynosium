@@ -77,7 +77,7 @@ export default function ContactPage() {
               className="mt-8 aspect-[4/3] w-full rounded-[var(--radius-card)] border border-light-gray"
               style={{ background: "repeating-linear-gradient(38.5deg, #f5f7fa 0 22px, #ffffff 22px 44px)" }}
               role="img"
-              aria-label={`Mapa — ${SITE.address.street}, ${SITE.address.city}. V produkci nahrazena mapou ve stylu Vynósium.`}
+              aria-label={`Mapa — ${SITE.address.street}, ${SITE.address.city}. V produkci nahrazena mapou ve stylu Vynosium.`}
             >
               <div className="flex h-full items-center justify-center">
                 <span className="inline-block h-3 w-3 rounded-full border-2 border-emerald" />

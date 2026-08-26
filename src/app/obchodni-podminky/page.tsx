@@ -19,7 +19,7 @@ export default function TermsPage() {
         {
           heading: "Rozsah služeb",
           paragraphs: [
-            "Vynósium zprostředkovává investiční příležitosti v nemovitostech a zajišťuje související služby — výběr, prověření, financování, realizaci, pronájem a správu.",
+            "Vynosium zprostředkovává investiční příležitosti v nemovitostech a zajišťuje související služby — výběr, prověření, financování, realizaci, pronájem a správu.",
           ],
         },
         {

@@ -3,7 +3,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { WHY_VYNOSIUM } from "@/lib/data/site";
 
 /**
- * Why Vynósium (§3/10). Six arguments, stated plainly.
+ * Why Vynosium (§3/10). Six arguments, stated plainly.
  *
  * Deliberately the quietest section on the page: hairline grid, no
  * movement beyond a fade. A section with less motion than its neighbours

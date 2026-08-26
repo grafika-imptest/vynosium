@@ -6,7 +6,7 @@ import { gsap, ensureGsapRegistered, prefersReducedMotion } from "@/lib/motion";
 import { VECTOR_ANGLE_DEG } from "@/lib/tokens";
 
 /**
- * Vynósium introduced (§3/06).
+ * Vynosium introduced (§3/06).
  *
  * The right half is a connection diagram: seven modules strung on ONE
  * line drawn at 38.5°. The line is scrubbed by scroll and each module
@@ -104,7 +104,7 @@ export function AboutIntro() {
             odpovědnost.
           </p>
           <Pill href="/jak-investujeme" variant="ghost-light" className="mt-8">
-            Jak Vynósium funguje
+            Jak Vynosium funguje
           </Pill>
         </div>
 

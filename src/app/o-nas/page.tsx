@@ -11,7 +11,7 @@ import { absoluteUrl, breadcrumbSchema } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "O nás",
   description:
-    "Kdo za Vynósium stojí, jaké projekty jsme realizovali a jaké zázemí máme. Zkušenosti, data a dlouhodobý pohled místo prezentací.",
+    "Kdo za Vynosium stojí, jaké projekty jsme realizovali a jaké zázemí máme. Zkušenosti, data a dlouhodobý pohled místo prezentací.",
   alternates: { canonical: absoluteUrl("/o-nas") },
 };
 
@@ -95,7 +95,7 @@ export default function AboutPage() {
 
             <div className="mt-12 max-w-[64ch]">
               <SectionIndex index="03" label="ZÁZEMÍ" tone="light" />
-              <h2 className="text-heading mt-6 text-navy">Skupina za Vynósium</h2>
+              <h2 className="text-heading mt-6 text-navy">Skupina za Vynosium</h2>
               <p className="text-body mt-4 text-text-secondary">
                 {SITE.group} Zázemí skupiny nám umožňuje plánovat v delším horizontu a nedělat
                 v jednotlivých projektech kompromisy kvůli krátkodobému tlaku na výsledek.

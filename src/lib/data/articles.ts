@@ -35,7 +35,7 @@ export const ARTICLES: Article[] = [
     category: "Jak investovat",
     perex:
       "První investiční byt se nevybírá podle toho, jestli by se v něm dalo bydlet. Rozhoduje propočet, likvidita a horizont.",
-    author: "Redakce Vynósium",
+    author: "Redakce Vynosium",
     publishedAt: "2026-02-11",
     readingMinutes: 6,
     relatedPath: { label: "Zhodnocení kapitálu", href: "/zhodnoceni-kapitalu" },
@@ -68,7 +68,7 @@ export const ARTICLES: Article[] = [
     category: "Financování",
     perex:
       "Úvěr zvyšuje výnos z vlastního kapitálu, ale zároveň zvyšuje citlivost na neobsazenost a růst sazeb. Obojí patří do modelu.",
-    author: "Redakce Vynósium",
+    author: "Redakce Vynosium",
     publishedAt: "2026-01-28",
     readingMinutes: 7,
     relatedPath: { label: "Pasivní příjem", href: "/pasivni-prijem" },
@@ -100,7 +100,7 @@ export const ARTICLES: Article[] = [
     category: "Pronájem",
     perex:
       "Krátkodobý pronájem vykazuje vyšší hrubý výnos. Po odečtení provozu, obsazenosti a regulace bývá rozdíl podstatně menší.",
-    author: "Redakce Vynósium",
+    author: "Redakce Vynosium",
     publishedAt: "2026-01-14",
     readingMinutes: 5,
     relatedPath: { label: "Pasivní příjem", href: "/pasivni-prijem" },
@@ -125,7 +125,7 @@ export const ARTICLES: Article[] = [
     category: "Rekonstrukce",
     perex:
       "Ne každá investovaná koruna se vrací. Rozhoduje dispozice, stav rozvodů a to, co v dané lokalitě kupující skutečně ocení.",
-    author: "Redakce Vynósium",
+    author: "Redakce Vynosium",
     publishedAt: "2025-12-09",
     readingMinutes: 6,
     relatedPath: { label: "Zhodnotit byt", href: "/zhodnotit-byt" },
@@ -150,7 +150,7 @@ export const ARTICLES: Article[] = [
     category: "Lokality",
     perex:
       "Doba inzerce, obsazenost a poměr nabídky k poptávce řeknou o lokalitě víc než plán rozvoje na dvacet let dopředu.",
-    author: "Redakce Vynósium",
+    author: "Redakce Vynosium",
     publishedAt: "2025-11-20",
     readingMinutes: 5,
     relatedPath: { label: "Investiční příležitosti", href: "/investicni-prilezitosti" },
@@ -170,7 +170,7 @@ export const ARTICLES: Article[] = [
     category: "Daně a legislativa",
     perex:
       "Volba formy vlastnictví ovlivní výnos víc než vyjednaná sleva z kupní ceny. Rozhodovat by se mělo před koupí.",
-    author: "Redakce Vynósium",
+    author: "Redakce Vynosium",
     publishedAt: "2025-10-30",
     readingMinutes: 8,
     relatedPath: { label: "Budování majetku", href: "/budovani-majetku" },
@@ -190,7 +190,7 @@ export const ARTICLES: Article[] = [
     category: "Investiční strategie",
     perex:
       "Prodej není odměna za dobré rozhodnutí, ale další rozhodnutí. Rozhoduje výnos z aktuální hodnoty, ne z pořizovací ceny.",
-    author: "Redakce Vynósium",
+    author: "Redakce Vynosium",
     publishedAt: "2025-10-02",
     readingMinutes: 6,
     relatedPath: { label: "Budování majetku", href: "/budovani-majetku" },
