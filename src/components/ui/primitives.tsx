@@ -13,7 +13,8 @@ const PILL_BASE =
   "focus-ring inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-pill)] px-7 text-[15px] font-medium no-underline transition-all duration-[var(--dur-micro)]";
 
 const PILL_VARIANTS: Record<PillVariant, string> = {
-  emerald: "bg-emerald text-white hover:bg-emerald-hover hover:-translate-y-px active:bg-emerald-active",
+  emerald:
+    "bg-emerald-cta text-white hover:bg-emerald-cta-hover hover:-translate-y-px active:bg-emerald-active",
   "ghost-dark": "border border-snow/50 text-snow hover:border-snow",
   "ghost-light": "border border-steel text-navy hover:border-navy",
 };
@@ -86,7 +87,7 @@ export function SectionIndex({
   className?: string;
 }) {
   return (
-    <p className={`text-label ${tone === "dark" ? "text-slate" : "text-text-muted"} ${className}`}>
+    <p className={`text-label ${tone === "dark" ? "text-silver" : "text-text-muted"} ${className}`}>
       {index} — {label}
     </p>
   );
@@ -106,16 +107,27 @@ export function Disclaimer({
   className?: string;
 }) {
   return (
-    <p className={`text-disclaimer ${tone === "dark" ? "text-slate" : "text-text-muted"} ${className}`}>
+    <p className={`text-disclaimer ${tone === "dark" ? "text-silver" : "text-text-muted"} ${className}`}>
       {children}
     </p>
   );
 }
 
-/** Model-value marker. Used everywhere a number is projected, not measured. */
-export function ModelMark() {
+/**
+ * Model-value marker. Used everywhere a number is projected, not measured.
+ *
+ * It renders at 0.62em — around 9-11px — so it needs the reading variant of
+ * emerald for its surface; the brand value fails AA at this size on both
+ * White and Navy.
+ */
+export function ModelMark({ tone = "light" }: { tone?: "light" | "dark" }) {
   return (
-    <sup className="ml-px align-super text-[0.62em] text-emerald" title="modelová hodnota">
+    <sup
+      className={`ml-px align-super text-[0.62em] ${
+        tone === "dark" ? "text-emerald-on-dark" : "text-emerald-on-light"
+      }`}
+      title="modelová hodnota"
+    >
       ᴹ
     </sup>
   );
@@ -142,7 +154,7 @@ export function Metric({
 }) {
   return (
     <div>
-      <p className={`text-label ${tone === "dark" ? "text-slate" : "text-text-muted"}`}>{label}</p>
+      <p className={`text-label ${tone === "dark" ? "text-silver" : "text-text-muted"}`}>{label}</p>
       <p
         className={`${size === "xl" ? "text-metric-xl" : "text-metric"} mt-3 ${
           tone === "dark" ? "text-snow" : "text-navy"
@@ -152,18 +164,35 @@ export function Metric({
         {value}
       </p>
       {basis && (
-        <p className={`text-label mt-3 ${tone === "dark" ? "text-steel" : "text-text-muted"}`}>{basis}</p>
+        <p className={`text-label mt-3 ${tone === "dark" ? "text-slate-on-dark" : "text-text-muted"}`}>{basis}</p>
       )}
     </div>
   );
 }
 
-/** Strategy badge: 1px token line + 6px dot + 11px uppercase label. */
-export function PathBadge({ path, label }: { path: InvestmentPath; label: string }) {
+/**
+ * Strategy badge: 1px token line + 6px dot + 11px uppercase label.
+ *
+ * The label takes the surface-specific text variant of the token (11px has
+ * to clear 4.5:1); the line and the dot keep the pure token, where
+ * contrast ratios do not apply.
+ */
+export function PathBadge({
+  path,
+  label,
+  tone = "light",
+}: {
+  path: InvestmentPath;
+  label: string;
+  tone?: "light" | "dark";
+}) {
   return (
     <span
       className="text-label inline-flex items-center gap-2 rounded-[var(--radius-pill)] border px-3 py-1.5"
-      style={{ borderColor: `var(--color-path-${path})`, color: `var(--color-path-${path})` }}
+      style={{
+        borderColor: `var(--color-path-${path})`,
+        color: `var(--color-path-${path}-on-${tone})`,
+      }}
     >
       <span
         className="inline-block h-1.5 w-1.5 rounded-full"
@@ -185,19 +214,21 @@ export function StatusPill({
   label: string;
   tone: "open" | "last" | "closed" | "prepared";
 }) {
-  const color = {
-    open: "var(--color-emerald)",
-    last: "var(--color-fn-warning)",
-    closed: "var(--color-steel)",
-    prepared: "var(--color-slate)",
+  // Line and dot carry the raw state colour; the 11px label carries the
+  // reading variant — Amber at #F59E0B is 2.15:1 on white.
+  const { line, text } = {
+    open: { line: "var(--color-emerald)", text: "var(--color-emerald-on-light)" },
+    last: { line: "var(--color-fn-warning)", text: "var(--color-fn-warning-on-light)" },
+    closed: { line: "var(--color-steel)", text: "var(--color-steel)" },
+    prepared: { line: "var(--color-slate)", text: "var(--color-text-secondary)" },
   }[tone];
 
   return (
     <span
       className="text-label inline-flex items-center gap-2 rounded-[var(--radius-pill)] border px-3 py-1.5"
-      style={{ borderColor: color, color }}
+      style={{ borderColor: line, color: text }}
     >
-      <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: color }} />
+      <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: line }} />
       {label}
     </span>
   );

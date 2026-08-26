@@ -85,7 +85,7 @@ export default function AboutPage() {
                     <tr key={row.period} className="border-b border-light-gray last:border-b-0 even:bg-mist">
                       <td className="text-data px-5 py-4 text-navy">{row.period}</td>
                       <td className="text-data px-5 py-4 text-text-secondary">{row.projects}</td>
-                      <td className="text-data px-5 py-4 text-emerald">{row.volume}</td>
+                      <td className="text-data px-5 py-4 text-emerald-on-light">{row.volume}</td>
                     </tr>
                   ))}
                 </tbody>

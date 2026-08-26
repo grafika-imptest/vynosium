@@ -31,7 +31,7 @@ export function PageIntro({
           {title}
         </h1>
         {lede && (
-          <p className={`text-lede mt-6 max-w-[64ch] ${dark ? "text-slate" : "text-text-secondary"}`}>
+          <p className={`text-lede mt-6 max-w-[64ch] ${dark ? "text-slate-on-dark" : "text-text-secondary"}`}>
             {lede}
           </p>
         )}

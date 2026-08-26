@@ -97,7 +97,7 @@ export function TrustNumbers() {
               {/* Labels here wrap to two lines, so they need leading the
                   single-line label token does not carry. */}
               <p className="text-label text-label-wrap mt-5 text-snow/80">{item.label}</p>
-              <p className="text-label text-label-wrap mt-3 text-steel">{item.basis}</p>
+              <p className="text-label text-label-wrap mt-3 text-slate-on-dark">{item.basis}</p>
             </div>
           ))}
         </div>

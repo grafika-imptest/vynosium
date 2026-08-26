@@ -71,7 +71,7 @@ export function Faq({
                   <span className="text-subheading">{item.q}</span>
                   <span
                     aria-hidden="true"
-                    className={`text-data mt-1 shrink-0 ${isOpen ? "text-emerald" : dark ? "text-slate" : "text-text-muted"}`}
+                    className={`text-data mt-1 shrink-0 ${isOpen ? (dark ? "text-emerald-on-dark" : "text-emerald-on-light") : dark ? "text-slate-on-dark" : "text-text-muted"}`}
                   >
                     {isOpen ? "−" : "+"}
                   </span>
@@ -83,7 +83,7 @@ export function Faq({
                       id={`faq-panel-${i}`}
                       role="region"
                       aria-labelledby={`faq-button-${i}`}
-                      className={`text-body pb-6 ${dark ? "text-slate" : "text-text-secondary"}`}
+                      className={`text-body pb-6 ${dark ? "text-slate-on-dark" : "text-text-secondary"}`}
                     >
                       {item.a}
                     </p>

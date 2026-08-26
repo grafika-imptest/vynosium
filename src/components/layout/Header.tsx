@@ -151,7 +151,7 @@ export function Header() {
               </a>
               <Link
                 href="/kontakt"
-                className="focus-ring inline-flex min-h-12 items-center rounded-[var(--radius-pill)] bg-emerald px-6 text-[15px] font-medium text-white no-underline transition-colors duration-[var(--dur-micro)] hover:bg-emerald-hover"
+                className="focus-ring inline-flex min-h-12 items-center rounded-[var(--radius-pill)] bg-emerald-cta px-6 text-[15px] font-medium text-white no-underline transition-colors duration-[var(--dur-micro)] hover:bg-emerald-cta-hover"
               >
                 Nezávazná konzultace
               </Link>

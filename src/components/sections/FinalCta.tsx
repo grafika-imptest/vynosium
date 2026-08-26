@@ -73,7 +73,7 @@ export function FinalCta() {
 
       <div className="relative z-[2] mx-auto max-w-[720px] px-[var(--gutter)] text-center">
         <h2 className="text-display-lg text-snow">Vaše další investice může začít jedním rozhovorem.</h2>
-        <p className="text-lede mt-6 text-slate">
+        <p className="text-lede mt-6 text-slate-on-dark">
           Řekněte nám, kolik chcete investovat a co od investice čekáte. Připravíme modelový propočet
           pro váš scénář — nezávazně a bez prezentací.
         </p>

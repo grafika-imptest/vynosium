@@ -166,8 +166,8 @@ export function Calculator({
               ) : (
                 <StaticRibbon input={committed} />
               )}
-              <p className="text-label absolute left-4 top-4 text-steel">Model. hodnota majetku</p>
-              <p className="text-label absolute bottom-4 right-4 text-steel">Pásmo scénářů P10–P90</p>
+              <p className="text-label absolute left-4 top-4 text-slate-on-dark">Model. hodnota majetku</p>
+              <p className="text-label absolute bottom-4 right-4 text-slate-on-dark">Pásmo scénářů P10–P90</p>
             </div>
 
             <div ref={liveRef} aria-live="polite" className="sr-only" />
@@ -288,7 +288,7 @@ export function Calculator({
             />
 
             <div>
-              <p className="text-label mb-4 text-slate">Preferovaný typ investice</p>
+              <p className="text-label mb-4 text-silver">Preferovaný typ investice</p>
               <div className="flex flex-wrap gap-2">
                 {INVESTMENT_PATHS.map((path) => {
                   const active = committed.type === path.id;
@@ -305,7 +305,7 @@ export function Calculator({
                       className="focus-ring text-label rounded-[var(--radius-pill)] border px-4 py-2.5 transition-colors duration-[var(--dur-micro)]"
                       style={{
                         borderColor: active ? `var(--color-${path.colorVar})` : "rgba(72,101,129,0.6)",
-                        color: active ? `var(--color-${path.colorVar})` : "var(--color-slate)",
+                        color: active ? `var(--color-${path.colorVar}-on-dark)` : "var(--color-slate-on-dark)",
                       }}
                     >
                       {path.label}
@@ -315,7 +315,7 @@ export function Calculator({
               </div>
             </div>
 
-            <p className="text-body-sm max-w-[46ch] text-slate">
+            <p className="text-body-sm max-w-[46ch] text-slate-on-dark">
               Model počítá s pořizovacími náklady, provozními náklady, neobsazeností a úrokem z
               financování. Hodnoty jsou uvedeny před zdaněním.
             </p>
@@ -341,17 +341,17 @@ function LedgerRow({
 }) {
   return (
     <div>
-      <dt className="text-label text-slate">{label}</dt>
+      <dt className="text-label text-silver">{label}</dt>
       <dd
         data-out={out}
-        className={`text-metric mt-3 ${emphasise ? "text-emerald" : "text-snow"}`}
+        className={`text-metric mt-3 ${emphasise ? "text-emerald-on-dark" : "text-snow"}`}
         style={emphasise ? { fontSize: "2rem" } : undefined}
       >
         {initial}
       </dd>
-      <dd className="text-label mt-2 text-steel">
+      <dd className="text-label mt-2 text-slate-on-dark">
         {basis}
-        <ModelMark />
+        <ModelMark tone="dark" />
       </dd>
     </div>
   );
@@ -395,7 +395,7 @@ function Slider({
   return (
     <div>
       <div className="mb-3 flex items-baseline justify-between gap-4">
-        <label htmlFor={`range-${name}`} className="text-label text-slate">
+        <label htmlFor={`range-${name}`} className="text-label text-silver">
           {label}
         </label>
         <span ref={valueRef} className="text-data text-snow">

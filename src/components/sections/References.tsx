@@ -91,7 +91,7 @@ export function References() {
             />
 
             <h3 className="text-subheading mt-6 text-snow">{study.name}</h3>
-            <p className="text-body-sm mt-1 text-slate">
+            <p className="text-body-sm mt-1 text-slate-on-dark">
               {study.location} · {study.year}
               {study.hasVideo && " · videoreference"}
             </p>
@@ -102,7 +102,7 @@ export function References() {
                   key={row.label}
                   className="flex items-baseline justify-between gap-6 border-b border-steel/30 pb-2 last:border-b-0"
                 >
-                  <dt className="text-body-sm text-slate">{row.label}</dt>
+                  <dt className="text-body-sm text-slate-on-dark">{row.label}</dt>
                   <dd className="text-data text-snow">{row.value}</dd>
                 </div>
               ))}
@@ -110,7 +110,7 @@ export function References() {
 
             <Link
               href={`/reference/${study.slug}`}
-              className="text-label mt-6 inline-flex items-center gap-2 text-emerald no-underline"
+              className="text-label mt-6 inline-flex items-center gap-2 text-emerald-on-dark no-underline"
             >
               Detail případové studie
               <svg width="18" height="10" viewBox="0 0 18 10" fill="none" aria-hidden="true">

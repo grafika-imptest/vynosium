@@ -30,7 +30,11 @@ import { breadcrumbSchema, faqSchema } from "@/lib/seo";
  * These pages are designed mobile-first: most paid traffic lands here.
  */
 export function LandingTemplate({ path }: { path: PathDefinition }) {
+  // The pure token is for lines and dots; text takes the surface-specific
+  // variant, because 11-24px type has to clear 4.5:1 either way (§5).
   const accent = `var(--color-${path.colorVar})`;
+  const accentOnDark = `var(--color-${path.colorVar}-on-dark)`;
+  const accentOnLight = `var(--color-${path.colorVar}-on-light)`;
   const cases = CASE_STUDIES.filter((c) => c.relatedPath === `/${path.slug}`).slice(0, 2);
 
   return (
@@ -50,7 +54,7 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
       {/* 1 — hero */}
       <section className="relative z-[2] bg-navy pb-[var(--space-10)] pt-[calc(var(--space-12)+40px)]">
         <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-          <div className="flex items-center gap-4" style={{ color: accent }}>
+          <div className="flex items-center gap-4" style={{ color: accentOnDark }}>
             <PathGlyph path={path.id} />
             <span className="text-label">
               {path.index} — {path.label}
@@ -58,13 +62,13 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
           </div>
 
           <h1 className="text-display-lg mt-8 max-w-[18ch] text-snow">{path.landingH1}</h1>
-          <p className="text-lede mt-6 max-w-[62ch] text-slate">{path.landingLede}</p>
+          <p className="text-lede mt-6 max-w-[62ch] text-slate-on-dark">{path.landingLede}</p>
 
           <dl className="mt-10 flex flex-wrap gap-x-12 gap-y-6 border-t border-steel/50 pt-6">
             {path.metrics.map((metric) => (
               <div key={metric.label}>
-                <dt className="text-label text-steel">{metric.label}</dt>
-                <dd className="text-metric mt-3" style={{ color: accent }}>
+                <dt className="text-label text-slate-on-dark">{metric.label}</dt>
+                <dd className="text-metric mt-3" style={{ color: accentOnDark }}>
                   {metric.value}
                 </dd>
               </div>
@@ -114,7 +118,7 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
           <ol className="mt-12 grid grid-cols-1 gap-px bg-light-gray md:grid-cols-2 lg:grid-cols-4">
             {path.mechanics.map((step, i) => (
               <li key={step.title} className="bg-mist p-8">
-                <span className="text-label" style={{ color: accent }}>
+                <span className="text-label" style={{ color: accentOnLight }}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <h3 className="text-subheading mt-5 text-navy">{step.title}</h3>
@@ -148,7 +152,7 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
                   <dt className="text-body-sm text-text-secondary">{row.label}</dt>
                   <dd className="text-data text-navy">
                     {row.value}
-                    {row.model && <ModelMark />}
+                    {row.model && <ModelMark tone="light" />}
                   </dd>
                 </div>
               ))}
@@ -183,11 +187,11 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
                 key={step.index}
                 className="rounded-[var(--radius-card)] border border-steel/50 p-6"
               >
-                <span className="text-label" style={{ color: accent }}>
+                <span className="text-label" style={{ color: accentOnDark }}>
                   {step.index}/06
                 </span>
                 <h3 className="text-subheading mt-4 text-snow">{step.title}</h3>
-                <p className="text-body-sm mt-3 max-w-[42ch] text-slate">{step.text}</p>
+                <p className="text-body-sm mt-3 max-w-[42ch] text-slate-on-dark">{step.text}</p>
               </li>
             ))}
           </ol>
@@ -218,7 +222,7 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
                     {study.location} · {study.year}
                   </p>
                   <h3 className="text-subheading mt-4 text-navy">{study.name}</h3>
-                  <p className="text-data mt-3" style={{ color: accent }}>
+                  <p className="text-data mt-3" style={{ color: accentOnLight }}>
                     {study.result}
                   </p>
                   <dl className="mt-5">

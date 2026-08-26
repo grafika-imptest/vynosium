@@ -127,7 +127,7 @@ export function ScenarioVector({
                 x={x}
                 y={y + 44}
                 textAnchor="middle"
-                fill={dark ? "#627d98" : "#7b8794"}
+                fill={dark ? "var(--color-slate-on-dark)" : "var(--color-text-muted)"}
                 style={{ font: "400 11px var(--font-mono)", letterSpacing: "0.14em" }}
               >
                 {node.time.toUpperCase()}

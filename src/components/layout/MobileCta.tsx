@@ -44,7 +44,7 @@ export function MobileCta() {
         </a>
         <Link
           href="/kontakt"
-          className="focus-ring flex h-11 flex-[1.4] items-center justify-center rounded-[var(--radius-pill)] bg-emerald text-sm font-medium text-white no-underline"
+          className="focus-ring flex h-11 flex-[1.4] items-center justify-center rounded-[var(--radius-pill)] bg-emerald-cta text-sm font-medium text-white no-underline"
         >
           Nezávazná konzultace
         </Link>

@@ -17,6 +17,30 @@
   --color-emerald: #1f8a70;
   --color-emerald-hover: #25a184;
   --color-emerald-active: #187059;
+
+  /*
+   * Emerald as TEXT. The brand emerald measures 4.26:1 on White and
+   * 3.44:1 on Navy, so it fails AA in both directions for anything under
+   * 18.66px — and it is used on 11-24px numbers all over the site. These
+   * are the reading variants (5.24 on White, 5.83 on Navy). Fills, borders
+   * and the CTA background keep the brand value.
+   */
+  --color-emerald-on-light: #1b7a63;
+  --color-emerald-on-dark: #35b795;
+
+  /*
+   * CTA fill. White 15px on the brand emerald measures 4.26:1 — just
+   * under AA, on the single most important element of the site. These two
+   * are the same green deepened until the label clears it (6.00 at rest,
+   * 5.24 on hover; the spec's lighter #25A184 hover would drop to ~3.3).
+   *
+   * BRAND DECISION: if the brand book insists on #1F8A70 as a fill, point
+   * --color-emerald-cta back at --color-emerald and the button returns to
+   * 4.26:1. Everything else (graphs, borders, accents) keeps the brand
+   * value already.
+   */
+  --color-emerald-cta: #187059;
+  --color-emerald-cta-hover: #1b7a63;
   --color-white: #ffffff;
   --color-mist: #f5f7fa;
 
@@ -33,16 +57,34 @@
   --color-silver: #bcccdc;
   --color-light-gray: #e4e7eb;
 
+  /*
+   * Muted TEXT on dark surfaces. §5 claims Slate is 4.6:1 on Navy; it
+   * measures 3.42:1, and Steel measures 2.41:1 — both fail AA for the
+   * sizes they were being used at. This tone keeps the muted feel and
+   * measures 5.60 on Navy, 5.05 on Surface 1 and 6.54 on Abyss.
+   * Steel stays what it is meant to be: a 1px line colour.
+   */
+  --color-slate-on-dark: #8ba3b9;
+
   /* Text */
   --color-text-primary: #102a43;
   --color-text-secondary: #52606d;
-  --color-text-muted: #7b8794;
+  /*
+   * §5 lists #7B8794 here and claims 4.54:1 on White. It measures 3.66:1
+   * on White and 3.41:1 on Mist, and it is the colour of every 11-12px
+   * label, caption and disclaimer on the light surfaces — the smallest
+   * type on the site, failing AA everywhere. #66717F is the same grey
+   * family at 4.96 / 4.62.
+   */
+  --color-text-muted: #66717f;
 
-  /* Investment paths — accents only (§5: never a fill) */
-  --color-path-flip: #1f8a70;
-  --color-path-income: #2f6fed;
-  --color-path-capital: #f59e0b;
-  --color-path-wealth: #6d5bd0;
+  /* Functional colours as TEXT on light surfaces (the base values are
+     2.00-4.08:1 on Mist; these are 4.92-5.28). */
+  --color-fn-warning-on-light: #96600a;
+  --color-fn-risk-on-light: #c13c3c;
+  --color-fn-positive-on-light: #2a8135;
+
+  /* Investment path colours live in :root, not here — see the note there. */
 
   /* Functional */
   --color-fn-positive: #3fb950;
@@ -55,6 +97,44 @@
 }
 
 :root {
+  /*
+   * Investment path colours (§5) — accents only, never a fill.
+   *
+   * Declared here rather than in @theme on purpose: these are consumed as
+   * `var(--color-path-${id})` built at runtime, and Tailwind v4 only emits
+   * the theme variables that some generated utility actually references.
+   * From @theme they silently resolved to nothing, which made the metric
+   * text inherit body navy — invisible on a navy card.
+   */
+  --color-path-flip: #1f8a70;
+  --color-path-income: #2f6fed;
+  --color-path-capital: #f59e0b;
+  --color-path-wealth: #6d5bd0;
+
+  /*
+   * The same identity, tuned for TEXT on dark surfaces. The base tokens
+   * are chosen for 1px lines and dots, where contrast ratios do not
+   * apply; as type on #16324B they measure 3.10 / 2.90 / 6.14 / 2.55 : 1,
+   * so three of the four fail AA. These keep the hue and clear 4.5:1
+   * (5.25 / 4.90 / 7.01 / 5.00). Lines, dots and shader accents keep
+   * using the base tokens above.
+   */
+  --color-path-flip-on-dark: #35b795;
+  --color-path-income-on-dark: #6f9bff;
+  --color-path-capital-on-dark: #f5b03c;
+  --color-path-wealth-on-dark: #a294ea;
+
+  /*
+   * Mirror problem on White/Mist: the base tokens measure 3.97 / 4.24 /
+   * 2.00 / 4.82 : 1 on Mist — Amber is the bad one at 2.00, and only
+   * Violet clears AA. These are the text variants for light surfaces
+   * (4.88 / 5.07 / 4.92 / 5.75 on Mist).
+   */
+  --color-path-flip-on-light: #1b7a63;
+  --color-path-income-on-light: #2b63d6;
+  --color-path-capital-on-light: #96600a;
+  --color-path-wealth-on-light: #6250bd;
+
   /* Space — 4px base, fluid at section level */
   --space-1: 4px;
   --space-2: 8px;

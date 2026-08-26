@@ -106,7 +106,7 @@ export function Opportunities({
             <FilterPill
               key={path.id}
               active={strategy === path.id}
-              accent={`var(--color-${path.colorVar})`}
+              accent={`var(--color-${path.colorVar}-on-light)`}
               onClick={() => {
                 beforeFilterChange();
                 setStrategy(path.id);
@@ -210,7 +210,7 @@ function FilterPill({
       className="focus-ring text-label shrink-0 snap-start rounded-[var(--radius-pill)] border px-4 py-2.5 transition-colors duration-[var(--dur-micro)]"
       style={{
         borderColor: active ? accent ?? "var(--color-emerald)" : "var(--color-light-gray)",
-        color: active ? accent ?? "var(--color-emerald)" : "var(--color-text-muted)",
+        color: active ? accent ?? "var(--color-emerald-on-light)" : "var(--color-text-muted)",
       }}
     >
       {children}
@@ -266,7 +266,7 @@ function ProjectTable({ projects }: { projects: Project[] }) {
                   {INVESTMENT_PATHS.find((p) => p.id === project.strategy)?.label}
                 </td>
                 <td className="text-data px-5 py-4 text-navy">{formatCzk(project.minCapital)}</td>
-                <td className="text-data px-5 py-4 text-emerald">{headline?.value}</td>
+                <td className="text-data px-5 py-4 text-emerald-on-light">{headline?.value}</td>
                 <td className="text-body-sm px-5 py-4 text-text-secondary">
                   {STATUS_LABEL[project.status]}
                 </td>

@@ -58,11 +58,11 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
             <div key={metric.label}>
               <dt className="text-label text-text-muted">{metric.label}</dt>
               <dd
-                className={`text-data mt-2 ${metric.emphasis ? "text-emerald" : "text-navy"}`}
+                className={`text-data mt-2 ${metric.emphasis ? "text-emerald-on-light" : "text-navy"}`}
                 style={{ fontSize: "1.125rem" }}
               >
                 {metric.value}
-                {metric.model && <ModelMark />}
+                {metric.model && <ModelMark tone="light" />}
               </dd>
             </div>
           ))}

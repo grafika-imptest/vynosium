@@ -61,12 +61,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       <section className="relative z-[2] bg-navy pb-[var(--space-9)] pt-[calc(var(--space-12)+40px)]">
         <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
           <div className="flex flex-wrap items-center gap-3">
-            <PathBadge path={project.strategy} label={path.label} />
+            <PathBadge path={project.strategy} label={path.label} tone="dark" />
             <StatusPill label={STATUS_LABEL[project.status]} tone={project.status} />
           </div>
           <h1 className="text-display-lg mt-6 max-w-[20ch] text-snow">{project.name}</h1>
-          <p className="text-lede mt-4 text-slate">{project.location}</p>
-          <p className="text-body mt-6 max-w-[64ch] text-slate">{project.summary}</p>
+          <p className="text-lede mt-4 text-slate-on-dark">{project.location}</p>
+          <p className="text-body mt-6 max-w-[64ch] text-slate-on-dark">{project.summary}</p>
         </div>
 
         <div
@@ -88,9 +88,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               {project.metrics.map((metric) => (
                 <div key={metric.label}>
                   <dt className="text-label text-text-muted">{metric.label}</dt>
-                  <dd className={`text-data mt-2 ${metric.emphasis ? "text-emerald" : "text-navy"}`}>
+                  <dd className={`text-data mt-2 ${metric.emphasis ? "text-emerald-on-light" : "text-navy"}`}>
                     {metric.value}
-                    {metric.model && <ModelMark />}
+                    {metric.model && <ModelMark tone="light" />}
                   </dd>
                 </div>
               ))}

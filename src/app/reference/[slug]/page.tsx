@@ -51,8 +51,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
             tone="dark"
           />
           <h1 className="text-display-lg mt-6 max-w-[20ch] text-snow">{study.name}</h1>
-          <p className="text-lede mt-4 text-slate">{study.location}</p>
-          <p className="text-data mt-6 text-emerald">{study.result}</p>
+          <p className="text-lede mt-4 text-slate-on-dark">{study.location}</p>
+          <p className="text-data mt-6 text-emerald-on-dark">{study.result}</p>
 
           <div className="mt-10 max-w-[820px]">
             <BeforeAfterSlider

@@ -34,8 +34,8 @@ export function Footer() {
               height={43}
               className="h-8 w-auto"
             />
-            <p className="text-label mt-5 text-slate">{SITE.claim}</p>
-            <address className="text-body-sm mt-5 not-italic text-slate">
+            <p className="text-label mt-5 text-silver">{SITE.claim}</p>
+            <address className="text-body-sm mt-5 not-italic text-slate-on-dark">
               {SITE.address.street}
               <br />
               {SITE.address.zip} {SITE.address.city}
@@ -45,7 +45,7 @@ export function Footer() {
           </div>
 
           <nav aria-label="Navigace v patičce">
-            <p className="text-label text-steel">Navigace</p>
+            <p className="text-label text-slate-on-dark">Navigace</p>
             <ul className="mt-5 flex flex-col gap-3">
               {NAVIGATION.map((item) => (
                 <li key={item.href}>
@@ -61,7 +61,7 @@ export function Footer() {
           </nav>
 
           <nav aria-label="Investiční cesty">
-            <p className="text-label text-steel">Investiční cesty</p>
+            <p className="text-label text-slate-on-dark">Investiční cesty</p>
             <ul className="mt-5 flex flex-col gap-3">
               {INVESTMENT_PATHS.map((path) => (
                 <li key={path.id}>
@@ -81,7 +81,7 @@ export function Footer() {
           </nav>
 
           <div>
-            <p className="text-label text-steel">Kontakt</p>
+            <p className="text-label text-slate-on-dark">Kontakt</p>
             <ul className="mt-5 flex flex-col gap-3">
               <li>
                 <a href={SITE.phoneHref} className="focus-ring text-body-sm text-snow no-underline">
@@ -112,16 +112,16 @@ export function Footer() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="focus-ring text-disclaimer text-slate no-underline hover:text-snow"
+                  className="focus-ring text-disclaimer text-silver no-underline hover:text-snow"
                 >
                   {item.label}
                 </Link>
               </li>
             ))}
-            <li className="text-disclaimer text-slate">© 2026 {SITE.name}</li>
+            <li className="text-disclaimer text-silver">© 2026 {SITE.name}</li>
           </ul>
           {/* The only place on the site where the group is named (§1). */}
-          <p className="text-disclaimer text-right text-[#627d98]">{SITE.group}</p>
+          <p className="text-disclaimer text-right text-slate-on-dark">{SITE.group}</p>
         </div>
       </div>
     </footer>

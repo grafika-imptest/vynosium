@@ -10,6 +10,19 @@ const BASE_SIZE = 14;
 const ACTIVE_SIZE = 56;
 
 /**
+ * Accent hand-off. Sections that own a colour (the path selector tones the
+ * whole room per card) push their token in here and the magnet takes it.
+ *
+ * A module-scoped ref rather than context or state on purpose: this is
+ * read inside the rAF loop, and §6 forbids a React render on pointer move.
+ */
+const accent: { hex: string | null } = { hex: null };
+
+export function setCursorAccent(hex: string | null) {
+  accent.hex = hex;
+}
+
+/**
  * Cursor magnet (§4.5): a disc that inverts whatever is underneath via
  * `mix-blend-mode: difference` and grows over interactive zones.
  *
@@ -58,6 +71,8 @@ export function CustomCursor() {
     window.addEventListener("pointerover", onOver, { passive: true });
     document.addEventListener("pointerleave", onLeave);
 
+    let appliedAccent: string | null = null;
+
     let raf = requestAnimationFrame(function tick() {
       const el = dotRef.current;
       if (el) {
@@ -68,6 +83,16 @@ export function CustomCursor() {
         el.style.width = `${s}px`;
         el.style.height = `${s}px`;
         el.style.transform = `translate3d(${pos.current.x - s / 2}px, ${pos.current.y - s / 2}px, 0)`;
+
+        // Only touch the paint properties when the accent actually changed.
+        // `difference` blending is what makes the plain white disc legible
+        // on any ground, but differencing a *hue* muddies it — an accent
+        // disc therefore paints normally.
+        if (accent.hex !== appliedAccent) {
+          appliedAccent = accent.hex;
+          el.style.backgroundColor = accent.hex ?? "#ffffff";
+          el.style.mixBlendMode = accent.hex ? "normal" : "difference";
+        }
       }
       raf = requestAnimationFrame(tick);
     });
@@ -78,6 +103,7 @@ export function CustomCursor() {
       window.removeEventListener("pointerover", onOver);
       document.removeEventListener("pointerleave", onLeave);
       document.documentElement.classList.remove("has-custom-cursor");
+      accent.hex = null;
     };
   }, []);
 

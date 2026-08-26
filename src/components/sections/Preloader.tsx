@@ -117,7 +117,7 @@ export function Preloader() {
         </g>
       </svg>
 
-      <p className="text-label mt-8 text-slate" style={{ letterSpacing: "0.18em" }}>
+      <p className="text-label mt-8 text-silver" style={{ letterSpacing: "0.18em" }}>
         Hodnota realizovaných obchodů
       </p>
       <span ref={counterRef} className="text-metric mt-3 text-snow">

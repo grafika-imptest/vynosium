@@ -158,18 +158,18 @@ export function ProcessSteps() {
               key={step.index}
               className="process-panel w-full shrink-0 lg:w-[60vw] lg:pr-[var(--space-10)]"
             >
-              <p className="process-fade text-label text-emerald">
+              <p className="process-fade text-label text-emerald-on-dark">
                 {step.index}/06
               </p>
               <h3 className="process-fade text-heading mt-5 max-w-[18ch] text-snow">{step.title}</h3>
-              <p className="process-fade text-body mt-4 max-w-[46ch] text-slate">{step.text}</p>
+              <p className="process-fade text-body mt-4 max-w-[46ch] text-slate-on-dark">{step.text}</p>
 
               <div className="process-fade mt-8 max-w-[380px] rounded-[var(--radius-card)] border border-steel/50 p-5">
-                <p className="text-label text-steel">{step.artifact.label}</p>
+                <p className="text-label text-slate-on-dark">{step.artifact.label}</p>
                 <dl className="mt-4 flex flex-col gap-3">
                   {step.artifact.rows.map(([label, value]) => (
                     <div key={label} className="flex items-baseline justify-between gap-6 border-b border-steel/30 pb-2 last:border-b-0">
-                      <dt className="text-body-sm text-slate">{label}</dt>
+                      <dt className="text-body-sm text-slate-on-dark">{label}</dt>
                       <dd className="text-data text-snow">{value}</dd>
                     </div>
                   ))}
@@ -179,7 +179,7 @@ export function ProcessSteps() {
           ))}
 
           <div className="process-panel flex w-full shrink-0 flex-col justify-center gap-4 lg:w-[40vw] lg:pr-[var(--gutter)]">
-            <p className="text-body max-w-[36ch] text-slate">
+            <p className="text-body max-w-[36ch] text-slate-on-dark">
               Každý krok má vlastní výstup, který dostanete písemně. Žádná fáze nezačíná dřív, než je
               uzavřená ta předchozí.
             </p>

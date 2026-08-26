@@ -75,7 +75,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
       className="invisible fixed inset-0 z-[150] flex flex-col bg-navy opacity-0 lg:hidden"
     >
       <div className="flex h-22 items-center justify-between px-[var(--gutter)]">
-        <span className="text-label text-slate">{SITE.claim}</span>
+        <span className="text-label text-silver">{SITE.claim}</span>
         <button
           type="button"
           onClick={onClose}
@@ -103,7 +103,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
           ))}
         </ul>
 
-        <p className="text-label mt-8 text-slate">Investiční cesty</p>
+        <p className="text-label mt-8 text-silver">Investiční cesty</p>
         <ul className="mt-4 flex flex-col gap-3">
           {INVESTMENT_PATHS.map((path) => (
             <li key={path.id}>
@@ -130,7 +130,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
         <Link
           href="/kontakt"
           onClick={onClose}
-          className="focus-ring flex min-h-12 w-full items-center justify-center rounded-[var(--radius-pill)] bg-emerald px-6 text-[15px] font-medium text-white no-underline"
+          className="focus-ring flex min-h-12 w-full items-center justify-center rounded-[var(--radius-pill)] bg-emerald-cta px-6 text-[15px] font-medium text-white no-underline"
         >
           Nezávazná konzultace
         </Link>

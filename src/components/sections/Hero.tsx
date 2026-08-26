@@ -96,7 +96,7 @@ export function Hero() {
         className="relative z-[2] mx-auto grid w-full max-w-[var(--max-w)] grid-cols-1 gap-10 px-[var(--gutter)] pb-[var(--space-10)] pt-[var(--space-12)] lg:grid-cols-12 lg:pb-[clamp(96px,22vh,260px)]"
       >
         <div className="lg:col-span-8">
-          <p className="text-label hero-fade text-slate">01 — TEZE</p>
+          <p className="text-label hero-fade text-silver">01 — TEZE</p>
 
           {/* hero-title caps the size to the 8-column measure — see globals.css */}
           <h1 className="text-display-xl hero-title mt-6 text-snow">
@@ -111,7 +111,7 @@ export function Hero() {
             </span>
           </h1>
 
-          <p className="text-lede hero-fade mt-8 max-w-[62ch] text-slate">
+          <p className="text-lede hero-fade mt-8 max-w-[62ch] text-slate-on-dark">
             Ať už chcete zvýšit hodnotu bytu rekonstrukcí, vytvořit si pasivní příjem, zhodnotit volný
             kapitál nebo budovat dlouhodobé portfolio, pomůžeme vám najít správnou investiční cestu.
           </p>
@@ -130,7 +130,7 @@ export function Hero() {
         <dl className="hero-rail flex flex-row gap-6 border-t border-steel/50 pt-5 lg:col-span-3 lg:col-start-10 lg:flex-col lg:justify-end lg:self-end lg:border-t-0">
           {TRUST_NUMBERS.slice(0, 3).map((item) => (
             <div key={item.label} className="flex-1 lg:border-t lg:border-steel/50 lg:pt-4">
-              <dt className="text-label text-steel">{item.label}</dt>
+              <dt className="text-label text-slate-on-dark">{item.label}</dt>
               <dd className="text-data mt-2 text-snow">
                 {item.value.toLocaleString("cs-CZ", {
                   minimumFractionDigits: item.decimals,

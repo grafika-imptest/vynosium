@@ -45,7 +45,7 @@ export function ReferenceExplorer() {
                 className="focus-ring text-label shrink-0 snap-start rounded-[var(--radius-pill)] border px-4 py-2.5 transition-colors duration-[var(--dur-micro)]"
                 style={{
                   borderColor: active ? "var(--color-emerald)" : "var(--color-light-gray)",
-                  color: active ? "var(--color-emerald)" : "var(--color-text-muted)",
+                  color: active ? "var(--color-emerald-on-light)" : "var(--color-text-muted)",
                 }}
               >
                 {option === "all" ? "Vše" : CASE_CATEGORY_LABEL[option as CaseCategory]}
@@ -75,7 +75,7 @@ export function ReferenceExplorer() {
                     {study.name}
                   </Link>
                 </h2>
-                <p className="text-data mt-3 text-emerald">{study.result}</p>
+                <p className="text-data mt-3 text-emerald-on-light">{study.result}</p>
                 <p className="text-body-sm mt-4 text-text-secondary">{study.summary}</p>
               </div>
             </article>

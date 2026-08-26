@@ -66,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <a
           href="#obsah"
-          className="focus-ring sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[400] focus:rounded-[var(--radius-pill)] focus:bg-emerald focus:px-5 focus:py-3 focus:text-white"
+          className="focus-ring sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[400] focus:rounded-[var(--radius-pill)] focus:bg-emerald-cta focus:px-5 focus:py-3 focus:text-white"
         >
           Přejít na obsah
         </a>

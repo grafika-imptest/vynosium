@@ -8,6 +8,7 @@ import {
   type PathSelectorHoverState,
 } from "@/components/gl/scenes/pathSelectorScene";
 import { PathGlyph, SectionIndex } from "@/components/ui/primitives";
+import { setCursorAccent } from "@/components/ui/CustomCursor";
 import { INVESTMENT_PATHS, type PathDefinition } from "@/lib/data/paths";
 import { PATH_COLORS, type InvestmentPath } from "@/lib/tokens";
 import { gsap, ensureGsapRegistered, prefersReducedMotion } from "@/lib/motion";
@@ -110,7 +111,7 @@ export function PathSelector() {
       <div className="relative z-[2] mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
         <SectionIndex index="03" label="ROZCESTNÍK" tone="dark" />
         <h2 className="text-display-lg mt-6 max-w-[18ch] text-snow">Jak chcete své peníze zhodnotit?</h2>
-        <p className="text-lede mt-6 max-w-[62ch] text-slate">
+        <p className="text-lede mt-6 max-w-[62ch] text-slate-on-dark">
           Každý investor má jiný cíl. Vyberte si cestu, která nejlépe odpovídá vašim možnostem
           a očekáváním.
         </p>
@@ -124,6 +125,8 @@ export function PathSelector() {
               onHover={(active) => {
                 hover.current.hovering = active;
                 hover.current.accentHex = PATH_COLORS[path.id];
+                // The magnet picks up whatever colour the room just took.
+                setCursorAccent(active ? PATH_COLORS[path.id] : null);
               }}
             />
           ))}
@@ -148,29 +151,30 @@ function PathCard({
       onPointerEnter={() => onHover(true)}
       onPointerLeave={() => onHover(false)}
       data-token={path.id}
-      className={`path-card group focus-ring relative flex min-h-[320px] flex-col justify-between gap-10 rounded-[var(--radius-card)] border border-steel/60 p-10 no-underline transition-[border-color,transform] duration-[var(--dur-ui)] hover:-translate-y-1.5 hover:border-[color:var(--card-accent)] ${layoutClass}`}
+      className={`path-card group focus-ring relative flex min-h-[320px] flex-col justify-between gap-10 rounded-[var(--radius-card)] border border-steel/60 p-10 no-underline backdrop-blur-[6px] transition-[border-color,transform] duration-[var(--dur-ui)] hover:-translate-y-1.5 hover:border-[color:var(--card-accent)] ${layoutClass}`}
       style={
         {
-          background: "rgba(22,50,75,0.55)",
+          /*
+           * Opaque enough that text contrast does not depend on where the
+           * shader's accent halo happens to sit. At 0.55 the bright halo
+           * pushed the card surface up under the type and small text fell
+           * below AA; the blur keeps the field readable through it.
+           */
+          background: "rgba(16,42,67,0.78)",
           "--card-accent": `var(--color-${path.colorVar})`,
+          // Text-safe variant of the same token — see globals.css §5 note.
+          "--card-accent-text": `var(--color-${path.colorVar}-on-dark)`,
         } as React.CSSProperties
       }
     >
       <div>
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-4">
-            <span className="text-[color:var(--card-accent)]">
-              <PathGlyph path={path.id} />
-            </span>
-            <span className="text-label text-slate">
-              {path.index} — {path.label}
-            </span>
-          </div>
-          <span
-            aria-hidden="true"
-            className="mt-2 inline-block h-1.5 w-1.5 rounded-full"
-            style={{ background: "var(--card-accent)" }}
-          />
+        <div className="flex items-center gap-4">
+          <span className="text-[color:var(--card-accent-text)]">
+            <PathGlyph path={path.id} />
+          </span>
+          <span className="text-label text-silver">
+            {path.index} — {path.label}
+          </span>
         </div>
 
         <p className="text-display mt-8 max-w-[20ch] text-snow">{path.claim}</p>
@@ -180,10 +184,10 @@ function PathCard({
         <dl className="flex flex-wrap gap-x-10 gap-y-3">
           {path.metrics.map((metric) => (
             <div key={metric.label}>
-              <dt className="text-label text-steel">{metric.label}</dt>
-              <dd className="text-data mt-2 text-slate transition-colors duration-[var(--dur-micro)] group-hover:text-[color:var(--card-accent)]">
-                {metric.value}
-              </dd>
+              <dt className="text-label text-silver">{metric.label}</dt>
+              {/* Token-coloured from the start: the metric is what the
+                  path promises, so it carries the path's identity. */}
+              <dd className="text-data mt-2 text-[color:var(--card-accent-text)]">{metric.value}</dd>
             </div>
           ))}
         </dl>
@@ -194,13 +198,13 @@ function PathCard({
             {/* 1px token underline grows from the left on hover */}
             <span
               aria-hidden="true"
-              className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-[color:var(--card-accent)] transition-transform duration-[var(--dur-ui)] group-hover:scale-x-100"
+              className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-[color:var(--card-accent-text)] transition-transform duration-[var(--dur-ui)] group-hover:scale-x-100 group-focus-visible:scale-x-100"
               style={{ transitionTimingFunction: "var(--ease-out)" }}
             />
           </span>
           <span
             aria-hidden="true"
-            className="text-[color:var(--card-accent)] transition-transform duration-[var(--dur-ui)] group-hover:translate-x-1.5"
+            className="text-[color:var(--card-accent-text)] transition-transform duration-[var(--dur-ui)] group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5"
           >
             <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
               <path d="M0 6h18M13 1l5 5-5 5" stroke="currentColor" strokeWidth="1.5" />

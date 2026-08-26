@@ -146,7 +146,7 @@ export function ContactForm({ defaultPriority }: { defaultPriority?: string }) {
           ))}
         </div>
         {errors.priorita && (
-          <p className="text-disclaimer mt-2 text-fn-risk">{errors.priorita}</p>
+          <p className="text-disclaimer mt-2 text-fn-risk-on-light">{errors.priorita}</p>
         )}
       </fieldset>
 
@@ -158,7 +158,7 @@ export function ContactForm({ defaultPriority }: { defaultPriority?: string }) {
           {RANGES.map((range) => (
             <label key={range} className="cursor-pointer">
               <input type="radio" name="rozsah" value={range} className="peer sr-only" />
-              <span className="text-label inline-flex rounded-[var(--radius-pill)] border border-light-gray px-4 py-2.5 text-text-muted transition-colors peer-checked:border-emerald peer-checked:text-emerald peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-emerald/40">
+              <span className="text-label inline-flex rounded-[var(--radius-pill)] border border-light-gray px-4 py-2.5 text-text-muted transition-colors peer-checked:border-emerald peer-checked:text-emerald-on-light peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-emerald/40">
                 {range}
               </span>
             </label>
@@ -188,12 +188,12 @@ export function ContactForm({ defaultPriority }: { defaultPriority?: string }) {
         className="absolute left-[-9999px] h-px w-px opacity-0"
       />
 
-      {errors.form && <p className="text-disclaimer text-fn-risk">{errors.form}</p>}
+      {errors.form && <p className="text-disclaimer text-fn-risk-on-light">{errors.form}</p>}
 
       <button
         type="submit"
         disabled={sending}
-        className="focus-ring inline-flex min-h-12 items-center justify-center rounded-[var(--radius-pill)] bg-emerald px-7 text-[15px] font-medium text-white transition-colors duration-[var(--dur-micro)] hover:bg-emerald-hover disabled:opacity-60"
+        className="focus-ring inline-flex min-h-12 items-center justify-center rounded-[var(--radius-pill)] bg-emerald-cta px-7 text-[15px] font-medium text-white transition-colors duration-[var(--dur-micro)] hover:bg-emerald-cta-hover disabled:opacity-60"
       >
         {sending ? "Odesílám…" : "Chci nezávaznou konzultaci"}
       </button>
@@ -236,7 +236,7 @@ function Field({
       />
       {/* Errors always carry text — colour never carries meaning alone. */}
       {error && (
-        <p id={`${name}-error`} className="text-disclaimer mt-2 text-fn-risk">
+        <p id={`${name}-error`} className="text-disclaimer mt-2 text-fn-risk-on-light">
           {error}
         </p>
       )}
