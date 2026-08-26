@@ -1,23 +1,44 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
-import { useGLScene } from "@/components/gl/useGLScene";
-import { buildHeroScene, type HeroSceneState } from "@/components/gl/scenes/heroScene";
 import { Pill } from "@/components/ui/primitives";
-import { gsap, ensureGsapRegistered, ScrollTrigger, prefersReducedMotion } from "@/lib/motion";
+import { withBasePath } from "@/lib/seo";
+import { gsap, ensureGsapRegistered, prefersReducedMotion } from "@/lib/motion";
 
 /**
  * Closing CTA (§3/13).
  *
- * The hero's depth field returns, darkened, and the monogram's flow
- * converges into a single point behind the button: the circle closes
- * where the site opened. Nothing else is on screen.
+ * The section the whole page funnels into: one photograph of the thing on
+ * offer — a conversation — with the invitation over it. Nothing else is on
+ * screen.
+ *
+ * The photograph carries pure white highlights, so the scrim is measured
+ * rather than eyeballed; see the SCRIM note below for the numbers.
+ *
+ * No GL and no entrance transform on the photo: the browser paints it from
+ * the first frame, so nothing about the closing pitch depends on a context,
+ * an idle callback or a tween that might not run.
  */
+
+/*
+ * SCRIM — worst-case contrast, computed against the brightest pixel in the
+ * region the copy sits over. That pixel is #ffffff, so these are floors, not
+ * averages:
+ *
+ *   flat 0.62 + centre wash 0.45  ->  effective 0.79 behind the copy
+ *   heading  #f8f8f8  ->  7.8:1
+ *   lede     #bcccdc  ->  5.1:1   (AA body text: 4.5:1)
+ *
+ * The lede is Silver rather than the usual Slate: Slate cannot clear 4.5:1
+ * over this photograph at any scrim that still lets the image read.
+ */
+const SCRIM_BASE = "rgba(11,29,46,0.62)";
+const SCRIM_WASH =
+  "radial-gradient(ellipse 78% 62% at 50% 46%, rgba(11,29,46,0.45) 0%, rgba(11,29,46,0.28) 58%, rgba(11,29,46,0) 100%)";
+
 export function FinalCta() {
   const sectionRef = useRef<HTMLElement>(null);
-  const state = useRef<HeroSceneState>({ x: 0, y: 0, progress: 0 });
-
-  const { hostRef, disabled } = useGLScene("final-cta", buildHeroScene(state, "finale"));
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -26,16 +47,6 @@ export function FinalCta() {
 
     const ctx = gsap.context(() => {
       if (prefersReducedMotion()) return;
-
-      ScrollTrigger.create({
-        trigger: section,
-        start: "top bottom",
-        end: "bottom bottom",
-        scrub: 1,
-        onUpdate: (self) => {
-          state.current.progress = self.progress;
-        },
-      });
 
       gsap.fromTo(
         ".final-cta-button",
@@ -69,11 +80,26 @@ export function FinalCta() {
       className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-abyss"
       data-scene="final-cta"
     >
-      {!disabled && <div ref={hostRef} aria-hidden="true" className="absolute inset-0" />}
+      {/*
+        Decorative: the copy already names what this is, so the photograph is
+        hidden from assistive technology rather than described twice.
+      */}
+      <Image
+        src={withBasePath("/photo/rozhovor.jpg")}
+        alt=""
+        aria-hidden="true"
+        fill
+        sizes="100vw"
+        /* Portrait crops so tightly that dead centre is just the table: shift
+           the frame left so one of the two people stays in shot. */
+        className="object-cover object-[38%_50%] sm:object-center"
+      />
+      <div aria-hidden="true" className="absolute inset-0" style={{ background: SCRIM_BASE }} />
+      <div aria-hidden="true" className="absolute inset-0" style={{ background: SCRIM_WASH }} />
 
       <div className="relative z-[2] mx-auto max-w-[720px] px-[var(--gutter)] text-center">
         <h2 className="text-display-lg text-snow">Vaše další investice může začít jedním rozhovorem.</h2>
-        <p className="text-lede mt-6 text-slate-on-dark">
+        <p className="text-lede mt-6 text-silver">
           Řekněte nám, kolik chcete investovat a co od investice čekáte. Připravíme modelový propočet
           pro váš scénář — nezávazně a bez prezentací.
         </p>
