@@ -92,27 +92,35 @@ export function Header() {
           }`}
         >
           <div className="mx-auto flex h-full max-w-[var(--max-w)] items-center justify-between px-[var(--gutter)]">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-7">
               <Link href="/" className="focus-ring shrink-0" aria-label={`${SITE.name} — domů`}>
+                {/*
+                  Claim-free logo: the claim is set as live text beside it, so
+                  it can hold its own letter-spacing, take the header's colour
+                  variant and stay selectable and translatable.
+                */}
                 <Image
                   src={withBasePath(
-                    dark ? "/brand/logo-horizontal-white.svg" : "/brand/logo-horizontal-color.svg"
+                    dark ? "/brand/logo-navbar-white.svg" : "/brand/logo-navbar-color.svg"
                   )}
                   alt={SITE.name}
-                  width={132}
+                  width={185}
                   height={35}
                   priority
-                  className="h-[26px] w-auto"
+                  className="h-7 w-auto"
                 />
               </Link>
-              {/* Claim is dropped below 1180px — it must never wrap. */}
+              {/* Two lines, no divider rule — dropped below 1180px so it
+                  never competes with the navigation for width. */}
               <span
-                className={`text-label hidden border-l pl-4 min-[1180px]:inline-block ${
-                  dark ? "border-steel text-[#9fb3c8]" : "border-light-gray text-text-muted"
+                className={`text-label text-label-wrap hidden min-[1180px]:inline-block ${
+                  dark ? "text-[#9fb3c8]" : "text-text-muted"
                 }`}
                 style={{ letterSpacing: "0.22em", fontSize: "10px" }}
               >
-                {SITE.claim}
+                CHYTRÁ CESTA
+                <br />
+                K VÝNOSŮM
               </span>
             </div>
 
@@ -142,13 +150,12 @@ export function Header() {
               })}
             </nav>
 
-            <div className="hidden items-center gap-5 lg:flex">
-              <a
-                href={SITE.phoneHref}
-                className={`focus-ring text-sm no-underline ${dark ? "text-snow/72" : "text-navy"}`}
-              >
-                {SITE.phone}
-              </a>
+            {/*
+              No phone number here: the reference navbar carries one action,
+              and the number stays reachable in the footer and in the sticky
+              mobile bar, where tapping it actually makes a call.
+            */}
+            <div className="hidden items-center lg:flex">
               <Link
                 href="/kontakt"
                 className="focus-ring inline-flex min-h-12 items-center rounded-[var(--radius-pill)] bg-emerald-cta px-6 text-[15px] font-medium text-white no-underline transition-colors duration-[var(--dur-micro)] hover:bg-emerald-cta-hover"
