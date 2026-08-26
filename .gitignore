@@ -43,3 +43,4 @@ next-env.d.ts
 # Photo sources. Only the web-sized output in public/photo is tracked;
 # regenerate it with scripts/prepare-photos.ps1 when the originals change.
 /assets
+/.next-verify
