@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Disclaimer, ModelMark, Pill, SectionIndex } from "@/components/ui/primitives";
 import { INVESTMENT_PATHS } from "@/lib/data/paths";
 import { DISCLAIMERS } from "@/lib/data/site";
@@ -22,12 +22,12 @@ const START_YEAR = 2026;
  * Investment calculator (§3/08). The section that hands over control —
  * a visitor who moved a slider has invested attention.
  *
- * INP discipline (§6): slider `input` events write ONLY to refs. A single
- * rAF loop recomputes the model, writes the ledger digits and slider
- * labels straight into the DOM, and rewrites the chart geometry in place.
- * React state is committed once per gesture (on `change`, i.e.
- * pointer release) purely so the CTA href and the screen-reader table
- * stay in sync — dragging never schedules a render.
+ * INP discipline (§6): a slider `input` event writes to refs and then
+ * paints the ledger, the slider fills and the chart geometry straight into
+ * the DOM. No React re-render per event, and no rAF loop either — a hidden
+ * or backgrounded tab gets no frames, which used to freeze the whole
+ * read-out mid-drag. React state is committed once per gesture (on pointer
+ * release) purely so the CTA href and the screen-reader table stay in sync.
  */
 export function Calculator({
   defaultType = "income",
@@ -40,7 +40,6 @@ export function Calculator({
   const ltvRef = useRef(DEFAULTS.ltv);
   const horizonRef = useRef(DEFAULTS.horizon);
   const typeRef = useRef<InvestmentPath>(defaultType);
-  const dirty = useRef(true);
 
   // Committed values — updated at the end of a gesture, not during it.
   const [committed, setCommitted] = useState({
@@ -52,8 +51,20 @@ export function Calculator({
 
   const rootRef = useRef<HTMLDivElement>(null);
   const liveRef = useRef<HTMLDivElement>(null);
+  const liveTimer = useRef<number | undefined>(undefined);
 
-  useEffect(() => {
+  /**
+   * Paints the whole read-out from the current ref values.
+   *
+   * Called straight from the input handlers, NOT from a rAF loop. The loop
+   * this replaces meant the calculator only updated when the browser was
+   * painting — and a browser does not run requestAnimationFrame for a
+   * hidden or backgrounded tab, so the numbers and the chart could sit
+   * frozen while the sliders moved. Range inputs already coalesce their
+   * events to roughly one per frame, so writing directly costs the same and
+   * cannot go stale. React still is not involved: no re-render per event.
+   */
+  const render = useCallback(() => {
     const root = rootRef.current;
     if (!root) return;
 
@@ -62,12 +73,7 @@ export function Calculator({
       if (el) el.textContent = value;
     };
 
-    let liveTimer: number | undefined;
-    let raf = requestAnimationFrame(function tick() {
-      raf = requestAnimationFrame(tick);
-      if (!dirty.current) return;
-      dirty.current = false;
-
+    {
       const input = {
         capital: capitalRef.current,
         ltv: ltvRef.current,
@@ -77,7 +83,7 @@ export function Calculator({
       const output = computeCalculator(input);
 
       // Slider value labels are written by their own input handler; this
-      // loop owns the ledger and the chart.
+      // function owns the ledger and the chart.
       write("investmentSize", formatCzk(output.investmentSize));
       // Unit lives in the label ("Cashflow měsíčně"), not glued to the
       // digits — a "/ měs." suffix pushed the number out of its column.
@@ -102,8 +108,8 @@ export function Calculator({
 
       /*
        * Chart update, in place. The same geometry function the server render
-       * used, so what the loop writes and what React would render agree —
-       * no re-render needed while a slider is moving.
+       * used, so what this writes and what React would render agree — no
+       * re-render needed while a slider is moving.
        */
       const scenarios = scenariosFor(input.type, output.modelYieldPercent);
       const geo = buildChart(input.capital, input.horizonYears, scenarios, START_YEAR);
@@ -140,20 +146,21 @@ export function Calculator({
         }
       });
 
-      // The live region must not fire on every frame of a drag.
-      window.clearTimeout(liveTimer);
-      liveTimer = window.setTimeout(() => {
+      // The live region must not announce every step of a drag.
+      window.clearTimeout(liveTimer.current);
+      liveTimer.current = window.setTimeout(() => {
         if (liveRef.current) {
           liveRef.current.textContent = summarise(input, output);
         }
       }, 400);
-    });
-
-    return () => {
-      cancelAnimationFrame(raf);
-      window.clearTimeout(liveTimer);
-    };
+    }
   }, []);
+
+  // First paint after hydration, and a cleanup for the pending announcement.
+  useEffect(() => {
+    render();
+    return () => window.clearTimeout(liveTimer.current);
+  }, [render]);
 
   const commit = () => {
     setCommitted({
@@ -268,7 +275,7 @@ export function Calculator({
               defaultValue={sliderFromCapital(DEFAULTS.capital)}
               onInput={(v) => {
                 capitalRef.current = capitalFromSlider(v);
-                dirty.current = true;
+                render();
                 return formatCzk(capitalRef.current);
               }}
               onCommit={commit}
@@ -283,7 +290,7 @@ export function Calculator({
               defaultValue={DEFAULTS.ltv}
               onInput={(v) => {
                 ltvRef.current = v;
-                dirty.current = true;
+                render();
                 return `${v} %`;
               }}
               onCommit={commit}
@@ -305,7 +312,7 @@ export function Calculator({
               defaultValue={DEFAULTS.horizon}
               onInput={(v) => {
                 horizonRef.current = v;
-                dirty.current = true;
+                render();
                 return `${v} let`;
               }}
               onCommit={commit}
@@ -323,8 +330,7 @@ export function Calculator({
                       aria-pressed={active}
                       onClick={() => {
                         typeRef.current = path.id;
-                        dirty.current = true;
-                        commit();
+                                commit();
                       }}
                       className="focus-ring text-label rounded-[var(--radius-pill)] border px-4 py-2.5 transition-colors duration-[var(--dur-micro)]"
                       style={{
