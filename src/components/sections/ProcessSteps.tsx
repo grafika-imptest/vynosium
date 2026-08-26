@@ -44,7 +44,14 @@ export function ProcessSteps() {
           scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: "+=420%",
+            /*
+             * 520%, not 420%: the track has to travel ~5200px and at 420%
+             * that is 1.38px of panel movement per px of scroll, which
+             * pushed a panel off screen in about 500px of scrolling — too
+             * fast to read one. At 520% the rate is ~1.06 and each panel
+             * holds the viewport for roughly 900px of scroll.
+             */
+            end: "+=520%",
             pin: true,
             scrub: 1,
             invalidateOnRefresh: true,
@@ -61,7 +68,21 @@ export function ProcessSteps() {
           tl.to(line, { strokeDashoffset: 0, ease: "none" }, 0);
         }
 
-        gsap.utils.toArray<HTMLElement>(".process-panel").forEach((panel, i) => {
+        /*
+         * Panel copy fades in when the panel itself arrives — which means
+         * the trigger has to measure the panel inside the horizontally
+         * scrubbed track, not guess from vertical scroll offsets.
+         * `containerAnimation` is exactly that: it maps the panel's
+         * position within `tl` to scroll progress.
+         *
+         * The previous version keyed each panel to `top+=${i * 60}%` of the
+         * section, which has no relation to the track's travel rate: the
+         * panels moved through the viewport far ahead of their triggers, so
+         * you scrolled past empty navy boxes and the text only appeared
+         * once the panel was already leaving.
+         */
+        const panels = gsap.utils.toArray<HTMLElement>(".process-panel", section);
+        panels.forEach((panel) => {
           gsap.fromTo(
             panel.querySelectorAll(".process-fade"),
             { y: 24, autoAlpha: 0 },
@@ -71,9 +92,19 @@ export function ProcessSteps() {
               duration: 0.5,
               ease: "expo.out",
               stagger: 0.06,
+              /*
+               * Critical: without this, `fromTo` applies the hidden state
+               * immediately. The first two panels are already on screen when
+               * the pin starts, so their trigger never fires — and they sat
+               * at opacity 0 forever. Empty navy boxes were exactly what you
+               * were scrolling through.
+               */
+              immediateRender: false,
               scrollTrigger: {
-                trigger: section,
-                start: () => `top+=${i * 60}% top`,
+                trigger: panel,
+                containerAnimation: tl,
+                // Panel's left edge crossing 88% of the viewport width.
+                start: "left 88%",
                 toggleActions: "play none none reverse",
               },
             }
