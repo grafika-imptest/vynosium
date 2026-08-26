@@ -19,8 +19,9 @@ type StatusFilter = ProjectStatus | "all";
  * Opportunities (§3/09 on the homepage, §14 on the listing page).
  *
  * Filtering reorders the existing nodes through GSAP Flip rather than
- * re-mounting them, so cards travel to their new slots. Every model value
- * carries the ᴹ mark and the legend sits under the grid, in layout.
+ * re-mounting them, so cards travel to their new slots. The model values are
+ * named as such in their labels and the legend sits under the grid, in
+ * layout — no superscript marker.
  */
 export function Opportunities({
   index = "09",

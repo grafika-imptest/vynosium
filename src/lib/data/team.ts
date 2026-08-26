@@ -1,8 +1,10 @@
 /**
  * Team (§19, §20). PLACEHOLDER DATA — mirrors the CMS `TeamMember` model.
- * Portraits are rendered as tight-cropped monogram plates until real
- * photography lands; the art direction forbids the suit-in-front-of-white
- * broker portrait.
+ *
+ * The portraits are real photographs now, but they are stock, and the names
+ * and positions are still stand-ins. The disclaimer under the grid has to go
+ * on saying so: a real face beside an invented name reads as a claim about
+ * a real person.
  */
 
 export interface TeamMember {
@@ -13,6 +15,8 @@ export interface TeamMember {
   linkedin: string;
   /** Vertical offset in px — the portrait column is deliberately staggered. */
   offset: number;
+  /** File in /photo/tym, produced by scripts/prepare-portraits.ps1. */
+  photo: string;
 }
 
 export const TEAM: TeamMember[] = [
@@ -23,6 +27,7 @@ export const TEAM: TeamMember[] = [
     text: "Devět let na trhu s investičními byty. Rozhoduje podle propočtu, ne podle prohlídky.",
     linkedin: "https://www.linkedin.com/",
     offset: 0,
+    photo: "zakladatel.jpg",
   },
   {
     name: "Jméno Příjmení",
@@ -31,6 +36,7 @@ export const TEAM: TeamMember[] = [
     text: "Vede projekty od rozpočtu po předání. Sleduje čerpání rozpočtu týdně, ne až na konci.",
     linkedin: "https://www.linkedin.com/",
     offset: 48,
+    photo: "realizace.jpg",
   },
   {
     name: "Jméno Příjmení",
@@ -39,6 +45,7 @@ export const TEAM: TeamMember[] = [
     text: "Připravuje financování v předstihu, aby další akvizice nenarazila na limit bonity.",
     linkedin: "https://www.linkedin.com/",
     offset: 16,
+    photo: "financovani.jpg",
   },
   {
     name: "Jméno Příjmení",
@@ -47,6 +54,7 @@ export const TEAM: TeamMember[] = [
     text: "Odpovídá za obsazenost a za to, že investor neřeší provoz.",
     linkedin: "https://www.linkedin.com/",
     offset: 64,
+    photo: "sprava.jpg",
   },
 ];
 

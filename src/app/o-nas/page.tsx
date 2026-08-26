@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { SetHeaderVariant } from "@/components/layout/HeaderVariantContext";
 import { PageIntro } from "@/components/layout/PageIntro";
 import { FinalCta } from "@/components/sections/FinalCta";
@@ -6,7 +7,7 @@ import { Disclaimer, SectionIndex } from "@/components/ui/primitives";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { DEAL_HISTORY, TEAM } from "@/lib/data/team";
 import { SITE, DISCLAIMERS } from "@/lib/data/site";
-import { absoluteUrl, breadcrumbSchema } from "@/lib/seo";
+import { absoluteUrl, breadcrumbSchema, withBasePath } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "O nás",
@@ -42,10 +43,33 @@ export default function AboutPage() {
               {TEAM.map((member) => (
                 <article key={`${member.name}-${member.position}`} style={{ marginTop: member.offset }}>
                   <div
-                    className="flex aspect-[3/4] w-full items-end justify-start rounded-[var(--radius-card)] border border-light-gray p-4"
+                    className="relative flex aspect-[3/4] w-full items-end justify-start overflow-hidden rounded-[var(--radius-card)] border border-light-gray p-4"
                     style={{ background: "linear-gradient(38.5deg, #16324b, #1b3a54)" }}
                   >
-                    <span className="text-label text-silver">{member.position}</span>
+                    {/* Decorative: the name and position are set as text
+                        right below, so a described portrait would say it
+                        twice. The gradient stays as the loading ground. */}
+                    <Image
+                      src={withBasePath(`/photo/tym/${member.photo}`)}
+                      alt=""
+                      aria-hidden="true"
+                      fill
+                      sizes="(min-width: 1024px) 22vw, (min-width: 640px) 42vw, 90vw"
+                      className="object-cover"
+                    />
+                    {/* The position sits on the photograph, so it needs its
+                        own ground — a scrim from the bottom edge, not a
+                        shadow behind the text. The four portraits are lit
+                        differently and the plate has to hold on all of them. */}
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-x-0 bottom-0 h-2/5"
+                      style={{
+                        background:
+                          "linear-gradient(to top, rgba(11,29,46,0.92) 0%, rgba(11,29,46,0.5) 45%, rgba(11,29,46,0) 100%)",
+                      }}
+                    />
+                    <span className="text-label relative text-snow">{member.position}</span>
                   </div>
                   <h2 className="text-subheading mt-4 text-navy">{member.name}</h2>
                   <p className="text-label mt-2 text-text-muted">{member.specialization}</p>
@@ -62,8 +86,8 @@ export default function AboutPage() {
               ))}
             </div>
             <Disclaimer className="mt-8">
-              Jména, pozice i portréty jsou zástupné — nahrazují se skutečnými údaji týmu před
-              spuštěním webu.
+              Jména a pozice jsou zástupné, portréty ilustrační — nahrazují se skutečnými údaji
+              a fotografiemi týmu před spuštěním webu.
             </Disclaimer>
           </div>
 

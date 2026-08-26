@@ -113,25 +113,20 @@ export function Disclaimer({
   );
 }
 
-/**
- * Model-value marker. Used everywhere a number is projected, not measured.
+/*
+ * The ᴹ superscript that used to mark projected numbers is gone, removed at
+ * the client's request: read at 9-11px next to a figure it looked like a
+ * typo, not a caveat, and it was doing that on every card and every table.
  *
- * It renders at 0.62em — around 9-11px — so it needs the reading variant of
- * emerald for its surface; the brand value fails AA at this size on both
- * White and Navy.
+ * The `model: true` flags in the data are therefore currently unrendered.
+ * They stay because they mirror the CMS field and say which rows are
+ * projections; nothing on screen depends on them today.
+ *
+ * What carries the caveat now is the written disclaimer under every set of
+ * model figures — the labels ("Modelový výnos", "Orientační výnos") plus
+ * DISCLAIMERS.modelValues. If a future edit removes one of those blocks,
+ * that page loses its grounding entirely, so they are not decoration.
  */
-export function ModelMark({ tone = "light" }: { tone?: "light" | "dark" }) {
-  return (
-    <sup
-      className={`ml-px align-super text-[0.62em] ${
-        tone === "dark" ? "text-emerald-on-dark" : "text-emerald-on-light"
-      }`}
-      title="modelová hodnota"
-    >
-      ᴹ
-    </sup>
-  );
-}
 
 /**
  * Metric block (§4.5): label → value → basis. A naked number is never

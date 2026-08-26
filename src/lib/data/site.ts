@@ -3,7 +3,7 @@
  *
  * PLACEHOLDER DATA. Every number below is a stand-in until Vynosium
  * supplies audited figures; each one is rendered with its basis (period /
- * source) and, where it is a model, with the ᴹ mark. Do not publish
+ * source), and model figures say so in their label. Do not publish
  * without replacing these values.
  */
 
@@ -216,8 +216,12 @@ export const DISCLAIMERS = {
     "Uvedené informace jsou obecného charakteru a nepředstavují investiční doporučení. Vynosium negarantuje výnos.",
   calculator:
     "Orientační model. Nejde o garantovaný výsledek ani investiční doporučení.",
+  /*
+   * No longer "marked values": the ᴹ superscript was removed, so this line
+   * has to say which figures it covers in words.
+   */
   modelValues:
-    "Označené hodnoty (ᴹ) jsou modelové nebo očekávané, nikoli historická data.",
+    "Uvedené výnosy, hodnoty a horizonty jsou modelové nebo očekávané, nikoli historická data.",
   scenario:
     "Modelový výpočet. Skutečný výsledek se může lišit podle vývoje trhu, nákladů a obsazenosti.",
 } as const;

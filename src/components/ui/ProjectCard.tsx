@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ModelMark, PathBadge, StatusPill } from "@/components/ui/primitives";
+import { PathBadge, StatusPill } from "@/components/ui/primitives";
 import { STATUS_LABEL, type Project } from "@/lib/data/projects";
 import { getPathById } from "@/lib/data/paths";
 import { withBasePath } from "@/lib/seo";
@@ -75,7 +75,6 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
                 style={{ fontSize: "1.125rem" }}
               >
                 {metric.value}
-                {metric.model && <ModelMark tone="light" />}
               </dd>
             </div>
           ))}

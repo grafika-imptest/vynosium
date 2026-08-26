@@ -6,7 +6,6 @@ import { Faq } from "@/components/sections/Faq";
 import { Opportunities } from "@/components/sections/Opportunities";
 import {
   Disclaimer,
-  ModelMark,
   PathGlyph,
   Pill,
   SectionIndex,
@@ -152,7 +151,6 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
                   <dt className="text-body-sm text-text-secondary">{row.label}</dt>
                   <dd className="text-data text-navy">
                     {row.value}
-                    {row.model && <ModelMark tone="light" />}
                   </dd>
                 </div>
               ))}

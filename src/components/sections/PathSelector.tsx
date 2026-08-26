@@ -136,9 +136,9 @@ export function PathSelector() {
         {/*
           The cards quote model yields, so the section owes the reader the
           legal line (§3/05, §4.5) — in the layout, never a tooltip. The
-          metrics themselves carry no ᴹ glyph: their labels already say
-          "Modelový výnos" in words, and an unexplained superscript reads
-          as a typo.
+          metrics carry no marker glyph anywhere on the site: their labels
+          already say "Modelový výnos" in words, and an unexplained
+          superscript read as a typo.
         */}
         <Disclaimer tone="dark" className="mt-12">
           Uvedené rozsahy jsou modelové, vycházejí z realizovaných projektů a nejsou garancí

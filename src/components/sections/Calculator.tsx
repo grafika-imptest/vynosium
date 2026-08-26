@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Disclaimer, ModelMark, Pill, SectionIndex } from "@/components/ui/primitives";
+import { Disclaimer, Pill, SectionIndex } from "@/components/ui/primitives";
 import { INVESTMENT_PATHS } from "@/lib/data/paths";
 import { DISCLAIMERS } from "@/lib/data/site";
 import { ScenarioChart, buildChart, scenariosFor } from "@/components/sections/ScenarioChart";
@@ -393,7 +393,6 @@ function LedgerRow({
       </dd>
       <dd className="text-label mt-2 text-slate-on-dark">
         {basis}
-        <ModelMark tone="dark" />
       </dd>
     </div>
   );

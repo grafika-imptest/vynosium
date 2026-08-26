@@ -1,7 +1,7 @@
 /**
  * Case studies (§3/11, §21). PLACEHOLDER DATA — mirrors the CMS
- * `CaseStudy` model. Realised figures carry no ᴹ mark; anything still
- * projected does.
+ * `CaseStudy` model. Realised figures and projections are told apart by
+ * their labels, not by a marker.
  */
 
 export type CaseCategory = "rekonstrukce" | "pronajem" | "portfolio";

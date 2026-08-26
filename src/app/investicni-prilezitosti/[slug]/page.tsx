@@ -6,7 +6,6 @@ import { ScenarioVector } from "@/components/sections/ScenarioVector";
 import { Faq } from "@/components/sections/Faq";
 import {
   Disclaimer,
-  ModelMark,
   PathBadge,
   Pill,
   SectionIndex,
@@ -103,7 +102,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   <dt className="text-label text-text-muted">{metric.label}</dt>
                   <dd className={`text-data mt-2 ${metric.emphasis ? "text-emerald-on-light" : "text-navy"}`}>
                     {metric.value}
-                    {metric.model && <ModelMark tone="light" />}
                   </dd>
                 </div>
               ))}

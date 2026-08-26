@@ -4,8 +4,8 @@ import type { InvestmentPath } from "@/lib/tokens";
  * The four investment paths (§3/03 + landing pages §25–29).
  *
  * All numbers here are MODEL ranges. Their labels say so in words
- * ("Modelový výnos"), which is why they carry no ᴹ glyph: the mark is for
- * matrices where the label alone does not say a figure is a projection.
+ * ("Modelový výnos"), which is what tells the reader they are projections —
+ * there is no marker glyph on the site any more.
  * In production this record is fed by the CMS `PathPage` type.
  */
 

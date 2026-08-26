@@ -2,7 +2,7 @@
  * Investment model behind the calculator (§3/08).
  *
  * Every figure this produces is a MODEL, not a promise — the UI is
- * required to render the disclaimer and the ᴹ marks alongside it. The
+ * required to render the disclaimer alongside it. The
  * assumptions below are deliberately explicit and named so a reviewer can
  * argue with them; a calculator whose parameters are hidden inside the
  * formula is marketing, not a product.

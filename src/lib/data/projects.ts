@@ -5,7 +5,8 @@ import type { InvestmentPath } from "@/lib/tokens";
  *
  * PLACEHOLDER DATA — mirrors the CMS `Project` model field for field, so
  * swapping this array for a CMS query needs no component changes. Metrics
- * flagged `model: true` render with the ᴹ mark.
+ * flagged `model: true` are projections, not measurements (the ᴹ mark that
+ * used to render them was removed — see the note in primitives.tsx).
  */
 
 export type ProjectStatus = "open" | "last" | "closed" | "prepared";
@@ -20,7 +21,7 @@ export const STATUS_LABEL: Record<ProjectStatus, string> = {
 export interface ProjectMetric {
   label: string;
   value: string;
-  /** Model / expected value → gets the ᴹ mark and the legend below. */
+  /** Model / expected value. Currently unrendered — see primitives.tsx. */
   model?: boolean;
   /** Highlighted as the headline yield of the card. */
   emphasis?: boolean;

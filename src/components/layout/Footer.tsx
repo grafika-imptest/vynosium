@@ -126,8 +126,27 @@ export function Footer() {
             ))}
             <li className="text-disclaimer text-silver">© 2026 {SITE.name}</li>
           </ul>
-          {/* The only place on the site where the group is named (§1). */}
-          <p className="text-disclaimer text-right text-slate-on-dark">{SITE.group}</p>
+          <div className="flex flex-col gap-3 md:items-end">
+            {/* The only place on the site where the group is named (§1). */}
+            <p className="text-disclaimer text-slate-on-dark md:text-right">{SITE.group}</p>
+            <a
+              href="https://impnet.cz"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="focus-ring text-disclaimer group inline-flex items-center gap-2 text-slate-on-dark no-underline"
+            >
+              Developed by
+              {/* The mark carries the name, so the words beside it are the
+                  caption — hence alt on the image and no second label. */}
+              <Image
+                src={withBasePath("/brand/impnet-white.svg")}
+                alt="IMPnet"
+                width={500}
+                height={136}
+                className="h-4 w-auto opacity-70 transition-opacity duration-[var(--dur-micro)] group-hover:opacity-100"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
