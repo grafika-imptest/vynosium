@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PathTile } from "@/components/ui/primitives";
 import { INVESTMENT_PATHS } from "@/lib/data/paths";
 import { SITE } from "@/lib/data/site";
 import { withBasePath } from "@/lib/seo";
@@ -67,17 +68,17 @@ export function Footer() {
 
           <nav aria-label="Investiční cesty">
             <p className="text-label text-slate-on-dark">Investiční cesty</p>
-            <ul className="mt-5 flex flex-col gap-3">
+            {/* Each path wears its own glyph and token here, the same pair
+                the selector uses — four coloured dots would ask the reader
+                to remember a legend that is a whole page away. */}
+            <ul className="mt-5 flex flex-col gap-2">
               {INVESTMENT_PATHS.map((path) => (
                 <li key={path.id}>
                   <Link
                     href={`/${path.slug}`}
                     className="focus-ring text-body-sm flex items-center gap-3 text-snow/80 no-underline transition-colors duration-[var(--dur-micro)] hover:text-snow"
                   >
-                    <span
-                      className="inline-block h-1.5 w-1.5 shrink-0 rounded-full"
-                      style={{ background: `var(--color-${path.colorVar})` }}
-                    />
+                    <PathTile path={path.id} />
                     {path.label}
                   </Link>
                 </li>

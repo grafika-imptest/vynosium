@@ -289,6 +289,44 @@ export function PathGlyph({ path, className = "" }: { path: InvestmentPath; clas
   }
 }
 
+/**
+ * Path glyph on a tinted tile — for lists where the four strategies sit
+ * under each other and a 6px dot asks the reader to learn a colour code
+ * before it means anything (footer, mobile menu).
+ *
+ * Distinct from PathBadge above, which is the labelled pill; this one is the
+ * mark on its own. Structure is a 1px border and a radius, as everywhere
+ * else: the system has no shadows, and a filled chip would read as a button.
+ *
+ * The var() names are composed at runtime, so the token and its reading
+ * variant must live in `:root` — inside `@theme` Tailwind tree-shakes any
+ * variable no generated utility references, and the glyph then silently
+ * inherits body text.
+ */
+export function PathTile({
+  path,
+  tone = "dark",
+  className = "",
+}: {
+  path: InvestmentPath;
+  tone?: "light" | "dark";
+  className?: string;
+}) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`grid h-9 w-9 shrink-0 place-items-center rounded-[8px] border transition-colors duration-[var(--dur-micro)] ${className}`}
+      style={{
+        borderColor: `color-mix(in oklab, var(--color-path-${path}) 45%, transparent)`,
+        background: `color-mix(in oklab, var(--color-path-${path}) 14%, transparent)`,
+        color: `var(--color-path-${path}-on-${tone})`,
+      }}
+    >
+      <PathGlyph path={path} className="h-[18px] w-[18px]" />
+    </span>
+  );
+}
+
 /** Hairline. The primary structural device of the whole site. */
 export function Hairline({ tone = "light", className = "" }: { tone?: "dark" | "light"; className?: string }) {
   return (

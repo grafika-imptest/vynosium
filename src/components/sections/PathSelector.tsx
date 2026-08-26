@@ -125,8 +125,9 @@ export function PathSelector() {
               onHover={(active) => {
                 hover.current.hovering = active;
                 hover.current.accentHex = PATH_COLORS[path.id];
-                // The magnet picks up whatever colour the room just took.
-                setCursorAccent(active ? PATH_COLORS[path.id] : null);
+                // The magnet picks up whatever colour the room just took,
+                // plus the glyph of the strategy it is standing on.
+                setCursorAccent(active ? PATH_COLORS[path.id] : null, path.id);
               }}
             />
           ))}

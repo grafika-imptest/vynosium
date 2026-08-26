@@ -1,16 +1,19 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { gsap, ensureGsapRegistered, prefersReducedMotion } from "@/lib/motion";
 import { NAV_LINKS } from "@/components/layout/Header";
+import { PathTile } from "@/components/ui/primitives";
 import { INVESTMENT_PATHS } from "@/lib/data/paths";
 import { SITE } from "@/lib/data/site";
+import { withBasePath } from "@/lib/seo";
 
 /**
  * Full-screen navy overlay opened with a clip-path wipe along 38.5°
- * (§4.1). Below the links sit the four paths with their token dots — the
- * shortest route from a paid click to a converting landing page.
+ * (§4.1). Below the links sit the four paths, each with its own glyph and
+ * token — the shortest route from a paid click to a converting landing page.
  */
 export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -75,7 +78,20 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
       className="invisible fixed inset-0 z-[150] flex flex-col bg-navy opacity-0 lg:hidden"
     >
       <div className="flex h-22 items-center justify-between px-[var(--gutter)]">
-        <span className="text-label text-silver">{SITE.claim}</span>
+        {/*
+          The mark alone, no claim: the overlay covers the header, so this is
+          the only thing saying whose menu this is, and the claim repeated
+          here was competing with the navigation for the same line.
+        */}
+        <Link href="/" onClick={onClose} className="focus-ring shrink-0" aria-label={`${SITE.name} — domů`}>
+          <Image
+            src={withBasePath("/brand/logo-navbar-white.svg")}
+            alt={SITE.name}
+            width={185}
+            height={35}
+            className="h-7 w-auto"
+          />
+        </Link>
         <button
           type="button"
           onClick={onClose}
@@ -104,18 +120,18 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
         </ul>
 
         <p className="text-label mt-8 text-silver">Investiční cesty</p>
-        <ul className="mt-4 flex flex-col gap-3">
+        {/* Same glyph-and-token pair as the selector and the footer: on a
+            phone this list is often the first place the four strategies are
+            seen at all, so it has to name them, not colour-code them. */}
+        <ul className="mt-4 flex flex-col gap-2">
           {INVESTMENT_PATHS.map((path) => (
             <li key={path.id}>
               <Link
                 href={`/${path.slug}`}
                 onClick={onClose}
-                className="focus-ring flex items-center gap-3 text-[15px] text-snow no-underline"
+                className="focus-ring flex min-h-11 items-center gap-3 text-[15px] text-snow no-underline"
               >
-                <span
-                  className="inline-block h-1.5 w-1.5 rounded-full"
-                  style={{ background: `var(--color-${path.colorVar})` }}
-                />
+                <PathTile path={path.id} />
                 {path.label}
               </Link>
             </li>
