@@ -31,7 +31,7 @@ const START_YEAR = 2026;
  */
 export function Calculator({
   defaultType = "income",
-  index = "08",
+  index,
 }: {
   defaultType?: InvestmentPath;
   index?: string;

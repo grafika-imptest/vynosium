@@ -33,11 +33,11 @@ export default function HomePage() {
       <WhyRealEstate />
       <AboutIntro />
       <ProcessSteps />
-      <Calculator />
-      <Opportunities compact />
+      <Calculator index="08" />
+      <Opportunities index="09" compact />
       <WhyVynosium />
       <References />
-      <Faq items={FAQ} />
+      <Faq index="12" items={FAQ} />
       <FinalCta />
     </>
   );

@@ -13,7 +13,7 @@ export function PageIntro({
   tone = "light",
   children,
 }: {
-  index: string;
+  index?: string;
   label: string;
   title: string;
   lede?: string;

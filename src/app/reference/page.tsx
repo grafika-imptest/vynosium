@@ -25,7 +25,6 @@ export default function ReferencesPage() {
       />
 
       <PageIntro
-        index="—"
         label="REFERENCE"
         title="Projekty, u kterých sedí čísla i na konci."
         lede="Každá studie končí ledgerem: co se koupilo, kolik stála rekonstrukce, jak dlouho trvala a s jakým výsledkem projekt skončil."

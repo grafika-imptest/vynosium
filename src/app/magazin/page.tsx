@@ -32,7 +32,6 @@ export default function MagazinePage() {
       />
 
       <PageIntro
-        index="—"
         label="MAGAZÍN"
         title="Texty, které počítají."
         lede="Bez marketingových slibů. Každý článek končí odkazem na investiční cestu, ke které se vztahuje."

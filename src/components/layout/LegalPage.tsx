@@ -21,7 +21,7 @@ export function LegalPage({
   return (
     <>
       <SetHeaderVariant variant="light" />
-      <PageIntro index="—" label={label} title={title} lede={intro} />
+      <PageIntro label={label} title={title} lede={intro} />
 
       <section className="relative z-[2] bg-white pb-[var(--space-11)]">
         <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">

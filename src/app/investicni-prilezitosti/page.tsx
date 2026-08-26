@@ -25,13 +25,12 @@ export default function OpportunitiesPage() {
       />
 
       <PageIntro
-        index="—"
         label="PŘÍLEŽITOSTI"
         title="Projekty, u kterých znáte čísla dřív než my vaši odpověď."
         lede="Každá příležitost je popsaná stejnou sadou metrik, aby se daly porovnat mezi sebou. Uzavřené projekty necháváme viditelné — jsou důkazem, ne inventářem."
       />
 
-      <Opportunities index="—" showTableToggle heading="Aktuální nabídka" lede="Filtrujte podle strategie, lokality a stavu projektu. Přepnutí do tabulky zobrazí všechny projekty vedle sebe." />
+      <Opportunities showTableToggle heading="Aktuální nabídka" lede="Filtrujte podle strategie, lokality a stavu projektu. Přepnutí do tabulky zobrazí všechny projekty vedle sebe." />
 
       <FinalCta />
     </>

@@ -31,16 +31,14 @@ export default function CalculatorPage() {
       />
 
       <PageIntro
-        index="—"
         label="KALKULAČKA"
         tone="dark"
         title="Spočítejte si, co vaše peníze v nemovitostech zvládnou."
         lede="Zadejte vlastní kapitál, míru financování a horizont. Model ukáže velikost investice, měsíční cashflow, zhodnocení i pásmo scénářů — včetně toho spodního."
       />
-      <Calculator index="—" />
+      <Calculator />
       <Faq
         items={FAQ.slice(6, 12)}
-        index="—"
         heading="Jak kalkulačka počítá"
         tone="light"
       />

@@ -26,7 +26,6 @@ export default function ContactPage() {
       />
 
       <PageIntro
-        index="—"
         label="KONTAKT"
         title="Pojďme probrat vaše investiční cíle."
         lede="Konzultace je nezávazná. Výstupem je modelový propočet pro váš kapitál a horizont, ne prezentace."
@@ -39,7 +38,7 @@ export default function ContactPage() {
           </div>
 
           <aside className="lg:col-span-5">
-            <SectionIndex index="—" label="SPOJENÍ" tone="light" />
+            <SectionIndex label="SPOJENÍ" tone="light" />
             <dl className="mt-6 border-t border-light-gray">
               <div className="border-b border-light-gray py-5">
                 <dt className="text-label text-text-muted">Telefon</dt>

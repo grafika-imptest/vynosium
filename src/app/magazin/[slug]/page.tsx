@@ -48,7 +48,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       <article className="relative z-[2] bg-white pb-[var(--space-10)] pt-[calc(var(--space-12)+40px)]">
         <div className="mx-auto grid max-w-[var(--max-w)] grid-cols-1 gap-12 px-[var(--gutter)] lg:grid-cols-12">
           <div className="lg:col-span-8">
-            <SectionIndex index="—" label={article.category} tone="light" />
+            <SectionIndex label={article.category} tone="light" />
             <h1 className="text-display mt-6 max-w-[24ch] text-navy">{article.title}</h1>
             <p className="text-lede mt-6 max-w-[68ch] text-text-secondary">{article.perex}</p>
             <p className="text-label mt-6 text-text-muted">

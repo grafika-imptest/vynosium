@@ -46,7 +46,6 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       <section className="relative z-[2] bg-navy pb-[var(--space-9)] pt-[calc(var(--space-12)+40px)]">
         <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
           <SectionIndex
-            index="—"
             label={`${CASE_CATEGORY_LABEL[study.category]} · ${study.year}`}
             tone="dark"
           />
@@ -90,7 +89,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
           <div className="lg:col-span-5">
             <div className="sticky top-24 rounded-[var(--radius-card)] border border-light-gray p-6">
-              <SectionIndex index="—" label="LEDGER PROJEKTU" tone="light" />
+              <SectionIndex label="LEDGER PROJEKTU" tone="light" />
               <dl className="mt-6">
                 {study.ledger.map((row) => (
                   <div

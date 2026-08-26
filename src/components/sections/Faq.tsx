@@ -13,7 +13,7 @@ import { SectionIndex } from "@/components/ui/primitives";
  */
 export function Faq({
   items,
-  index = "12",
+  index,
   heading = "Co se investoři ptají nejčastěji",
   tone = "light",
 }: {

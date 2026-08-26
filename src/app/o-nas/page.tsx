@@ -28,7 +28,6 @@ export default function AboutPage() {
       />
 
       <PageIntro
-        index="—"
         label="O NÁS"
         title="Investice do nemovitostí stavíme na zkušenostech, datech a dlouhodobém pohledu."
         lede="Nejsme makléři. Kupujeme, počítáme, rekonstruujeme a spravujeme — a stejná čísla, která ukazujeme investorovi, používáme při vlastním rozhodování."

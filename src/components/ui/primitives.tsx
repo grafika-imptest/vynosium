@@ -81,14 +81,19 @@ export function SectionIndex({
   tone,
   className = "",
 }: {
-  index: string;
+  /**
+   * Position in the homepage narrative. Omit it on sections that are not
+   * part of that sequence — subpages used to pass an em dash as the index
+   * and got "— — LABEL" out of the separator below.
+   */
+  index?: string;
   label: string;
   tone: "dark" | "light";
   className?: string;
 }) {
   return (
     <p className={`text-label ${tone === "dark" ? "text-silver" : "text-text-muted"} ${className}`}>
-      {index} — {label}
+      {index ? `${index} — ${label}` : label}
     </p>
   );
 }

@@ -137,7 +137,31 @@ export function BeforeAfterSlider({
           className="absolute inset-y-0 w-px bg-emerald"
           style={{ left: "50%" }}
         >
-          <span className="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full border border-emerald bg-navy" />
+          {/*
+            Two arrows in the grip: a bare disc on a line says "there is a
+            control here" but not what it does. They point outwards, along
+            the one axis it moves.
+          */}
+          <span className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-1.5 rounded-full border border-emerald bg-navy text-snow">
+            <svg width="6" height="10" viewBox="0 0 6 10" fill="none">
+              <path
+                d="M4.75 1 1 5l3.75 4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <svg width="6" height="10" viewBox="0 0 6 10" fill="none">
+              <path
+                d="M1.25 1 5 5l-3.75 4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
         </div>
       </div>
 

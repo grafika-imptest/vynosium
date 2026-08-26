@@ -24,7 +24,7 @@ type StatusFilter = ProjectStatus | "all";
  * layout — no superscript marker.
  */
 export function Opportunities({
-  index = "09",
+  index,
   compact = false,
   showTableToggle = false,
   initialStrategy = "all",

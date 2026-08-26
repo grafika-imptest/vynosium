@@ -29,7 +29,6 @@ export default function ProcessPage() {
       />
 
       <PageIntro
-        index="—"
         label="PROCES"
         title="Od první konzultace k výnosu."
         lede="Šest kroků, které na sebe navazují. Každý má vlastní výstup, který dostanete písemně — a žádný nezačíná dřív, než je uzavřený ten předchozí."
@@ -37,7 +36,7 @@ export default function ProcessPage() {
 
       <ProcessSteps />
       <WhyVynosium />
-      <Faq items={FAQ.slice(0, 6)} index="—" heading="Nejčastější otázky k procesu" />
+      <Faq items={FAQ.slice(0, 6)} heading="Nejčastější otázky k procesu" />
       <FinalCta />
     </>
   );
