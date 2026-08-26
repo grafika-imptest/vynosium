@@ -13,10 +13,10 @@ import { gsap, ensureGsapRegistered, ScrollTrigger, prefersReducedMotion } from 
  * rail bottom-aligned in 10–12. The asymmetry between the monumental left
  * mass and the thin right line is the entire composition.
  *
- * Layer 1 is a muted, looping video of the real product; the shader field
- * it replaced stays in use for the closing CTA reprise (§3/13). The clip
- * is over-scaled so the pointer parallax never exposes its edges, and the
- * scrim above it keeps AA contrast on the copy.
+ * Layer 1 is a muted, looping clip of the real product; the shader field it
+ * replaced stays in use for the closing CTA reprise (§3/13). The clip is
+ * visible without any JS — nothing about the background is gated on a tween
+ * — and the scrim above it keeps AA contrast on the copy.
  */
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -30,18 +30,11 @@ export function Hero() {
     ensureGsapRegistered();
 
     const reduced = prefersReducedMotion();
-    const video = videoRef.current;
 
     // Reduced motion keeps the first frame as a still backdrop.
-    if (reduced) video?.pause();
+    if (reduced) videoRef.current?.pause();
 
     const ctx = gsap.context(() => {
-      const media = mediaRef.current;
-
-      if (media) {
-        gsap.fromTo(media, { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2, ease: "power2.out" });
-      }
-
       if (!reduced) {
         const tl = gsap.timeline({ delay: 0.15 });
         tl.fromTo(
@@ -52,7 +45,7 @@ export function Hero() {
           .fromTo(".hero-fade", { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7, stagger: 0.08 }, "-=0.6")
           .fromTo(".hero-rail", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, "-=0.5");
 
-        // A real dolly: the field pushes in while the content leaves.
+        // A real dolly: the clip pushes in while the content leaves.
         ScrollTrigger.create({
           trigger: section,
           start: "top top",
@@ -60,14 +53,18 @@ export function Hero() {
           scrub: 1,
           onUpdate: (self) => {
             gsap.set(contentRef.current, { yPercent: -18 * self.progress, autoAlpha: 1 - self.progress * 0.9 });
-            if (media) gsap.set(media, { scale: 1.08 + 0.1 * self.progress });
+            if (mediaRef.current) gsap.set(mediaRef.current, { scale: 1.08 + 0.1 * self.progress });
           },
         });
       }
     }, sectionRef);
 
-    // Pointer parallax is driven straight through gsap — never React state
-    // (§6 INP). The clip drifts against the pointer, never with it.
+    /*
+     * Pointer parallax is driven straight through GSAP — never React state
+     * (§6 INP). The clip drifts against the pointer, never with it. quickTo
+     * overwrites competing tweens on its target, so this element carries
+     * transforms only; opacity is never animated here.
+     */
     let onMove: ((e: PointerEvent) => void) | undefined;
     const media = mediaRef.current;
     if (!reduced && media) {
@@ -93,7 +90,18 @@ export function Hero() {
       className="relative flex min-h-[100svh] items-end overflow-hidden bg-navy"
       data-scene="hero"
     >
-      <div ref={mediaRef} aria-hidden="true" className="absolute inset-0 scale-[1.08]">
+      {/*
+       * Over-scaled so the parallax never exposes the clip's edges. The base
+       * transform is inline rather than a utility class: GSAP composes the
+       * whole transform on this element and reads its starting value from
+       * the element itself.
+       */}
+      <div
+        ref={mediaRef}
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{ transform: "scale(1.08)" }}
+      >
         <video
           ref={videoRef}
           className="h-full w-full object-cover"
