@@ -4,18 +4,18 @@ import { useEffect, useRef } from "react";
 import { Pill, SectionIndex } from "@/components/ui/primitives";
 import { PROCESS_STEPS } from "@/lib/data/site";
 import { gsap, ensureGsapRegistered, ScrollTrigger, prefersReducedMotion } from "@/lib/motion";
-import { VECTOR_ANGLE_DEG } from "@/lib/tokens";
 
 /**
  * How we invest — six steps (§3/07).
  *
- * Desktop: a pinned horizontal track of six 60vw panels driven by
- * vertical scroll, with ONE line running its whole length at 38.5° whose
- * stroke-dashoffset is scrubbed to progress — the monogram's arrow is
- * literally drawn as the model is explained.
+ * Desktop: a pinned horizontal track driven by vertical scroll, with ONE
+ * connector line running along the step numbers whose stroke-dashoffset is
+ * scrubbed to progress — the line is drawn from step to step exactly as the
+ * model is explained, and it stays welded to the numbers because it lives
+ * inside the moving track.
  *
  * Mobile: the pin is REMOVED, not shrunk. Six full-width blocks stack and
- * the same vector is drawn vertically in the left margin, so the metaphor
+ * the vector is drawn vertically in the left margin, so the metaphor
  * survives the layout change instead of fighting native scrolling.
  */
 export function ProcessSteps() {
@@ -45,13 +45,12 @@ export function ProcessSteps() {
             trigger: section,
             start: "top top",
             /*
-             * 520%, not 420%: the track has to travel ~5200px and at 420%
-             * that is 1.38px of panel movement per px of scroll, which
-             * pushed a panel off screen in about 500px of scrolling — too
-             * fast to read one. At 520% the rate is ~1.06 and each panel
-             * holds the viewport for roughly 900px of scroll.
+             * Tuned to the panel width: the narrower panels travel ~2400px,
+             * and 340% of a 900px viewport gives ~0.8px of movement per px
+             * of scroll — roughly 600px of scroll per step, enough to read
+             * one without the section overstaying.
              */
-            end: "+=520%",
+            end: "+=340%",
             pin: true,
             scrub: 1,
             invalidateOnRefresh: true,
@@ -138,51 +137,29 @@ export function ProcessSteps() {
       ref={sectionRef}
       id="jak-investujeme"
       className="relative z-[2] overflow-hidden bg-navy py-[var(--space-10)] lg:py-0"
+      style={
+        {
+          /*
+           * Step 01 has to start exactly where the heading starts. The
+           * heading sits in a centred max-w container, so its left edge is
+           * the centring offset plus the gutter — the track needs the same
+           * padding, otherwise it hangs left of the heading on wide screens.
+           */
+          "--track-pad": "calc(max(0px, (100vw - var(--max-w)) / 2) + var(--gutter))",
+          /* Narrower panels = smaller gaps between steps. */
+          "--step-w": "clamp(340px, 30vw, 500px)",
+          /* Vertical centre of the index row: where the connector runs. */
+          "--step-line-y": "14px",
+        } as React.CSSProperties
+      }
     >
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)] lg:pt-[var(--space-10)]">
         <SectionIndex index="07" label="JAK INVESTUJEME" tone="dark" />
         <h2 className="text-display-lg mt-6 max-w-[16ch] text-snow">Od první konzultace k výnosu.</h2>
       </div>
 
-      <div className="relative mt-12 lg:mt-16 lg:h-[62vh]">
-        {/*
-          Desktop: the vector runs under the panels, inside the track area —
-          not the section. Anchored to the section it sat at 50% of a
-          viewport-tall box and ran off below the fold, so the one thing that
-          is supposed to draw itself as you scroll was never on screen.
-        */}
-        <svg
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block"
-          viewBox="0 0 1000 420"
-          preserveAspectRatio="none"
-        >
-          {/*
-            The vector climbs across the whole track box, behind the panels.
-            preserveAspectRatio="none" stretches it, so the drawn angle is a
-            projection of 38.5° onto a box that is ten times wider than it is
-            tall — the ratio is what carries the metaphor here, not the
-            on-screen degrees.
-          */}
-          <line
-            ref={lineRef}
-            x1="0"
-            y1="410"
-            x2="1000"
-            y2={410 - 1000 * Math.tan((VECTOR_ANGLE_DEG * Math.PI) / 180) * 0.44}
-            stroke="url(#process-gradient)"
-            strokeWidth="2"
-          />
-          <defs>
-            <linearGradient id="process-gradient" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0%" stopColor="#243b53" />
-              <stop offset="46%" stopColor="#16506b" />
-              <stop offset="100%" stopColor="#1f8a70" />
-            </linearGradient>
-          </defs>
-        </svg>
-
-        {/* Mobile: same vector, drawn vertically in the left margin. */}
+      <div className="relative mt-12 lg:mt-16">
+        {/* Mobile: the vector, drawn vertically in the left margin. */}
         <svg
           aria-hidden="true"
           className="absolute left-2 top-0 h-full w-4 lg:hidden"
@@ -192,19 +169,52 @@ export function ProcessSteps() {
           <line ref={vLineRef} x1="5" y1="1000" x2="5" y2="0" stroke="#1f8a70" strokeWidth="1.5" />
         </svg>
 
+        {/*
+          The track carries the connector line itself, so the line travels
+          with the panels and stays welded to the step numbers instead of
+          drifting behind them. Its own dash offset is scrubbed by the same
+          timeline, so it draws from one step to the next as you scroll.
+        */}
         <div
           ref={trackRef}
-          className="flex flex-col gap-8 pl-10 lg:flex-row lg:gap-0 lg:pl-[var(--gutter)]"
+          className="flex flex-col gap-8 pl-10 lg:relative lg:flex-row lg:gap-0 lg:pl-[var(--track-pad)]"
         >
+          <svg
+            aria-hidden="true"
+            className="pointer-events-none absolute left-0 top-[var(--step-line-y)] hidden h-px w-full lg:block"
+            preserveAspectRatio="none"
+            viewBox="0 0 1000 1"
+          >
+            <line
+              ref={lineRef}
+              x1="0"
+              y1="0.5"
+              x2="1000"
+              y2="0.5"
+              stroke="url(#process-gradient)"
+              strokeWidth="1"
+              vectorEffect="non-scaling-stroke"
+            />
+            <defs>
+              <linearGradient id="process-gradient" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#243b53" />
+                <stop offset="30%" stopColor="#16506b" />
+                <stop offset="100%" stopColor="#35b795" />
+              </linearGradient>
+            </defs>
+          </svg>
+
           {PROCESS_STEPS.map((step) => (
             <article
               key={step.index}
-              className="process-panel w-full shrink-0 lg:w-[60vw] lg:pr-[var(--space-10)]"
+              className="process-panel w-full shrink-0 lg:w-[var(--step-w)] lg:pr-[var(--space-8)]"
             >
-              <p className="process-fade text-label text-emerald-on-dark">
+              <p className="process-fade text-label flex h-7 items-center gap-3 text-emerald-on-dark">
+                {/* Node on the connector line, at the number's own baseline. */}
+                <span aria-hidden="true" className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-on-dark" />
                 {step.index}/06
               </p>
-              <h3 className="process-fade text-heading mt-5 max-w-[18ch] text-snow">{step.title}</h3>
+              <h3 className="process-fade text-heading mt-4 max-w-[18ch] text-snow">{step.title}</h3>
               <p className="process-fade text-body mt-4 max-w-[46ch] text-slate-on-dark">{step.text}</p>
 
               <div className="process-fade mt-8 max-w-[380px] rounded-[var(--radius-card)] border border-steel/50 p-5">
@@ -221,7 +231,7 @@ export function ProcessSteps() {
             </article>
           ))}
 
-          <div className="process-panel flex w-full shrink-0 flex-col justify-center gap-4 lg:w-[40vw] lg:pr-[var(--gutter)]">
+          <div className="process-panel flex w-full shrink-0 flex-col justify-center gap-4 lg:w-[var(--step-w)] lg:pr-[var(--gutter)]">
             <p className="text-body max-w-[36ch] text-slate-on-dark">
               Každý krok má vlastní výstup, který dostanete písemně. Žádná fáze nezačíná dřív, než je
               uzavřená ta předchozí.

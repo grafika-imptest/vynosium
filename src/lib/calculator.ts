@@ -112,39 +112,6 @@ export function computeCalculator(input: CalculatorInput): CalculatorOutput {
   };
 }
 
-export interface RibbonSeries {
-  median: number[];
-  low: number[];
-  high: number[];
-}
-
-/**
- * Year-by-year model equity, plus the P10/P90 scenario band.
- *
- * The band is the point of the chart: a projection that can only rise is
- * marketing. The spread is applied to the *gain*, not to the capital, so
- * the lower scenario can legitimately fall below the money put in.
- */
-export function sampleRibbonSeries(input: CalculatorInput, steps = 60): RibbonSeries {
-  const { capital, horizonYears } = clampInput(input);
-  const spread = MODEL_ASSUMPTIONS.scenarioSpread;
-
-  const median: number[] = [];
-  const low: number[] = [];
-  const high: number[] = [];
-
-  for (let i = 0; i <= steps; i++) {
-    const years = (i / steps) * horizonYears;
-    const value = projectedEquity(input, years);
-    const gain = value - capital;
-    median.push(value);
-    low.push(capital + gain * (1 - spread));
-    high.push(capital + gain * (1 + spread));
-  }
-
-  return { median, low, high };
-}
-
 /* --------------------------------------------------------------------------
    Logarithmic capital slider (§4.3): most investors sit in the lower band,
    so the lower band gets half the travel.

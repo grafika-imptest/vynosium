@@ -1,28 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useGLScene } from "@/components/gl/useGLScene";
-import {
-  buildCalculatorRibbonScene,
-  RIBBON_SAMPLES,
-  type RibbonTarget,
-} from "@/components/gl/scenes/calculatorRibbonScene";
 import { Disclaimer, ModelMark, Pill, SectionIndex } from "@/components/ui/primitives";
 import { INVESTMENT_PATHS } from "@/lib/data/paths";
 import { DISCLAIMERS } from "@/lib/data/site";
-import {
-  capitalFromSlider,
-  computeCalculator,
-  sampleRibbonSeries,
-  sliderFromCapital,
-} from "@/lib/calculator";
+import { ScenarioChart, buildChart, scenariosFor } from "@/components/sections/ScenarioChart";
+import { capitalFromSlider, computeCalculator, sliderFromCapital } from "@/lib/calculator";
 import { formatCzk, formatPercent } from "@/lib/format";
 import type { InvestmentPath } from "@/lib/tokens";
 
-const CLIP_MIN = -0.55;
-const CLIP_MAX = 0.65;
-
 const DEFAULTS = { capital: 2_000_000, ltv: 30, horizon: 5 };
+
+/**
+ * Base year of the projection. A constant, not new Date(): this is a client
+ * component in a statically exported page, so reading the clock at render
+ * time would drift from the built HTML. Bump it with the data.
+ */
+const START_YEAR = 2026;
 
 /**
  * Investment calculator (§3/08). The section that hands over control —
@@ -30,8 +24,8 @@ const DEFAULTS = { capital: 2_000_000, ltv: 30, horizon: 5 };
  *
  * INP discipline (§6): slider `input` events write ONLY to refs. A single
  * rAF loop recomputes the model, writes the ledger digits and slider
- * labels straight into the DOM, and pushes new ribbon vertices to the GL
- * scene. React state is committed once per gesture (on `change`, i.e.
+ * labels straight into the DOM, and rewrites the chart geometry in place.
+ * React state is committed once per gesture (on `change`, i.e.
  * pointer release) purely so the CTA href and the screen-reader table
  * stay in sync — dragging never schedules a render.
  */
@@ -55,9 +49,6 @@ export function Calculator({
     horizonYears: DEFAULTS.horizon,
     type: defaultType,
   });
-
-  const target = useRef<RibbonTarget>({ median: [], low: [], high: [] });
-  const { hostRef, disabled } = useGLScene("calculator-ribbon", buildCalculatorRibbonScene(target));
 
   const rootRef = useRef<HTMLDivElement>(null);
   const liveRef = useRef<HTMLDivElement>(null);
@@ -86,13 +77,14 @@ export function Calculator({
       const output = computeCalculator(input);
 
       // Slider value labels are written by their own input handler; this
-      // loop owns the ledger and the ribbon.
+      // loop owns the ledger and the chart.
       write("investmentSize", formatCzk(output.investmentSize));
       // Unit lives in the label ("Cashflow měsíčně"), not glued to the
       // digits — a "/ měs." suffix pushed the number out of its column.
       write("cashflow", formatCzk(output.monthlyCashflow));
       write("yield", `${formatPercent(output.modelYieldPercent)} p.a.`);
       write("finalValue", formatCzk(output.finalValue));
+      write("chartCapital", formatCzk(input.capital));
 
       // Leverage warning above 70 % LTV (§4.3) — text, never colour alone.
       const warning = root.querySelector<HTMLElement>('[data-out="ltvWarning"]');
@@ -108,18 +100,45 @@ export function Calculator({
       setFill("ltv", input.ltv / 80);
       setFill("horizon", (input.horizonYears - 1) / 14);
 
-      // Same sample count the scene sized its buffers with.
-      const series = sampleRibbonSeries(input, RIBBON_SAMPLES);
-      const all = [...series.median, ...series.low, ...series.high];
-      const min = Math.min(...all);
-      const max = Math.max(...all);
-      const span = Math.max(max - min, 1);
-      const norm = (v: number) => CLIP_MIN + ((v - min) / span) * (CLIP_MAX - CLIP_MIN);
-      target.current = {
-        median: series.median.map(norm),
-        low: series.low.map(norm),
-        high: series.high.map(norm),
-      };
+      /*
+       * Chart update, in place. The same geometry function the server render
+       * used, so what the loop writes and what React would render agree —
+       * no re-render needed while a slider is moving.
+       */
+      const scenarios = scenariosFor(input.type, output.modelYieldPercent);
+      const geo = buildChart(input.capital, input.horizonYears, scenarios, START_YEAR);
+
+      for (const l of geo.lines) {
+        root.querySelector(`[data-chart-line="${l.key}"]`)?.setAttribute("points", l.line);
+        root.querySelector(`[data-chart-area="${l.key}"]`)?.setAttribute("points", l.area);
+        const label = root.querySelector(`[data-chart-label="${l.key}"]`);
+        if (label) {
+          label.setAttribute("x", String(l.labelX));
+          label.setAttribute("y", String(l.labelY));
+          label.textContent = l.label;
+        }
+        const rate = root.querySelector(`[data-chart-rate="${l.key}"]`);
+        if (rate) rate.textContent = l.label;
+      }
+      geo.yTicks.forEach((tick, i) => {
+        const grid = root.querySelector(`[data-chart-grid="${i}"]`);
+        if (grid) {
+          grid.setAttribute("y1", String(tick.y));
+          grid.setAttribute("y2", String(tick.y));
+        }
+        const text = root.querySelector(`[data-chart-ytick="${i}"]`);
+        if (text) {
+          text.setAttribute("y", String(tick.y + 4));
+          text.textContent = tick.label;
+        }
+      });
+      geo.xTicks.forEach((tick, i) => {
+        const text = root.querySelector(`[data-chart-xtick="${i}"]`);
+        if (text) {
+          text.setAttribute("x", String(tick.x));
+          text.textContent = tick.label;
+        }
+      });
 
       // The live region must not fire on every frame of a drag.
       window.clearTimeout(liveTimer);
@@ -149,13 +168,7 @@ export function Calculator({
   const ctaHref = `/kontakt?kapital=${committed.capital}&ltv=${committed.ltv}&horizont=${committed.horizonYears}&typ=${committed.type}`;
 
   return (
-    /*
-      No z-index on the section itself: the single GL canvas sits at z-1 and
-      has to paint OVER this navy background, with the content lifted above
-      it. Carrying z-2 here hid the whole ribbon behind the section's own
-      background — every other shader section leaves the section at z-auto.
-    */
-    <section className="relative bg-navy py-[var(--space-10)]" data-scene="calculator">
+    <section className="relative z-[2] bg-navy py-[var(--space-10)]">
       <div ref={rootRef} className="relative z-[2] mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
         <SectionIndex index={index} label="KALKULAČKA" tone="dark" />
         <h2 className="text-display-lg mt-6 max-w-[18ch] text-snow">
@@ -166,21 +179,19 @@ export function Calculator({
           {/* Graph sits above the controls on mobile — thumb reach. */}
           <div className="order-1 lg:order-2 lg:col-span-8">
             <div
-              className="relative aspect-[16/10] w-full overflow-hidden rounded-[var(--radius-card)] border border-steel/50"
-              // Transparent while the GL stage is live: the ribbon is painted
-              // by the canvas *behind* this content layer, so any wash here
-              // would sit on top of it. The static fallback brings its own.
-              style={disabled ? { background: "rgba(22,50,75,0.55)" } : undefined}
-              role="img"
-              aria-label="Modelový vývoj hodnoty investice včetně pásma scénářů P10 až P90."
+              className="rounded-[var(--radius-card)] border border-steel/50 p-6"
+              style={{ background: "rgba(22,50,75,0.55)" }}
             >
-              {!disabled ? (
-                <div ref={hostRef} className="absolute inset-0" />
-              ) : (
-                <StaticRibbon input={committed} />
-              )}
-              <p className="text-label absolute left-4 top-4 text-slate-on-dark">Model. hodnota majetku</p>
-              <p className="text-label absolute bottom-4 right-4 text-slate-on-dark">Pásmo scénářů P10–P90</p>
+              <ScenarioChart
+                capital={committed.capital}
+                years={committed.horizonYears}
+                scenarios={scenariosFor(committed.type, initialOutput.modelYieldPercent)}
+                startYear={START_YEAR}
+              />
+              <p className="text-label mt-2 text-slate-on-dark">
+                Modelový vývoj hodnoty majetku při vstupu{" "}
+                <span data-out="chartCapital">{formatCzk(committed.capital)}</span>
+              </p>
             </div>
 
             <div ref={liveRef} aria-live="polite" className="sr-only" />
@@ -467,38 +478,3 @@ function summarise(
   )} ročně, modelová hodnota majetku ${formatCzk(output.finalValue)}.`;
 }
 
-/**
- * No-WebGL / reduced-motion fallback: the same composition rendered as a
- * static SVG area chart with the same core gradient and the same scenario
- * band. Identical picture, zero movement.
- */
-function StaticRibbon({
-  input,
-}: {
-  input: { capital: number; ltv: number; horizonYears: number; type: InvestmentPath };
-}) {
-  const { median, low, high } = sampleRibbonSeries(input, 40);
-  const all = [...median, ...low, ...high];
-  const min = Math.min(...all);
-  const max = Math.max(...all);
-  const span = Math.max(max - min, 1);
-  const toPoints = (series: number[]) =>
-    series
-      .map((v, i) => `${(i / (series.length - 1)) * 100},${95 - ((v - min) / span) * 85}`)
-      .join(" ");
-
-  return (
-    <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-full w-full">
-      <defs>
-        <linearGradient id="static-ribbon" x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0%" stopColor="#102a43" />
-          <stop offset="46%" stopColor="#16506b" />
-          <stop offset="100%" stopColor="#1f8a70" />
-        </linearGradient>
-      </defs>
-      <polygon points={`${toPoints(low)} ${toPoints(high).split(" ").reverse().join(" ")}`} fill="#486581" opacity="0.25" />
-      <polygon points={`0,100 ${toPoints(median)} 100,100`} fill="url(#static-ribbon)" opacity="0.92" />
-      <polyline points={toPoints(median)} fill="none" stroke="#1f8a70" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
-    </svg>
-  );
-}
