@@ -171,9 +171,14 @@ export function Opportunities({
         ) : table ? (
           <ProjectTable projects={visible} />
         ) : (
-          <div ref={gridRef} className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          /*
+            Three across only from 1280px. At 1024 three cards left each one
+            293px wide, which is 112px per metric cell — narrower than the
+            seven-figure amounts they hold, whatever the type size.
+          */
+          <div ref={gridRef} className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {visible.map((project, i) => (
-              <div key={project.slug} data-flip-card className={project.featured && i % 5 === 3 ? "lg:col-span-2" : ""}>
+              <div key={project.slug} data-flip-card className={project.featured && i % 5 === 3 ? "xl:col-span-2" : ""}>
                 <ProjectCard project={project} />
               </div>
             ))}

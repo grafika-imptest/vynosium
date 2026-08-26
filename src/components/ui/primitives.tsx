@@ -181,21 +181,25 @@ export function PathBadge({
   path,
   label,
   tone = "light",
+  onImage = false,
 }: {
   path: InvestmentPath;
   label: string;
   tone?: "light" | "dark";
+  /** Sits on a photograph: takes its own ground — see ON_IMAGE_GROUND. */
+  onImage?: boolean;
 }) {
   return (
     <span
-      className="text-label inline-flex items-center gap-2 rounded-[var(--radius-pill)] border px-3 py-1.5"
+      className="text-label inline-flex items-center gap-2 whitespace-nowrap rounded-[var(--radius-pill)] border px-3 py-1.5"
       style={{
         borderColor: `var(--color-path-${path})`,
-        color: `var(--color-path-${path}-on-${tone})`,
+        color: `var(--color-path-${path}-on-${onImage ? "dark" : tone})`,
+        background: onImage ? ON_IMAGE_GROUND : undefined,
       }}
     >
       <span
-        className="inline-block h-1.5 w-1.5 rounded-full"
+        className="inline-block h-1.5 w-1.5 shrink-0 rounded-full"
         style={{ background: `var(--color-path-${path})` }}
       />
       {label}
@@ -204,31 +208,55 @@ export function PathBadge({
 }
 
 /**
- * Status pill. Colour never carries meaning on its own — every state
- * ships with its text label.
+ * Ground for a pill sitting on a photograph. A hairline pill is drawn for a
+ * known surface; over a photo it has none, and the label lands on whatever
+ * the picture happens to put there — a tiled bathroom wall in one card, a
+ * dark window frame in the next. This gives it its own surface, opaque
+ * enough that the reading holds over the brightest photo in the set: at
+ * 0.92 the palest label on this ground still clears AA against a pure
+ * white pixel behind it.
+ */
+export const ON_IMAGE_GROUND = "rgba(11,29,46,0.92)";
+
+/**
+ * Status pill. Colour never carries meaning on its own — every state ships
+ * with its text label.
  */
 export function StatusPill({
   label,
   tone,
+  onImage = false,
 }: {
   label: string;
   tone: "open" | "last" | "closed" | "prepared";
+  /** Sits on a photograph: takes its own ground and the on-dark text. */
+  onImage?: boolean;
 }) {
   // Line and dot carry the raw state colour; the 11px label carries the
-  // reading variant — Amber at #F59E0B is 2.15:1 on white.
+  // reading variant for its surface — Amber at #F59E0B is 2.15:1 on white,
+  // and the on-light variants are just as unreadable on navy.
   const { line, text } = {
-    open: { line: "var(--color-emerald)", text: "var(--color-emerald-on-light)" },
-    last: { line: "var(--color-fn-warning)", text: "var(--color-fn-warning-on-light)" },
-    closed: { line: "var(--color-steel)", text: "var(--color-steel)" },
-    prepared: { line: "var(--color-slate)", text: "var(--color-text-secondary)" },
+    open: {
+      line: "var(--color-emerald)",
+      text: onImage ? "var(--color-emerald-on-dark)" : "var(--color-emerald-on-light)",
+    },
+    last: {
+      line: "var(--color-fn-warning)",
+      text: onImage ? "var(--color-fn-warning)" : "var(--color-fn-warning-on-light)",
+    },
+    closed: { line: "var(--color-steel)", text: onImage ? "var(--color-silver)" : "var(--color-steel)" },
+    prepared: {
+      line: "var(--color-slate)",
+      text: onImage ? "var(--color-silver)" : "var(--color-text-secondary)",
+    },
   }[tone];
 
   return (
     <span
-      className="text-label inline-flex items-center gap-2 rounded-[var(--radius-pill)] border px-3 py-1.5"
-      style={{ borderColor: line, color: text }}
+      className="text-label inline-flex items-center gap-2 whitespace-nowrap rounded-[var(--radius-pill)] border px-3 py-1.5"
+      style={{ borderColor: line, color: text, background: onImage ? ON_IMAGE_GROUND : undefined }}
     >
-      <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: line }} />
+      <span className="inline-block h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: line }} />
       {label}
     </span>
   );

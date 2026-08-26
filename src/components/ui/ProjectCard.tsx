@@ -23,7 +23,9 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
         closed
           ? "border-dashed border-light-gray opacity-40"
           : "border-light-gray hover:-translate-y-1.5 hover:border-emerald"
-      } ${featured ? "lg:col-span-2" : ""}`}
+      } ${featured ? "xl:col-span-2" : ""}`}
+      /* The metric values size themselves against this width — see below. */
+      style={{ containerType: "inline-size" }}
     >
       <div
         className="relative aspect-[16/10] w-full overflow-hidden"
@@ -47,32 +49,57 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
           aria-hidden="true"
           className="absolute inset-0 bg-navy/25 transition-opacity duration-[600ms] group-hover:opacity-0"
         />
-        <div className="absolute left-4 top-4">
-          <StatusPill label={STATUS_LABEL[project.status]} tone={project.status} />
+        {/*
+          Both pills live on the photograph, one per corner. The strategy
+          used to sit beside the title, where it had a third of the card's
+          width and broke "ZHODNOTIT BYT" across two lines inside its own
+          pill. Up here each stays on one line, the title gets the full
+          column, and the two corners frame the image.
+        */}
+        <div className="absolute inset-x-4 top-4 z-[2] flex flex-wrap items-start justify-between gap-2">
+          <StatusPill label={STATUS_LABEL[project.status]} tone={project.status} onImage />
+          <PathBadge path={project.strategy} label={path.label} onImage />
         </div>
       </div>
 
       <div className="flex flex-1 flex-col p-6">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-subheading text-navy">
-              <Link href={`/investicni-prilezitosti/${project.slug}`} className="focus-ring no-underline">
-                <span className="absolute inset-0" aria-hidden="true" />
-                {project.name}
-              </Link>
-            </h3>
-            <p className="text-body-sm mt-1 text-text-muted">{project.location}</p>
-          </div>
-          <PathBadge path={project.strategy} label={path.label} />
-        </div>
+        <h3 className="text-subheading text-navy">
+          <Link href={`/investicni-prilezitosti/${project.slug}`} className="focus-ring no-underline">
+            <span className="absolute inset-0" aria-hidden="true" />
+            {project.name}
+          </Link>
+        </h3>
+        <p className="text-body-sm mt-1 text-text-muted">{project.location}</p>
 
-        <dl className="mt-6 grid grid-cols-2 gap-x-4 gap-y-5 border-t border-light-gray pt-5 sm:grid-cols-3">
+        {/*
+          Two columns, three only on the double-width card. At three the
+          cells were about 115px and every seven-figure amount broke mid
+          number — "12 090 000" over two lines reads as two figures.
+
+          The labels take the wrapping variant of the label type: the default
+          sets line-height 1, which is right for a single-line eyebrow and
+          far too tight for "HODNOTA PO / REKONSTRUKCI".
+        */}
+        <dl
+          className={`mt-6 grid grid-cols-2 gap-x-5 gap-y-5 border-t border-light-gray pt-5 ${
+            featured ? "sm:grid-cols-3" : ""
+          }`}
+        >
           {project.metrics.map((metric) => (
             <div key={metric.label}>
-              <dt className="text-label text-text-muted">{metric.label}</dt>
+              <dt className="text-label text-label-wrap text-text-muted">{metric.label}</dt>
               <dd
-                className={`text-data mt-2 ${metric.emphasis ? "text-emerald-on-light" : "text-navy"}`}
-                style={{ fontSize: "1.125rem" }}
+                className={`text-data mt-1.5 whitespace-nowrap ${
+                  metric.emphasis ? "text-emerald-on-light" : "text-navy"
+                }`}
+                /*
+                   Sized against the CARD, not the viewport: the same 768px
+                   screen shows a 421px card three-up and a 332px card
+                   two-up, and only the second one has to shrink. A cell is
+                   about (card - 68) / 2, and a seven-figure amount needs
+                   146px at 17px.
+                 */
+                style={{ fontSize: "clamp(0.9375rem, 5.4cqi - 3px, 1.0625rem)" }}
               >
                 {metric.value}
               </dd>

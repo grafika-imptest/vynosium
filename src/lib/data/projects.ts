@@ -117,8 +117,8 @@ export const PROJECTS: Project[] = [
     imageTo: "#2f6fed",
     metrics: [
       { label: "Kupní cena", value: "7 400 000 Kč" },
-      { label: "Očekávané nájemné", value: "26 500 Kč / měs.", model: true },
-      { label: "Náklady a rezerva", value: "7 400 Kč / měs.", model: true },
+      { label: "Očekávané nájemné měsíčně", value: "26 500 Kč", model: true },
+      { label: "Náklady a rezerva měsíčně", value: "7 400 Kč", model: true },
       { label: "Orientační výnos", value: "5,6 % p.a.", model: true, emphasis: true },
       { label: "Obsazenost v lokalitě", value: "97 %" },
       { label: "Investiční horizont", value: "5+ let" },
@@ -207,7 +207,7 @@ export const PROJECTS: Project[] = [
     imageTo: "#6d5bd0",
     metrics: [
       { label: "Kupní cena celkem", value: "13 900 000 Kč" },
-      { label: "Očekávané nájemné", value: "58 200 Kč / měs.", model: true },
+      { label: "Očekávané nájemné měsíčně", value: "58 200 Kč", model: true },
       { label: "Orientační výnos", value: "5,1 % p.a.", model: true, emphasis: true },
       { label: "Počet jednotek", value: "3" },
       { label: "Investiční horizont", value: "10+ let" },
@@ -250,7 +250,7 @@ export const PROJECTS: Project[] = [
     imageTo: "#f59e0b",
     metrics: [
       { label: "Kupní cena", value: "2 350 000 Kč" },
-      { label: "Očekávané nájemné", value: "11 200 Kč / měs.", model: true },
+      { label: "Očekávané nájemné měsíčně", value: "11 200 Kč", model: true },
       { label: "Orientační výnos", value: "5,9 % p.a.", model: true, emphasis: true },
       { label: "Investiční horizont", value: "3–7 let" },
     ],
