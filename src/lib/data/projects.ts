@@ -90,7 +90,7 @@ export const PROJECTS: Project[] = [
     financing: [
       { label: "Doporučené LTV", value: "50 %" },
       { label: "Vlastní kapitál", value: "6 045 000 Kč" },
-      { label: "Model. výnos z kapitálu", value: "26,4 %ᴹ" },
+      { label: "Model. výnos z kapitálu", value: "26,4 %" },
     ],
     gallery: [
       { caption: "Obývací prostor — původní stav", kind: "foto" },
@@ -136,7 +136,7 @@ export const PROJECTS: Project[] = [
     financing: [
       { label: "Doporučené LTV", value: "60 %" },
       { label: "Vlastní kapitál", value: "2 960 000 Kč" },
-      { label: "Model. výnos z kapitálu", value: "7,2 %ᴹ p.a." },
+      { label: "Model. výnos z kapitálu", value: "7,2 % p.a." },
     ],
     gallery: [
       { caption: "Obývací pokoj", kind: "foto" },
@@ -178,7 +178,7 @@ export const PROJECTS: Project[] = [
     financing: [
       { label: "Doporučené LTV", value: "45 %" },
       { label: "Vlastní kapitál", value: "3 540 000 Kč" },
-      { label: "Model. výnos z kapitálu", value: "22,1 %ᴹ" },
+      { label: "Model. výnos z kapitálu", value: "22,1 %" },
     ],
     gallery: [
       { caption: "Kuchyně — původní stav", kind: "foto" },
@@ -221,7 +221,7 @@ export const PROJECTS: Project[] = [
     financing: [
       { label: "Doporučené LTV", value: "65 %" },
       { label: "Vlastní kapitál", value: "4 865 000 Kč" },
-      { label: "Model. výnos z kapitálu", value: "8,4 %ᴹ p.a." },
+      { label: "Model. výnos z kapitálu", value: "8,4 % p.a." },
     ],
     gallery: [
       { caption: "Dům z ulice", kind: "foto" },
@@ -262,7 +262,7 @@ export const PROJECTS: Project[] = [
     financing: [
       { label: "Doporučené LTV", value: "40 %" },
       { label: "Vlastní kapitál", value: "1 410 000 Kč" },
-      { label: "Model. výnos z kapitálu", value: "7,6 %ᴹ p.a." },
+      { label: "Model. výnos z kapitálu", value: "7,6 % p.a." },
     ],
     gallery: [{ caption: "Interiér po rekonstrukci", kind: "foto" }],
   },

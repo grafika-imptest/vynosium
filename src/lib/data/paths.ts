@@ -3,8 +3,10 @@ import type { InvestmentPath } from "@/lib/tokens";
 /**
  * The four investment paths (§3/03 + landing pages §25–29).
  *
- * All numbers here are MODEL ranges and are rendered with the ᴹ mark and a
- * legend. In production this record is fed by the CMS `PathPage` type.
+ * All numbers here are MODEL ranges. Their labels say so in words
+ * ("Modelový výnos"), which is why they carry no ᴹ glyph: the mark is for
+ * matrices where the label alone does not say a figure is a projection.
+ * In production this record is fed by the CMS `PathPage` type.
  */
 
 export interface PathDefinition {
@@ -40,7 +42,7 @@ export const INVESTMENT_PATHS: PathDefinition[] = [
     label: "Zhodnotit byt",
     claim: "Koupit, rekonstruovat a následně prodat se ziskem.",
     metrics: [
-      { label: "Modelový výnos", value: "18–24 %ᴹ" },
+      { label: "Modelový výnos", value: "18–24 %" },
       { label: "Horizont", value: "6–14 měsíců" },
     ],
     cta: "Chci zhodnotit byt",
@@ -92,7 +94,7 @@ export const INVESTMENT_PATHS: PathDefinition[] = [
     label: "Pasivní příjem",
     claim: "Investiční byt, který každý měsíc vydělává.",
     metrics: [
-      { label: "Modelový výnos", value: "4,8–6,2 %ᴹ p.a." },
+      { label: "Modelový výnos", value: "4,8–6,2 % p.a." },
       { label: "Horizont", value: "5+ let" },
     ],
     cta: "Chci pasivní příjem",
@@ -144,7 +146,7 @@ export const INVESTMENT_PATHS: PathDefinition[] = [
     label: "Zhodnocení kapitálu",
     claim: "Volný kapitál převedený do reálného aktiva.",
     metrics: [
-      { label: "Modelové zhodnocení", value: "6–9 %ᴹ p.a." },
+      { label: "Modelové zhodnocení", value: "6–9 % p.a." },
       { label: "Horizont", value: "3–7 let" },
     ],
     cta: "Chci zhodnotit kapitál",
@@ -191,7 +193,7 @@ export const INVESTMENT_PATHS: PathDefinition[] = [
     label: "Budování majetku",
     claim: "Portfolio, které roste po jednotlivých krocích.",
     metrics: [
-      { label: "Modelový růst portfolia", value: "5–8 %ᴹ p.a." },
+      { label: "Modelový růst portfolia", value: "5–8 % p.a." },
       { label: "Horizont", value: "10+ let" },
     ],
     cta: "Chci budovat majetek",

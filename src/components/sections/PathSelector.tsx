@@ -7,7 +7,7 @@ import {
   buildPathSelectorScene,
   type PathSelectorHoverState,
 } from "@/components/gl/scenes/pathSelectorScene";
-import { PathGlyph, SectionIndex } from "@/components/ui/primitives";
+import { Disclaimer, PathGlyph, SectionIndex } from "@/components/ui/primitives";
 import { setCursorAccent } from "@/components/ui/CustomCursor";
 import { INVESTMENT_PATHS, type PathDefinition } from "@/lib/data/paths";
 import { PATH_COLORS, type InvestmentPath } from "@/lib/tokens";
@@ -131,6 +131,18 @@ export function PathSelector() {
             />
           ))}
         </div>
+
+        {/*
+          The cards quote model yields, so the section owes the reader the
+          legal line (§3/05, §4.5) — in the layout, never a tooltip. The
+          metrics themselves carry no ᴹ glyph: their labels already say
+          "Modelový výnos" in words, and an unexplained superscript reads
+          as a typo.
+        */}
+        <Disclaimer tone="dark" className="mt-12">
+          Uvedené rozsahy jsou modelové, vycházejí z realizovaných projektů a nejsou garancí
+          budoucího výnosu. Konkrétní propočet připravujeme na míru zadání investora.
+        </Disclaimer>
       </div>
     </section>
   );
