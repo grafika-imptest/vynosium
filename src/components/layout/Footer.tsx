@@ -109,31 +109,46 @@ export function Footer() {
           </div>
         </div>
 
+        {/*
+          Bottom bar: one line, one type size, one centre line.
+
+          Each half carries the disclaimer size for its own items rather than
+          each item carrying it — the li elements used to inherit 16px/25.6px
+          body type while the links inside them were 12px, which left the ©
+          six pixels above the links beside it.
+
+          The size class stays off the row itself: .text-disclaimer also sets
+          an 80ch measure for prose, and on the row that capped the whole bar
+          at 703px and folded it into two lines. A Tailwind max-w-none does
+          not win that fight — the custom class is unlayered.
+
+          Below lg it becomes two stacked groups, where the two halves
+          together (about 790px) stop fitting the content width.
+        */}
         <div
-          className="mt-[var(--space-10)] flex flex-col gap-4 border-t py-6 md:flex-row md:items-center md:justify-between"
+          className="mt-[var(--space-10)] flex flex-col gap-x-8 gap-y-4 border-t py-6 lg:flex-row lg:items-center lg:justify-between"
           style={{ borderColor: "rgba(72,101,129,0.4)" }}
         >
-          <ul className="flex flex-wrap gap-5">
+          <ul className="text-disclaimer flex flex-wrap items-center gap-x-5 gap-y-2 text-silver">
+            <li>© 2026 {SITE.name}</li>
             {LEGAL.map((item) => (
               <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="focus-ring text-disclaimer text-silver no-underline hover:text-snow"
-                >
+                <Link href={item.href} className="focus-ring no-underline hover:text-snow">
                   {item.label}
                 </Link>
               </li>
             ))}
-            <li className="text-disclaimer text-silver">© 2026 {SITE.name}</li>
           </ul>
-          <div className="flex flex-col gap-3 md:items-end">
+
+          <div className="text-disclaimer flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-on-dark">
             {/* The only place on the site where the group is named (§1). */}
-            <p className="text-disclaimer text-slate-on-dark md:text-right">{SITE.group}</p>
+            <p>{SITE.group}</p>
+            <span aria-hidden="true" className="hidden h-3 w-px bg-steel/60 sm:block" />
             <a
               href="https://impnet.cz"
               target="_blank"
               rel="noreferrer noopener"
-              className="focus-ring text-disclaimer group inline-flex items-center gap-2 text-slate-on-dark no-underline"
+              className="focus-ring group inline-flex items-center gap-2 no-underline"
             >
               Developed by
               {/* The mark carries the name, so the words beside it are the
