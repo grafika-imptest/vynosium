@@ -3,245 +3,155 @@
 import { useEffect, useRef } from "react";
 import { Pill, SectionIndex } from "@/components/ui/primitives";
 import { PROCESS_STEPS } from "@/lib/data/site";
-import { gsap, ensureGsapRegistered, ScrollTrigger, prefersReducedMotion } from "@/lib/motion";
 
 /**
  * How we invest — six steps (§3/07).
  *
- * Desktop: a pinned horizontal track driven by vertical scroll, with ONE
- * connector line running along the step numbers, scaled in by the same
- * scrubbed timeline — it is drawn from step to step exactly as the model is
- * explained, and it stays welded to the numbers because it lives inside the
- * moving track.
+ * A snap rail the visitor scrolls themselves, not a pinned+scrubbed track.
  *
- * Mobile: the pin is REMOVED, not shrunk. Six full-width blocks stack and
- * the vector is drawn vertically in the left margin, so the metaphor
- * survives the layout change instead of fighting native scrolling.
+ * The pinned version is what §8 of the brief calls the riskiest section on
+ * the page, and it earned that: it broke three separate ways in testing —
+ * ScrollTrigger measuring its range against a document that the preloader's
+ * scroll lock had shortened, panel copy pre-hidden by triggers that could
+ * never fire, and a connector tween that stayed at zero while its sibling
+ * in the same timeline advanced. Each fix exposed the next.
+ *
+ * What survives here is everything the section was for: six steps read
+ * horizontally, one connector line through the numbers, and the vector
+ * drawn as you arrive. What is gone is the dependency on pinning, scrubbing
+ * and frame timing — the rail is native scrolling with CSS snap, the reveal
+ * is one IntersectionObserver toggling a class, and the connector is a CSS
+ * transition. Nothing here can leave content invisible or frozen.
  */
 export function ProcessSteps() {
   const sectionRef = useRef<HTMLElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
-  const vLineRef = useRef<SVGLineElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const track = trackRef.current;
-    if (!section || !track) return;
-    ensureGsapRegistered();
+    if (!section) return;
 
-    const ctx = gsap.context(() => {
-      const reduced = prefersReducedMotion();
+    /*
+     * The hidden start state is applied by JS (`process-anim`), never by the
+     * stylesheet: markup that ships hidden and waits for a trigger is how
+     * this section lost its content twice already.
+     *
+     * The reveal then has two independent ways to fire — the observer, and a
+     * timer that runs regardless. IntersectionObserver delivery is tied to
+     * the rendering pipeline, so a hidden or backgrounded tab can withhold
+     * it indefinitely; a timer cannot be withheld. Whichever lands first
+     * wins, and "invisible forever" is not reachable.
+     */
+    section.classList.add("process-anim");
 
-      const mm = gsap.matchMedia();
+    const reveal = () => section.classList.add("process-in");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          reveal();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(section);
+    const fallback = window.setTimeout(reveal, 4000);
 
-      mm.add("(min-width: 1024px)", () => {
-        if (reduced) return;
-
-        const distance = () => track.scrollWidth - window.innerWidth + 80;
-
-        /*
-         * The connector is written straight from the trigger's progress
-         * rather than tweened. As a tween in this timeline it stayed pinned
-         * at scaleX(0) on the deployed build while the track tween in the
-         * same timeline advanced normally — one assignment per update has no
-         * such failure mode, and progress is exactly the value we want.
-         */
-        const line = lineRef.current;
-        if (line) line.style.transform = "scaleX(0)";
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            /*
-             * Tuned to the panel width: the narrower panels travel ~2400px,
-             * and 340% of a 900px viewport gives ~0.8px of movement per px
-             * of scroll — roughly 600px of scroll per step, enough to read
-             * one without the section overstaying.
-             */
-            end: "+=340%",
-            pin: true,
-            scrub: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              if (line) line.style.transform = `scaleX(${self.progress.toFixed(4)})`;
-            },
-          },
-        });
-
-        // Scrubbed movement never eases (§5).
-        tl.to(track, { x: () => -distance(), ease: "none" }, 0);
-
-        /*
-         * Panel copy fades in when the panel itself arrives — which means
-         * the trigger has to measure the panel inside the horizontally
-         * scrubbed track, not guess from vertical scroll offsets.
-         * `containerAnimation` is exactly that: it maps the panel's
-         * position within `tl` to scroll progress.
-         *
-         * The previous version keyed each panel to `top+=${i * 60}%` of the
-         * section, which has no relation to the track's travel rate: the
-         * panels moved through the viewport far ahead of their triggers, so
-         * you scrolled past empty navy boxes and the text only appeared
-         * once the panel was already leaving.
-         */
-        const panels = gsap.utils.toArray<HTMLElement>(".process-panel", section);
-        panels.forEach((panel) => {
-          gsap.fromTo(
-            panel.querySelectorAll(".process-fade"),
-            { y: 24, autoAlpha: 0 },
-            {
-              y: 0,
-              autoAlpha: 1,
-              duration: 0.5,
-              ease: "expo.out",
-              stagger: 0.06,
-              /*
-               * Critical: without this, `fromTo` applies the hidden state
-               * immediately. The first two panels are already on screen when
-               * the pin starts, so their trigger never fires — and they sat
-               * at opacity 0 forever. Empty navy boxes were exactly what you
-               * were scrolling through.
-               */
-              immediateRender: false,
-              scrollTrigger: {
-                trigger: panel,
-                containerAnimation: tl,
-                // Panel's left edge crossing 88% of the viewport width.
-                start: "left 88%",
-                toggleActions: "play none none reverse",
-              },
-            }
-          );
-        });
-
-        return () => tl.kill();
-      });
-
-      mm.add("(max-width: 1023px)", () => {
-        const vLine = vLineRef.current;
-        if (!vLine || reduced) return;
-        const length = vLine.getTotalLength();
-        gsap.set(vLine, { strokeDasharray: length, strokeDashoffset: length });
-        gsap.to(vLine, {
-          strokeDashoffset: 0,
-          ease: "none",
-          scrollTrigger: { trigger: section, start: "top 80%", end: "bottom 60%", scrub: 1 },
-        });
-      });
-
-      ScrollTrigger.refresh();
-      return () => mm.revert();
-    }, sectionRef);
-
-    return () => ctx.revert();
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(fallback);
+    };
   }, []);
 
   return (
     <section
       ref={sectionRef}
       id="jak-investujeme"
-      className="relative z-[2] overflow-hidden bg-navy py-[var(--space-10)] lg:py-0"
+      className="process-section relative z-[2] bg-navy py-[var(--space-10)]"
       style={
         {
           /*
-           * Step 01 has to start exactly where the heading starts: the
-           * centring offset of the max-w container plus the gutter. Measured
-           * in % of the section, not vw — vw includes the scrollbar, which
-           * pushed the track 8px right of the heading.
+           * Step 01 starts exactly where the heading starts: the centring
+           * offset of the max-w container plus the gutter. In % of the
+           * section, not vw — vw includes the scrollbar, which pushed the
+           * rail 8px right of the heading.
            */
           "--track-pad": "calc(max(0px, (100% - var(--max-w)) / 2) + var(--gutter))",
-          /* Narrower panels = smaller gaps between steps. */
-          "--step-w": "clamp(340px, 30vw, 500px)",
+          /* Narrower panels keep the gaps between steps small. */
+          "--step-w": "clamp(300px, 30vw, 460px)",
           /* Vertical centre of the index row: where the connector runs. */
           "--step-line-y": "14px",
         } as React.CSSProperties
       }
     >
-      <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)] lg:pt-[var(--space-10)]">
+      <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
         <SectionIndex index="07" label="JAK INVESTUJEME" tone="dark" />
         <h2 className="text-display-lg mt-6 max-w-[16ch] text-snow">Od první konzultace k výnosu.</h2>
       </div>
 
-      <div className="relative mt-12 lg:mt-16">
-        {/* Mobile: the vector, drawn vertically in the left margin. */}
-        <svg
-          aria-hidden="true"
-          className="absolute left-2 top-0 h-full w-4 lg:hidden"
-          viewBox="0 0 10 1000"
-          preserveAspectRatio="none"
-        >
-          <line ref={vLineRef} x1="5" y1="1000" x2="5" y2="0" stroke="#1f8a70" strokeWidth="1.5" />
-        </svg>
-
-        {/*
-          The track carries the connector line itself, so the line travels
-          with the panels and stays welded to the step numbers instead of
-          drifting behind them. It is scaled in by the same timeline, so it
-          draws from one step to the next as you scroll.
-        */}
+      {/*
+        Native horizontal scrolling with snap: the visitor sets the pace, and
+        the next panel peeking in at the right edge is what signals there is
+        more. scroll-padding keeps a snapped panel aligned with the heading.
+      */}
+      <div
+        className="process-rail mt-12 flex snap-x snap-mandatory overflow-x-auto pb-8 pl-[var(--track-pad)] pr-[var(--gutter)]"
+        style={{ scrollPaddingLeft: "var(--track-pad)" }}
+      >
+        {/* Connector: one line through every step number, drawn on arrival. */}
         <div
-          ref={trackRef}
-          className="flex flex-col gap-8 pl-10 lg:relative lg:flex-row lg:gap-0 lg:pl-[var(--track-pad)]"
-        >
-          {/*
-            A scaled div, not an SVG line: stroke-dasharray needs
-            getTotalLength(), and on a stretched viewBox that has not been
-            laid out yet that returns 0 — a zero-length dash array draws the
-            line complete from the first frame, which is exactly what it did.
-            scaleX cannot be measured wrong.
-          */}
-          <div
-            ref={lineRef}
-            aria-hidden="true"
-            className="pointer-events-none absolute left-0 top-[var(--step-line-y)] hidden h-px w-full origin-left lg:block"
-            style={{
-              background:
-                "linear-gradient(90deg, var(--color-line-deep) 0%, #16506b 30%, var(--color-emerald-on-dark) 100%)",
-            }}
-          />
+          aria-hidden="true"
+          className="process-line pointer-events-none absolute left-[var(--track-pad)] right-0 top-0 h-px origin-left"
+          style={{
+            background:
+              "linear-gradient(90deg, var(--color-line-deep) 0%, #16506b 30%, var(--color-emerald-on-dark) 100%)",
+          }}
+        />
 
-          {PROCESS_STEPS.map((step) => (
-            <article
-              key={step.index}
-              className="process-panel w-full shrink-0 lg:w-[var(--step-w)] lg:pr-[var(--space-8)]"
-            >
-              <p className="process-fade text-label flex h-7 items-center gap-3 text-emerald-on-dark">
-                {/* Node on the connector line, at the number's own baseline. */}
-                <span aria-hidden="true" className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-on-dark" />
-                {step.index}/06
-              </p>
-              <h3 className="process-fade text-heading mt-4 max-w-[18ch] text-snow">{step.title}</h3>
-              <p className="process-fade text-body mt-4 max-w-[46ch] text-slate-on-dark">{step.text}</p>
-
-              <div className="process-fade mt-8 max-w-[380px] rounded-[var(--radius-card)] border border-steel/50 p-5">
-                <p className="text-label text-slate-on-dark">{step.artifact.label}</p>
-                <dl className="mt-4 flex flex-col gap-3">
-                  {step.artifact.rows.map(([label, value]) => (
-                    <div key={label} className="flex items-baseline justify-between gap-6 border-b border-steel/30 pb-2 last:border-b-0">
-                      <dt className="text-body-sm text-slate-on-dark">{label}</dt>
-                      <dd className="text-data text-snow">{value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            </article>
-          ))}
-
-          <div className="process-panel flex w-full shrink-0 flex-col justify-center gap-4 lg:w-[var(--step-w)] lg:pr-[var(--gutter)]">
-            <p className="text-body max-w-[36ch] text-slate-on-dark">
-              Každý krok má vlastní výstup, který dostanete písemně. Žádná fáze nezačíná dřív, než je
-              uzavřená ta předchozí.
+        {PROCESS_STEPS.map((step) => (
+          <article
+            key={step.index}
+            className="process-panel w-[var(--step-w)] shrink-0 snap-start pr-[var(--space-8)]"
+          >
+            <p className="text-label flex h-7 items-center gap-3 text-emerald-on-dark">
+              {/* Node sitting on the connector, at the number's own baseline. */}
+              <span
+                aria-hidden="true"
+                className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-on-dark"
+              />
+              {step.index}/06
             </p>
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <Pill href="#rozcestnik" variant="ghost-dark">
-                Vybrat svou cestu
-              </Pill>
-              <Pill href="/kontakt" variant="emerald">
-                Nezávazná konzultace
-              </Pill>
+            <h3 className="text-heading mt-4 max-w-[18ch] text-snow">{step.title}</h3>
+            <p className="text-body mt-3 max-w-[42ch] text-slate-on-dark">{step.text}</p>
+
+            <div className="mt-6 rounded-[var(--radius-card)] border border-steel/50 p-5">
+              <p className="text-label text-slate-on-dark">{step.artifact.label}</p>
+              <dl className="mt-4 flex flex-col gap-3">
+                {step.artifact.rows.map(([label, value]) => (
+                  <div
+                    key={label}
+                    className="flex items-baseline justify-between gap-6 border-b border-steel/30 pb-2 last:border-b-0"
+                  >
+                    <dt className="text-body-sm text-slate-on-dark">{label}</dt>
+                    <dd className="text-data text-snow">{value}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
+          </article>
+        ))}
+
+        <div className="process-panel flex w-[var(--step-w)] shrink-0 snap-start flex-col justify-center gap-5 pr-[var(--gutter)]">
+          <p className="text-body max-w-[36ch] text-slate-on-dark">
+            Každý krok má vlastní výstup, který dostanete písemně. Žádná fáze nezačíná dřív, než je
+            uzavřená ta předchozí.
+          </p>
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <Pill href="#rozcestnik" variant="ghost-dark">
+              Vybrat svou cestu
+            </Pill>
+            <Pill href="/kontakt" variant="emerald">
+              Nezávazná konzultace
+            </Pill>
           </div>
         </div>
       </div>

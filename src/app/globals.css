@@ -438,6 +438,53 @@ body {
   cursor: pointer;
 }
 
+/**
+ * Process rail (§3/07).
+ *
+ * The reveal lives in CSS so its resting state is VISIBLE: a class that
+ * never arrives means no animation, never missing content. JS only adds
+ * `.process-in` when the section scrolls into view.
+ */
+.process-rail {
+  position: relative;
+  /* The connector spans the whole scrollable width, not just the viewport. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-steel) transparent;
+}
+.process-line {
+  /* Centre of the 28px index row, so the line runs through the numbers. */
+  top: var(--step-line-y);
+}
+.process-panel {
+  transition:
+    opacity var(--dur-reveal) var(--ease-out),
+    transform var(--dur-reveal) var(--ease-out);
+}
+@media (prefers-reduced-motion: no-preference) {
+  /*
+   * `.process-anim` is added by JS on mount, so the hidden start state only
+   * ever exists on a page where the script that reveals it is running.
+   */
+  .process-section.process-anim:not(.process-in) .process-line {
+    transform: scaleX(0);
+  }
+  .process-section.process-anim:not(.process-in) .process-panel {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  .process-line {
+    transition: transform 1.4s var(--ease-out);
+  }
+  /* Stagger by position in the rail. */
+  .process-panel:nth-child(2) { transition-delay: 0ms; }
+  .process-panel:nth-child(3) { transition-delay: 80ms; }
+  .process-panel:nth-child(4) { transition-delay: 160ms; }
+  .process-panel:nth-child(5) { transition-delay: 240ms; }
+  .process-panel:nth-child(6) { transition-delay: 320ms; }
+  .process-panel:nth-child(7) { transition-delay: 400ms; }
+  .process-panel:nth-child(8) { transition-delay: 480ms; }
+}
+
 /* Accordion rows animate height via grid-rows, so no JS measurement is
    needed and the hairline below never jumps. */
 .accordion-body {
