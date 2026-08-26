@@ -23,10 +23,21 @@ const MODULES = [
   "Správa",
 ];
 
-const X0 = 40;
-const Y0 = 440;
-const RUN = 520;
+/**
+ * Geometry. Labels sit to the RIGHT of their node on the same baseline, so
+ * the run has to stop short of the right edge to leave room for the widest
+ * one ("REKONSTRUKCE" ≈ 110px at 11px mono with .14em tracking). The
+ * previous alternating above/below placement collided its own labels and
+ * pushed the last node off the canvas.
+ */
+const VIEW_W = 700;
+const VIEW_H = 500;
+const LABEL_GAP = 16;
+const LABEL_ROOM = 150;
+const X0 = 30;
+const RUN = VIEW_W - X0 - LABEL_ROOM;
 const RISE = RUN * Math.tan((VECTOR_ANGLE_DEG * Math.PI) / 180);
+const Y0 = VIEW_H - 40;
 
 export function AboutIntro() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -99,15 +110,15 @@ export function AboutIntro() {
 
         <div className="lg:col-span-7">
           <svg
-            viewBox="0 0 600 480"
+            viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
             className="h-auto w-full"
             role="img"
             aria-label="Diagram propojení: výběr, prověření, financování, rekonstrukce, pronájem, prodej a správa na jedné linii."
           >
             {/* Hairline grid — the drawing-board ground the whole system sits on */}
-            <g stroke="#e4e7eb" strokeWidth="1">
-              {Array.from({ length: 6 }, (_, i) => (
-                <line key={`h${i}`} x1="0" x2="600" y1={80 * (i + 1)} y2={80 * (i + 1)} />
+            <g stroke="var(--color-light-gray)" strokeWidth="1">
+              {Array.from({ length: 5 }, (_, i) => (
+                <line key={`h${i}`} x1="0" x2={VIEW_W} y1={80 * (i + 1)} y2={80 * (i + 1)} />
               ))}
             </g>
 
@@ -132,23 +143,23 @@ export function AboutIntro() {
               const t = i / (MODULES.length - 1);
               const x = X0 + RUN * t;
               const y = Y0 - RISE * t;
-              const above = i % 2 === 0;
               return (
                 <g key={label} data-node>
-                  <circle cx={x} cy={y} r="4" fill="#ffffff" stroke="#1f8a70" strokeWidth="1.5" />
-                  <line
-                    x1={x}
-                    y1={y}
-                    x2={x}
-                    y2={above ? y - 26 : y + 26}
-                    stroke="#e4e7eb"
-                    strokeWidth="1"
+                  <circle
+                    cx={x}
+                    cy={y}
+                    r="4"
+                    fill="var(--color-white)"
+                    stroke="var(--color-emerald)"
+                    strokeWidth="1.5"
                   />
+                  {/* Label rides beside its node, no connector tick: the run
+                      is diagonal, so a horizontal offset alone already keeps
+                      every label clear of its neighbours. */}
                   <text
-                    x={x}
-                    y={above ? y - 34 : y + 42}
-                    textAnchor="middle"
-                    fill="#52606d"
+                    x={x + LABEL_GAP}
+                    y={y + 4}
+                    fill="var(--color-text-secondary)"
                     style={{ font: "500 11px var(--font-mono)", letterSpacing: "0.14em" }}
                   >
                     {label.toUpperCase()}
