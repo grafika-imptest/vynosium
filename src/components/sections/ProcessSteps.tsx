@@ -9,10 +9,10 @@ import { gsap, ensureGsapRegistered, ScrollTrigger, prefersReducedMotion } from 
  * How we invest — six steps (§3/07).
  *
  * Desktop: a pinned horizontal track driven by vertical scroll, with ONE
- * connector line running along the step numbers whose stroke-dashoffset is
- * scrubbed to progress — the line is drawn from step to step exactly as the
- * model is explained, and it stays welded to the numbers because it lives
- * inside the moving track.
+ * connector line running along the step numbers, scaled in by the same
+ * scrubbed timeline — it is drawn from step to step exactly as the model is
+ * explained, and it stays welded to the numbers because it lives inside the
+ * moving track.
  *
  * Mobile: the pin is REMOVED, not shrunk. Six full-width blocks stack and
  * the vector is drawn vertically in the left margin, so the metaphor
@@ -21,7 +21,7 @@ import { gsap, ensureGsapRegistered, ScrollTrigger, prefersReducedMotion } from 
 export function ProcessSteps() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const lineRef = useRef<SVGLineElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
   const vLineRef = useRef<SVGLineElement>(null);
 
   useEffect(() => {
@@ -62,9 +62,8 @@ export function ProcessSteps() {
 
         const line = lineRef.current;
         if (line) {
-          const length = line.getTotalLength();
-          gsap.set(line, { strokeDasharray: length, strokeDashoffset: length });
-          tl.to(line, { strokeDashoffset: 0, ease: "none" }, 0);
+          gsap.set(line, { scaleX: 0 });
+          tl.to(line, { scaleX: 1, ease: "none" }, 0);
         }
 
         /*
@@ -140,12 +139,12 @@ export function ProcessSteps() {
       style={
         {
           /*
-           * Step 01 has to start exactly where the heading starts. The
-           * heading sits in a centred max-w container, so its left edge is
-           * the centring offset plus the gutter — the track needs the same
-           * padding, otherwise it hangs left of the heading on wide screens.
+           * Step 01 has to start exactly where the heading starts: the
+           * centring offset of the max-w container plus the gutter. Measured
+           * in % of the section, not vw — vw includes the scrollbar, which
+           * pushed the track 8px right of the heading.
            */
-          "--track-pad": "calc(max(0px, (100vw - var(--max-w)) / 2) + var(--gutter))",
+          "--track-pad": "calc(max(0px, (100% - var(--max-w)) / 2) + var(--gutter))",
           /* Narrower panels = smaller gaps between steps. */
           "--step-w": "clamp(340px, 30vw, 500px)",
           /* Vertical centre of the index row: where the connector runs. */
@@ -172,37 +171,29 @@ export function ProcessSteps() {
         {/*
           The track carries the connector line itself, so the line travels
           with the panels and stays welded to the step numbers instead of
-          drifting behind them. Its own dash offset is scrubbed by the same
-          timeline, so it draws from one step to the next as you scroll.
+          drifting behind them. It is scaled in by the same timeline, so it
+          draws from one step to the next as you scroll.
         */}
         <div
           ref={trackRef}
           className="flex flex-col gap-8 pl-10 lg:relative lg:flex-row lg:gap-0 lg:pl-[var(--track-pad)]"
         >
-          <svg
+          {/*
+            A scaled div, not an SVG line: stroke-dasharray needs
+            getTotalLength(), and on a stretched viewBox that has not been
+            laid out yet that returns 0 — a zero-length dash array draws the
+            line complete from the first frame, which is exactly what it did.
+            scaleX cannot be measured wrong.
+          */}
+          <div
+            ref={lineRef}
             aria-hidden="true"
-            className="pointer-events-none absolute left-0 top-[var(--step-line-y)] hidden h-px w-full lg:block"
-            preserveAspectRatio="none"
-            viewBox="0 0 1000 1"
-          >
-            <line
-              ref={lineRef}
-              x1="0"
-              y1="0.5"
-              x2="1000"
-              y2="0.5"
-              stroke="url(#process-gradient)"
-              strokeWidth="1"
-              vectorEffect="non-scaling-stroke"
-            />
-            <defs>
-              <linearGradient id="process-gradient" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#243b53" />
-                <stop offset="30%" stopColor="#16506b" />
-                <stop offset="100%" stopColor="#35b795" />
-              </linearGradient>
-            </defs>
-          </svg>
+            className="pointer-events-none absolute left-0 top-[var(--step-line-y)] hidden h-px w-full origin-left lg:block"
+            style={{
+              background:
+                "linear-gradient(90deg, var(--color-line-deep) 0%, #16506b 30%, var(--color-emerald-on-dark) 100%)",
+            }}
+          />
 
           {PROCESS_STEPS.map((step) => (
             <article
