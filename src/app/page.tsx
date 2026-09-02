@@ -1,5 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
 import { TrustNumbers } from "@/components/sections/TrustNumbers";
+import { PartnerStrip } from "@/components/sections/PartnerStrip";
 import { PathSelector } from "@/components/sections/PathSelector";
 import { CaseProof } from "@/components/sections/CaseProof";
 import { Opportunities } from "@/components/sections/Opportunities";
@@ -44,6 +45,7 @@ export default function HomePage() {
       <JsonLd data={faqSchema(FAQ)} />
       <Hero />
       <TrustNumbers />
+      <PartnerStrip />
       <PathSelector />
       <CaseProof />
       <Opportunities index="05" compact />
