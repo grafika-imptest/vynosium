@@ -540,16 +540,18 @@ body {
 }
 .team-video-play {
   position: absolute;
-  right: 4px;
-  bottom: 4px;
+  left: 50%;
+  top: 50%;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 42px;
+  height: 42px;
+  /* Optical centring: the triangle's mass sits left of its bounding box. */
   padding-left: 3px;
   border-radius: 50%;
   background: var(--color-emerald-cta);
   color: #fff;
+  transform: translate(-50%, -50%);
   transition: background-color var(--dur-micro) var(--ease-out);
 }
 .team-video-trigger:hover .team-video-play {
@@ -562,7 +564,14 @@ body {
   border: 0;
   background: none;
   max-width: min(960px, calc(100vw - 2 * var(--gutter)));
+  max-height: calc(100vh - 2 * var(--gutter));
   width: 100%;
+  /*
+   * The UA centres a modal dialog with margin:auto — and Tailwind's preflight
+   * sets margin:0 on every element, which quietly parked the player in the
+   * top-left corner of the backdrop. Putting the margin back is the whole fix.
+   */
+  margin: auto;
 }
 .team-video-dialog::backdrop {
   background: rgba(11, 29, 46, 0.82);
