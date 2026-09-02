@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PathBadge, StatusPill } from "@/components/ui/primitives";
-import { STATUS_LABEL, type Project } from "@/lib/data/projects";
+import { STATUS_LABEL, type Project, type ProjectMetric } from "@/lib/data/projects";
+import { formatCzk } from "@/lib/format";
 import { getPathById } from "@/lib/data/paths";
 import { withBasePath } from "@/lib/seo";
 
@@ -16,6 +17,19 @@ import { withBasePath } from "@/lib/seo";
 export function ProjectCard({ project, featured = false }: { project: Project; featured?: boolean }) {
   const path = getPathById(project.strategy);
   const closed = project.status === "closed";
+
+  /*
+   * The three decision figures, picked by meaning rather than by position:
+   * the return (whichever metric the data marks as the headline one), the
+   * horizon, and the entry ticket. Picking metrics[0..2] would have shown
+   * "kupní cena" and "investiční náklady" on the flip projects — costs, not
+   * reasons to click.
+   */
+  const headline = [
+    project.metrics.find((m) => m.emphasis),
+    project.metrics.find((m) => m.label.toLowerCase().includes("horizont")),
+    { label: "Potřebný kapitál", value: formatCzk(project.minCapital) },
+  ].filter((m): m is ProjectMetric => Boolean(m));
 
   return (
     <article
@@ -72,20 +86,22 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
         <p className="text-body-sm mt-1 text-text-muted">{project.location}</p>
 
         {/*
-          Two columns, three only on the double-width card. At three the
-          cells were about 115px and every seven-figure amount broke mid
-          number — "12 090 000" over two lines reads as two figures.
+          Three figures, not six. The client's note was that the opportunities
+          should read as a marketplace, and a marketplace card answers three
+          questions on sight: what can it return, for how long, and how much
+          do I need. The rest of the ledger is on the detail page, one click
+          away, where someone comparing two projects actually wants it.
 
           The labels take the wrapping variant of the label type: the default
           sets line-height 1, which is right for a single-line eyebrow and
-          far too tight for "HODNOTA PO / REKONSTRUKCI".
+          far too tight for "POTŘEBNÝ / KAPITÁL".
         */}
         <dl
           className={`mt-6 grid grid-cols-2 gap-x-5 gap-y-5 border-t border-light-gray pt-5 ${
             featured ? "sm:grid-cols-3" : ""
           }`}
         >
-          {project.metrics.map((metric) => (
+          {headline.map((metric) => (
             <div key={metric.label}>
               <dt className="text-label text-label-wrap text-text-muted">{metric.label}</dt>
               <dd
@@ -106,6 +122,34 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
             </div>
           ))}
         </dl>
+
+        {/*
+          How much of the round is taken. This is the marketplace's own
+          signal — what other investors already did — so it is a bar and a
+          number, never a colour alone, and it says "obsazeno" on a closed
+          project rather than showing a full bar with no explanation.
+        */}
+        <div className="mt-6">
+          <p className="text-label text-text-muted">
+            {project.reservedPercent >= 100 ? "Obsazeno" : `${project.reservedPercent} % rezervováno`}
+          </p>
+          <div
+            className="mt-2 h-1 w-full overflow-hidden rounded-full bg-light-gray"
+            role="img"
+            aria-label={`Rezervováno ${project.reservedPercent} procent`}
+          >
+            <div
+              className="h-full rounded-full"
+              style={{
+                width: `${project.reservedPercent}%`,
+                background:
+                  project.reservedPercent >= 100
+                    ? "var(--color-steel)"
+                    : "var(--color-emerald)",
+              }}
+            />
+          </div>
+        </div>
 
         <p className="text-body-sm mt-5 max-w-[52ch] text-text-secondary">{project.summary}</p>
 

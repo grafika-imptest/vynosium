@@ -6,6 +6,7 @@ import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { Undecided } from "@/components/sections/Undecided";
 import { WhyRealEstate } from "@/components/sections/WhyRealEstate";
 import { WhyVynosium } from "@/components/sections/WhyVynosium";
+import { Comparison } from "@/components/sections/Comparison";
 import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -47,6 +48,7 @@ export default function ProcessPage() {
       <AboutIntro />
       <ProcessSteps />
       <WhyRealEstate />
+      <Comparison />
       <WhyVynosium />
       <Undecided />
       <Faq items={FAQ.slice(0, 6)} heading="Nejčastější otázky k procesu" />
