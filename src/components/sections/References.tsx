@@ -14,7 +14,7 @@ import { ensureGsapRegistered, prefersReducedMotion } from "@/lib/motion";
  * A horizontal drag rail with native scroll-snap underneath, so touch
  * keeps its own inertia and the keyboard can still reach every card.
  */
-export function References() {
+export function References({ index }: { index?: string }) {
   const railRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export function References() {
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <SectionIndex index="11" label="REFERENCE" tone="dark" />
+            <SectionIndex index={index} label="REFERENCE" tone="dark" />
             <h2 className="text-display mt-6 max-w-[20ch] text-snow">
               Projekty, u kterých sedí čísla i na konci.
             </h2>

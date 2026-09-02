@@ -13,7 +13,7 @@ export function WhyRealEstate() {
   return (
     <section className="relative z-[2] bg-white py-[var(--space-10)]">
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-        <SectionIndex index="05" label="PROČ NEMOVITOSTI" tone="light" />
+        <SectionIndex label="PROČ NEMOVITOSTI" tone="light" />
         <h2 className="text-display mt-6 max-w-[20ch] text-navy">
           Nemovitost je aktivum, které lze spočítat.
         </h2>

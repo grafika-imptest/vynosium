@@ -7,11 +7,31 @@ import { withBasePath } from "@/lib/seo";
 import { gsap, ensureGsapRegistered, ScrollTrigger, prefersReducedMotion } from "@/lib/motion";
 
 /**
+ * Proof line under the claim.
+ *
+ * Composed from the trust data rather than typed out, so the figures cannot
+ * drift from the band below — except the entry ticket, which is a commercial
+ * term and lives nowhere else yet.
+ *
+ * NOTE: the figures in TRUST_NUMBERS are still placeholders. They now sit in
+ * the most prominent position on the site, which is exactly where an invented
+ * number does the most damage. Replace them before launch.
+ */
+const HERO_PROOF = [
+  "Od 300 000 Kč",
+  `${TRUST_NUMBERS[1].value}${TRUST_NUMBERS[1].glue} realizovaných projektů`,
+  `${TRUST_NUMBERS[0].value.toLocaleString("cs-CZ", {
+    minimumFractionDigits: TRUST_NUMBERS[0].decimals,
+    maximumFractionDigits: TRUST_NUMBERS[0].decimals,
+  })} ${TRUST_NUMBERS[0].unit} v realizovaných obchodech`,
+];
+
+/**
  * Hero — the thesis (§3/01).
  *
- * H1 sits in columns 1–8, deliberately off-centre, with the hairline data
- * rail bottom-aligned in 10–12. The asymmetry between the monumental left
- * mass and the thin right line is the entire composition.
+ * H1 sits in columns 1–9, deliberately off-centre, with the proof line and
+ * both calls to action stacked under it. The asymmetry between the monumental
+ * left mass and the open right edge is the composition.
  *
  * Layer 1 is a muted, looping clip of the real product; the shader field it
  * replaced stays in use for the closing CTA reprise (§3/13). The clip is
@@ -42,8 +62,7 @@ export function Hero() {
           { yPercent: 110 },
           { yPercent: 0, duration: 1.1, ease: "expo.out", stagger: 0.09 }
         )
-          .fromTo(".hero-fade", { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7, stagger: 0.08 }, "-=0.6")
-          .fromTo(".hero-rail", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, "-=0.5");
+          .fromTo(".hero-fade", { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7, stagger: 0.08 }, "-=0.6");
 
         // A real dolly: the clip pushes in while the content leaves.
         ScrollTrigger.create({
@@ -135,53 +154,55 @@ export function Hero() {
          */
         className="relative z-[2] mx-auto grid w-full max-w-[var(--max-w)] grid-cols-1 gap-10 px-[var(--gutter)] pb-[var(--space-10)] pt-[var(--space-12)] lg:grid-cols-12 lg:pb-[clamp(96px,22vh,260px)]"
       >
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-9">
           <p className="text-label hero-fade text-silver">01 — TEZE</p>
 
-          {/* hero-title caps the size to the 8-column measure — see globals.css */}
+          {/*
+            The claim is the client's own wording. What it replaced —
+            "Investujte do nemovitostí způsobem, který odpovídá vašim cílům"
+            — was true of every competitor on the market; this one says what
+            the company does and what it takes off the investor's hands.
+          */}
           <h1 className="text-display-xl hero-title mt-6 text-snow">
             <span className="mask-line hero-line">
-              <span>Investujte do nemovitostí</span>
+              <span>Nemovitosti, které vydělávají.</span>
             </span>
             <span className="mask-line hero-line">
-              <span>způsobem, který odpovídá</span>
+              <span>My najdeme příležitost,</span>
             </span>
             <span className="mask-line hero-line">
-              <span>vašim cílům.</span>
+              <span>spočítáme ji a celé</span>
+            </span>
+            <span className="mask-line hero-line">
+              <span>investování zařídíme.</span>
             </span>
           </h1>
 
-          <p className="text-lede hero-fade mt-8 max-w-[62ch] text-slate-on-dark">
-            Ať už chcete zvýšit hodnotu bytu rekonstrukcí, vytvořit si pasivní příjem, zhodnotit volný
-            kapitál nebo budovat dlouhodobé portfolio, pomůžeme vám najít správnou investiční cestu.
+          {/*
+            Proof on one line directly under the claim, replacing the
+            hairline rail that used to sit in columns 10–12 — up there it read
+            as a footnote. The entry ticket comes first: it answers the
+            question that stops most readers ("is this for someone like me?")
+            before the scale answers "can they actually do it?".
+          */}
+          <p className="hero-fade text-data mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-snow">
+            {HERO_PROOF.map((item, i) => (
+              <span key={item} className="flex items-center gap-4">
+                {i > 0 && <span aria-hidden="true" className="h-3 w-px bg-steel" />}
+                {item}
+              </span>
+            ))}
           </p>
 
           <div className="hero-fade mt-10 flex flex-col gap-4 sm:flex-row">
             <Pill href="#rozcestnik" variant="emerald">
-              Vyberte si svůj investiční cíl
+              Chci zjistit, jak investovat
             </Pill>
             <Pill href="/investicni-prilezitosti" variant="ghost-dark">
-              Prohlédnout investiční příležitosti
+              Prohlédnout příležitosti
             </Pill>
           </div>
         </div>
-
-        {/* Hairline data rail, bottom-aligned in columns 10–12. */}
-        <dl className="hero-rail flex flex-row gap-6 border-t border-steel/50 pt-5 lg:col-span-3 lg:col-start-10 lg:flex-col lg:justify-end lg:self-end lg:border-t-0">
-          {TRUST_NUMBERS.slice(0, 3).map((item) => (
-            <div key={item.label} className="flex-1 lg:border-t lg:border-steel/50 lg:pt-4">
-              <dt className="text-label text-slate-on-dark">{item.label}</dt>
-              <dd className="text-data mt-2 text-snow">
-                {item.value.toLocaleString("cs-CZ", {
-                  minimumFractionDigits: item.decimals,
-                  maximumFractionDigits: item.decimals,
-                })}
-                {item.glue}
-                {item.unit && ` ${item.unit}`}
-              </dd>
-            </div>
-          ))}
-        </dl>
       </div>
     </section>
   );

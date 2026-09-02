@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { SetHeaderVariant } from "@/components/layout/HeaderVariantContext";
 import { PageIntro } from "@/components/layout/PageIntro";
+import { AboutIntro } from "@/components/sections/AboutIntro";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
+import { Undecided } from "@/components/sections/Undecided";
+import { WhyRealEstate } from "@/components/sections/WhyRealEstate";
 import { WhyVynosium } from "@/components/sections/WhyVynosium";
 import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
@@ -34,8 +37,18 @@ export default function ProcessPage() {
         lede="Šest kroků, které na sebe navazují. Každý má vlastní výstup, který dostanete písemně — a žádný nezačíná dřív, než je uzavřený ten předchozí."
       />
 
+      {/*
+        This page took over what the homepage was carrying: the full six-step
+        process was already here, and the argument for real estate as an asset
+        class plus the route for readers who have not picked a strategy came
+        down from the homepage in the September review. They belong to someone
+        who is already reading about the mechanics, not to a first visit.
+      */}
+      <AboutIntro />
       <ProcessSteps />
+      <WhyRealEstate />
       <WhyVynosium />
+      <Undecided />
       <Faq items={FAQ.slice(0, 6)} heading="Nejčastější otázky k procesu" />
       <FinalCta />
     </>

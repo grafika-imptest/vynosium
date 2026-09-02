@@ -13,7 +13,7 @@ export function WhyVynosium() {
   return (
     <section className="relative z-[2] bg-white py-[var(--space-10)]">
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-        <SectionIndex index="10" label="PROČ VYNÓSIUM" tone="light" />
+        <SectionIndex label="PROČ VYNOSIUM" tone="light" />
         <h2 className="text-display mt-6 max-w-[20ch] text-navy">
           Jeden partner pro celou investici.
         </h2>

@@ -11,7 +11,12 @@ export const SITE = {
   name: "Vynosium",
   legalName: "Vynosium s.r.o.",
   claim: "CHYTRÁ CESTA K VÝNOSŮM",
-  tagline: "Investujte do nemovitostí způsobem, který odpovídá vašim cílům.",
+  /*
+   * Mirrors the hero claim (client review, 9/2026). It is the title tag and
+   * the OG title, so a claim that only lives in the H1 would leave every
+   * search result and every shared link still selling the old one.
+   */
+  tagline: "Nemovitosti, které vydělávají",
   group: "Vynosium je součástí skupiny Real Luxembourg.",
   phone: "+420 000 000 000",
   phoneHref: "tel:+420000000000",

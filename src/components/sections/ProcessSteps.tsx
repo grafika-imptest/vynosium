@@ -101,7 +101,7 @@ export function ProcessSteps() {
       }
     >
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-        <SectionIndex index="07" label="JAK INVESTUJEME" tone="dark" />
+        <SectionIndex label="JAK INVESTUJEME" tone="dark" />
         <h2 className="text-display-lg mt-6 max-w-[16ch] text-snow">Od první konzultace k výnosu.</h2>
       </div>
 

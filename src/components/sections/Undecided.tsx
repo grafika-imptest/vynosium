@@ -11,7 +11,7 @@ export function Undecided() {
     <section className="relative z-[2] border-y border-light-gray bg-mist">
       <Reveal className="mx-auto flex max-w-[var(--max-w)] flex-col gap-8 px-[var(--gutter)] py-[var(--space-9)] lg:flex-row lg:items-center lg:justify-between">
         <div className="max-w-[68ch]">
-          <SectionIndex index="04" label="NEROZHODNUTÍ" tone="light" />
+          <SectionIndex label="NEROZHODNUTÍ" tone="light" />
           <h2 className="text-heading mt-5 text-navy">
             Nejste si jistí, která cesta je pro vás vhodná?
           </h2>

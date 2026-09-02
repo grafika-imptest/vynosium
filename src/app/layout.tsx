@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE.name}`,
   },
   description:
-    "Investiční příležitosti v nemovitostech s propočtem před koupí: rekonstrukce a prodej, pasivní příjem z pronájmu, zhodnocení kapitálu a budování portfolia.",
+    "Najdeme příležitost, spočítáme ji a celé investování zařídíme — rekonstrukce a prodej, pasivní příjem z pronájmu, zhodnocení kapitálu i budování portfolia. Od 300 000 Kč.",
   openGraph: {
     type: "website",
     locale: "cs_CZ",
