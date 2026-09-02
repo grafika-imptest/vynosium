@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { Pill } from "@/components/ui/primitives";
+import { PARTNERS } from "@/lib/data/partners";
 import { TRUST_NUMBERS } from "@/lib/data/site";
 import { withBasePath } from "@/lib/seo";
 import { gsap, ensureGsapRegistered, ScrollTrigger, prefersReducedMotion } from "@/lib/motion";
@@ -196,7 +198,7 @@ export function Hero() {
          * Trimming padding that nothing sees costs nothing and brings both
          * calls to action back above it.
          */
-        className="relative z-[2] mx-auto grid w-full max-w-[var(--max-w)] grid-cols-1 gap-10 px-[var(--gutter)] pb-16 pt-[var(--space-10)] sm:pb-[var(--space-10)] sm:pt-[var(--space-12)] lg:grid-cols-12 lg:pb-[clamp(96px,22vh,260px)]"
+        className="relative z-[2] mx-auto grid w-full max-w-[var(--max-w)] grid-cols-1 gap-8 px-[var(--gutter)] lg:gap-10 pb-10 pt-[var(--space-10)] sm:pb-[var(--space-10)] sm:pt-[var(--space-12)] lg:grid-cols-12 lg:pb-[clamp(96px,22vh,260px)]"
       >
         <div className="lg:col-span-9">
           <p className="text-label hero-fade text-silver">01 — TEZE</p>
@@ -255,7 +257,52 @@ export function Hero() {
             </Pill>
           </div>
         </div>
+
+        <HeroPartners />
       </div>
     </section>
+  );
+}
+
+/**
+ * Partner marks in the hero's open right column (columns 10–12).
+ *
+ * This replaced a full section under the credibility band. Four logos never
+ * needed a band of their own — a strip that wide invites a marquee and reads
+ * as a badge wall — and the right column has been empty since the hairline
+ * rail came out of it in September. Down here the marks are a quiet aside to
+ * the claim: present for anyone who looks, silent for anyone who doesn't.
+ *
+ * They are the client's white SVGs held at 55% opacity, which is the whole
+ * treatment: white marks at full strength out-shout the H1 they are meant to
+ * support. No tiles, no borders, no hover — on a photograph that furniture is
+ * what makes a logo strip look bolted on.
+ *
+ * Bottom-aligned with the CTA row on a desktop; on a phone there is no right
+ * column, so the marks become one short row under the calls to action at 68%
+ * of their size (see --logo-scale), which is what keeps the hero inside one
+ * screen.
+ */
+function HeroPartners() {
+  return (
+    <aside className="hero-fade hero-partners lg:col-span-3 lg:self-end">
+      {/* Silver, not slate: slate measured 3.22:1 here against the brightest
+          frame of the clip, and this is 11px type. */}
+      <p className="text-label text-silver">Partneři</p>
+      <ul className="hero-partners-list">
+        {PARTNERS.map((partner) => (
+          <li key={partner.name}>
+            <Image
+              src={withBasePath(partner.src)}
+              alt={partner.name}
+              width={partner.width}
+              height={partner.height}
+              /* Optical height per mark; the phone scale is applied in CSS. */
+              style={{ "--logo-h": `${partner.renderHeight}px` } as React.CSSProperties}
+            />
+          </li>
+        ))}
+      </ul>
+    </aside>
   );
 }

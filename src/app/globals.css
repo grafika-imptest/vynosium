@@ -445,6 +445,51 @@ body {
   }
 }
 
+/**
+ * Partner marks in the hero (see HeroPartners).
+ *
+ * --logo-scale is the phone concession: each mark carries its own optical
+ * height as --logo-h, and one variable shrinks the whole set without touching
+ * the ratios between them. 55% opacity is the "darkening" — the files are
+ * pure white, and at full strength four marks compete with the H1.
+ */
+.hero-partners {
+  /*
+   * 0.6 keeps all four marks on one line at 375px - two lines pushed the row
+   * below the fold. No top margin: on a phone the hero grid's own 40px gap
+   * already separates this from the CTA stack.
+   */
+  --logo-scale: 0.6;
+}
+.hero-partners-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hero-partners img {
+  height: calc(var(--logo-h) * var(--logo-scale));
+  width: auto;
+  opacity: 0.55;
+}
+@media (min-width: 1024px) {
+  .hero-partners {
+    --logo-scale: 1;
+    /* The column is bottom-aligned with the CTA row, so its own top margin
+       would only push it below that line. */
+    margin-top: 0;
+  }
+  .hero-partners-list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    margin-top: 22px;
+  }
+}
+
 /* Line-mask reveal: the inner span rides y:110% → 0 under GSAP. */
 .mask-line {
   display: block;
@@ -667,112 +712,3 @@ body {
   opacity: 1;
 }
 
-/**
- * Partner strip (§3, added September 2026).
- *
- * Four logos fit a desktop row, so there the track is simply a centred row.
- * Below 1024px they do not fit, and that is the only place the marquee earns
- * itself: motion there reveals what is off-screen instead of decorating what
- * is already visible.
- *
- * The loop shifts by one full group plus one gap. `-50%` alone is short by
- * half a gap — the track is two groups plus the gap between them — and the
- * result is a visible stutter every cycle.
- */
-.partner-viewport {
-  --partner-gap: 12px;
-  overflow: hidden;
-  /* Fades the ends so tiles enter and leave instead of being cut off. */
-  /* 40px minimum: on a phone the gutter is 20px, and a 20px fade over a
-     172px tile reads as a hard cut rather than a tile leaving the frame. */
-  --partner-fade: max(var(--gutter), 40px);
-  mask-image: linear-gradient(
-    90deg,
-    transparent 0,
-    #000 var(--partner-fade),
-    #000 calc(100% - var(--partner-fade)),
-    transparent 100%
-  );
-}
-.partner-track {
-  display: flex;
-  width: max-content;
-  gap: var(--partner-gap);
-  animation: partner-marquee 26s linear infinite;
-}
-.partner-group {
-  display: flex;
-  gap: var(--partner-gap);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.partner-tile {
-  display: flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: 172px;
-  height: 88px;
-  background: #fff;
-  border: var(--border-light);
-  border-radius: var(--radius-card);
-}
-.partner-logo {
-  /*
-   * No grayscale. Desaturating a mixed set is the usual way to make four
-   * brands read as one strip, and it was the first thing tried here — but two
-   * of these four are white type on a coloured tile, and grayscale turns
-   * white-on-light-blue into white-on-light-grey. The Equity Solutions tile
-   * disappeared completely. Colour stays; the tile, the shared height and the
-   * hairline are what hold the set together.
-   */
-  opacity: 0.92;
-  transition: opacity var(--dur-ui) var(--ease-out);
-}
-.partner-tile:hover .partner-logo {
-  opacity: 1;
-}
-@keyframes partner-marquee {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(calc(-50% - var(--partner-gap) / 2), 0, 0);
-  }
-}
-@media (min-width: 1024px) {
-  /*
-   * Four equal tiles across the container, on the same rhythm as the four
-   * credibility numbers directly above. A centred 724px row under
-   * left-aligned copy floated; dividing the grid ties the two bands together.
-   */
-  .partner-track {
-    width: auto;
-    max-width: var(--max-w);
-    margin-inline: auto;
-    padding-inline: var(--gutter);
-    animation: none;
-  }
-  .partner-group {
-    flex: 1;
-  }
-  .partner-tile {
-    flex: 1 1 0;
-    width: auto;
-  }
-  .partner-dupe {
-    display: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  /* The blanket rule above stops the animation; without this the tiles it
-     was going to reveal would simply be unreachable. */
-  .partner-viewport {
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .partner-dupe {
-    display: none;
-  }
-}
