@@ -5,7 +5,6 @@ import { CaseProof } from "@/components/sections/CaseProof";
 import { Opportunities } from "@/components/sections/Opportunities";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Calculator } from "@/components/sections/Calculator";
-import { References } from "@/components/sections/References";
 import { TeamStrip } from "@/components/sections/TeamStrip";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -50,7 +49,6 @@ export default function HomePage() {
       <Opportunities index="05" compact />
       <HowItWorks />
       <Calculator index="07" />
-      <References index="08" />
       <TeamStrip />
       <FinalCta />
     </>

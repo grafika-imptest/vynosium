@@ -13,8 +13,20 @@ export interface PathDefinition {
   id: InvestmentPath;
   index: string;
   slug: string;
-  /** Short label used in nav, chips and badges. */
+  /**
+   * Short internal label — nav, chips, badges, footer. Kept because it is
+   * how the firm names the strategy in its own documents.
+   */
   label: string;
+  /**
+   * What the investor wants, in their words (client review 9/2026). The
+   * internal names overlapped semantically — "zhodnocení kapitálu" against
+   * "budování majetku" means nothing to a first-time reader — so the goal
+   * leads and the internal name sits under it.
+   */
+  goal: string;
+  /** One line under the goal: the mechanic, in six words or fewer. */
+  goalMechanic: string;
   /** Card headline — a claim, never a description. */
   claim: string;
   /** Two metrics maximum on a card (§4.2). */
@@ -40,6 +52,8 @@ export const INVESTMENT_PATHS: PathDefinition[] = [
     index: "01",
     slug: "zhodnotit-byt",
     label: "Zhodnotit byt",
+    goal: "Chci vydělat na bytu",
+    goalMechanic: "Koupit → zvýšit hodnotu → prodat",
     claim: "Koupit, rekonstruovat a následně prodat se ziskem.",
     metrics: [
       { label: "Modelový výnos", value: "18–24 %" },
@@ -92,6 +106,8 @@ export const INVESTMENT_PATHS: PathDefinition[] = [
     index: "02",
     slug: "pasivni-prijem",
     label: "Pasivní příjem",
+    goal: "Chci pravidelný příjem",
+    goalMechanic: "Investiční byt s nájmem",
     claim: "Investiční byt, který každý měsíc vydělává.",
     metrics: [
       { label: "Modelový výnos", value: "4,8–6,2 % p.a." },
@@ -144,6 +160,8 @@ export const INVESTMENT_PATHS: PathDefinition[] = [
     index: "03",
     slug: "zhodnoceni-kapitalu",
     label: "Zhodnocení kapitálu",
+    goal: "Chci uložit kapitál do realit",
+    goalMechanic: "Alternativa k finančním produktům",
     claim: "Volný kapitál převedený do reálného aktiva.",
     metrics: [
       { label: "Modelové zhodnocení", value: "6–9 % p.a." },
@@ -191,6 +209,8 @@ export const INVESTMENT_PATHS: PathDefinition[] = [
     index: "04",
     slug: "budovani-majetku",
     label: "Budování majetku",
+    goal: "Chci vybudovat portfolio",
+    goalMechanic: "Více nemovitostí a využití financování",
     claim: "Portfolio, které roste po jednotlivých krocích.",
     metrics: [
       { label: "Modelový růst portfolia", value: "5–8 % p.a." },

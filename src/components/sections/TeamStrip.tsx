@@ -22,7 +22,7 @@ export function TeamStrip() {
   return (
     <section className="relative z-[2] bg-mist py-[var(--space-10)]">
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-        <SectionIndex index="09" label="LIDÉ" tone="light" />
+        <SectionIndex index="08" label="LIDÉ" tone="light" />
         <h2 className="text-display mt-6 max-w-[22ch] text-navy">
           Za Vynosiem stojí lidé, kteří sami investují do nemovitostí.
         </h2>

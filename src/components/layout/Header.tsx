@@ -230,8 +230,11 @@ export function Header() {
                     style={{ "--card-accent": `var(--color-path-${path.id})` } as React.CSSProperties}
                   >
                     <PathTile path={path.id} />
-                    <span className="text-[15px] text-snow">{path.label}</span>
-                    <span className="text-body-sm text-slate-on-dark">{path.claim}</span>
+                    {/* Goal first here too — this menu is where a first-time
+                        visitor picks, and they pick by what they want. */}
+                    <span className="text-[15px] text-snow">{path.goal}</span>
+                    <span className="text-label text-label-wrap text-slate-on-dark">{path.label}</span>
+                    <span className="text-body-sm text-slate-on-dark">{path.goalMechanic}</span>
                     <span
                       className="text-label text-label-wrap mt-auto"
                       style={{ color: `var(--color-path-${path.id}-on-dark)` }}

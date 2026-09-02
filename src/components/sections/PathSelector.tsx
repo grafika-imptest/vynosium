@@ -181,6 +181,13 @@ function PathCard({
       }
     >
       <div>
+        {/*
+          The goal leads, the internal name follows. The client's note was
+          that "zhodnocení kapitálu" and "budování majetku" do not read as
+          different things to anyone outside the firm — so the card now opens
+          with what the investor wants and keeps the strategy name as the
+          smaller line, where it still tells the reader what to ask for.
+        */}
         <div className="flex items-center gap-4">
           <span className="text-[color:var(--card-accent-text)]">
             <PathGlyph path={path.id} />
@@ -190,7 +197,12 @@ function PathCard({
           </span>
         </div>
 
-        <p className="text-display mt-8 max-w-[20ch] text-snow">{path.claim}</p>
+        <h3 className="text-heading mt-6 max-w-[18ch] text-snow">{path.goal}</h3>
+        <p className="text-label text-label-wrap mt-3 text-[color:var(--card-accent-text)]">
+          {path.goalMechanic}
+        </p>
+
+        <p className="text-body mt-6 max-w-[34ch] text-slate-on-dark">{path.claim}</p>
       </div>
 
       <div>
