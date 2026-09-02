@@ -1,5 +1,6 @@
 /**
- * Writes the team-video poster from a base64 JPEG captured in the browser.
+ * Writes the team-video poster from video-poster.b64, a base64 JPEG captured
+ * in the browser.
  *
  * There is no ffmpeg on this machine, so the frame was grabbed by drawing the
  * <video> element onto a canvas at 2.2s (a 224x224 centre crop, quality 0.72)
@@ -9,7 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const b64 = fs.readFileSync(path.join(__dirname, 'poster.b64'), 'utf8').replace(/\s+/g, '');
+const b64 = fs.readFileSync(path.join(__dirname, 'video-poster.b64'), 'utf8').replace(/\s+/g, '');
 const out = process.argv[2];
 fs.mkdirSync(path.dirname(out), { recursive: true });
 fs.writeFileSync(out, Buffer.from(b64, 'base64'));
