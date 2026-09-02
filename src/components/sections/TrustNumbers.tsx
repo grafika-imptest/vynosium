@@ -61,7 +61,7 @@ export function TrustNumbers() {
   return (
     <section ref={sectionRef} className="relative z-[2] bg-navy py-[var(--space-10)]">
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-        <SectionIndex index="02" label="DŮVĚRYHODNOST" tone="dark" />
+        <SectionIndex label="KAŽDÉ ČÍSLO MÁ SVŮJ ZDROJ" tone="dark" />
 
         <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-x-0">
           {TRUST_NUMBERS.map((item, i) => (

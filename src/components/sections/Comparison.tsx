@@ -69,7 +69,7 @@ export function Comparison() {
   return (
     <section className="relative z-[2] bg-mist py-[var(--space-10)]">
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-        <SectionIndex label="MECHANIKA" tone="light" />
+        <SectionIndex label="MECHANIKA, NE VÝNOSY" tone="light" />
         <h2 className="text-display mt-6 max-w-[24ch] text-navy">
           Co které řešení umožňuje
         </h2>

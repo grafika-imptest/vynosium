@@ -24,14 +24,12 @@ type StatusFilter = ProjectStatus | "all";
  * layout — no superscript marker.
  */
 export function Opportunities({
-  index,
   compact = false,
   showTableToggle = false,
   initialStrategy = "all",
   heading = "Aktuální investiční příležitosti",
   lede = "Vybrané projekty prezentujeme prostřednictvím konkrétních čísel, scénářů a očekávaného vývoje.",
 }: {
-  index?: string;
   /** Homepage variant: fewer cards, no table mode, link to the full list. */
   compact?: boolean;
   showTableToggle?: boolean;
@@ -76,7 +74,7 @@ export function Opportunities({
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <SectionIndex index={index} label="PŘÍLEŽITOSTI" tone="light" />
+            <SectionIndex label="VĚTŠINU NABÍDEK VYŘADÍME" tone="light" />
             <h2 className="text-display mt-6 max-w-[18ch] text-navy">{heading}</h2>
             <p className="text-lede mt-5 max-w-[60ch] text-text-secondary">{lede}</p>
           </div>

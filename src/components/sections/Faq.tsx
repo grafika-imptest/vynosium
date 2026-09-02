@@ -13,12 +13,10 @@ import { SectionIndex } from "@/components/ui/primitives";
  */
 export function Faq({
   items,
-  index,
   heading = "Co se investoři ptají nejčastěji",
   tone = "light",
 }: {
   items: readonly { q: string; a: string; openByDefault?: boolean }[];
-  index?: string;
   heading?: string;
   tone?: "light" | "dark";
 }) {
@@ -39,7 +37,7 @@ export function Faq({
   return (
     <section className={`relative z-[2] py-[var(--space-10)] ${dark ? "bg-navy" : "bg-white"}`}>
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-        <SectionIndex index={index} label="OTÁZKY" tone={dark ? "dark" : "light"} />
+        <SectionIndex label="OTÁZKY, KTERÉ ROZHODUJÍ" tone={dark ? "dark" : "light"} />
         <h2 className={`text-display mt-6 max-w-[20ch] ${dark ? "text-snow" : "text-navy"}`}>{heading}</h2>
 
         <ul className="mt-12 max-w-[68ch]">

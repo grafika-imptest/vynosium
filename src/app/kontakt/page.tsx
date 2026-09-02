@@ -38,7 +38,7 @@ export default function ContactPage() {
           </div>
 
           <aside className="lg:col-span-5">
-            <SectionIndex label="SPOJENÍ" tone="light" />
+            <SectionIndex label="PŘÍMÉ KONTAKTY" tone="light" />
             <dl className="mt-6 border-t border-light-gray">
               <div className="border-b border-light-gray py-5">
                 <dt className="text-label text-text-muted">Telefon</dt>

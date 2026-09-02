@@ -201,7 +201,7 @@ export function Hero() {
         className="relative z-[2] mx-auto grid w-full max-w-[var(--max-w)] grid-cols-1 gap-8 px-[var(--gutter)] lg:gap-10 pb-10 pt-[var(--space-10)] sm:pb-[var(--space-10)] sm:pt-[var(--space-12)] lg:grid-cols-12 lg:pb-[clamp(96px,22vh,260px)]"
       >
         <div className="lg:col-span-9">
-          <p className="text-label hero-fade text-silver">01 — TEZE</p>
+          <p className="text-label hero-fade text-silver">Investice do nemovitostí na klíč</p>
 
           {/*
             The claim is the client's own wording. What it replaced —

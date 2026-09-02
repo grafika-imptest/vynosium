@@ -89,7 +89,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
           <div className="lg:col-span-5">
             <div className="sticky top-24 rounded-[var(--radius-card)] border border-light-gray p-6">
-              <SectionIndex label="LEDGER PROJEKTU" tone="light" />
+              <SectionIndex label="ČÍSLA ŘÁDEK PO ŘÁDKU" tone="light" />
               <dl className="mt-6">
                 {study.ledger.map((row) => (
                   <div

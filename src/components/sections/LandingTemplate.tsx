@@ -126,7 +126,7 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
       <section className="relative z-[2] bg-white py-[var(--space-10)]">
         <div className="mx-auto grid max-w-[var(--max-w)] grid-cols-1 gap-12 px-[var(--gutter)] lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <SectionIndex index="01" label="PRO KOHO" tone="light" />
+            <SectionIndex label="KOMU TATO CESTA SEDNE" tone="light" />
             <h2 className="text-display mt-6 max-w-[16ch] text-navy">
               Komu tato cesta dává smysl
             </h2>
@@ -144,7 +144,7 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
       {/* 3 — how the strategy works */}
       <section className="relative z-[2] bg-mist py-[var(--space-10)]">
         <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-          <SectionIndex index="02" label="JAK TO FUNGUJE" tone="light" />
+          <SectionIndex label="CO SE DĚJE S VAŠÍM KAPITÁLEM" tone="light" />
           <h2 className="text-display mt-6 max-w-[18ch] text-navy">Strategie krok za krokem</h2>
 
           <ol className="mt-12 grid grid-cols-1 gap-px bg-light-gray md:grid-cols-2 lg:grid-cols-4">
@@ -165,7 +165,7 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
       <section id="cisla" className="relative z-[2] bg-white py-[var(--space-10)]">
         <div className="mx-auto grid max-w-[var(--max-w)] grid-cols-1 gap-12 px-[var(--gutter)] lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <SectionIndex index="03" label="KONKRÉTNÍ ČÍSLA" tone="light" />
+            <SectionIndex label="MODEL, NIKOLI GARANCE" tone="light" />
             <h2 className="text-display mt-6 max-w-[16ch] text-navy">Modelová investice</h2>
             <p className="text-body mt-6 max-w-[52ch] text-text-secondary">
               Takto vypadá propočet, který dostanete před rozhodnutím. Stejnou strukturu má každý
@@ -195,7 +195,7 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
       {/* 5 — advantages */}
       <section className="relative z-[2] bg-white pb-[var(--space-10)]">
         <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-          <SectionIndex index="04" label="VÝHODY" tone="light" />
+          <SectionIndex label="PROČ TATO CESTA" tone="light" />
           <div className="mt-8 grid grid-cols-1 gap-px bg-light-gray md:grid-cols-3">
             {path.advantages.map((item) => (
               <article key={item.title} className="bg-white p-8">
@@ -210,7 +210,7 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
       {/* 6 — how the cooperation runs */}
       <section className="relative z-[2] bg-navy py-[var(--space-10)]">
         <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-          <SectionIndex index="05" label="SPOLUPRÁCE" tone="dark" />
+          <SectionIndex label="CO DĚLÁME MY, CO VY" tone="dark" />
           <h2 className="text-display mt-6 max-w-[18ch] text-snow">Jak probíhá spolupráce</h2>
           <ol className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {PROCESS_STEPS.map((step) => (
@@ -231,7 +231,6 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
 
       {/* 7 — only projects of this strategy */}
       <Opportunities
-        index="06"
         initialStrategy={path.id}
         heading="Projekty této strategie"
         lede="Zobrazeny jsou projekty odpovídající zvolené cestě. Filtr lze rozšířit."
@@ -241,7 +240,7 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
       {cases.length > 0 && (
         <section className="relative z-[2] bg-white py-[var(--space-10)]">
           <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-            <SectionIndex index="07" label="REFERENCE" tone="light" />
+            <SectionIndex label="REALIZOVANÉ PROJEKTY" tone="light" />
             <h2 className="text-display mt-6 max-w-[20ch] text-navy">Stejná strategie v praxi</h2>
             <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
               {cases.map((study) => (
@@ -281,16 +280,16 @@ export function LandingTemplate({ path }: { path: PathDefinition }) {
       )}
 
       {/* 9 — calculator pre-tuned to this strategy */}
-      <Calculator defaultType={path.id} index="08" />
+      <Calculator defaultType={path.id} />
 
       {/* 10 — five questions of this path */}
-      <Faq items={PATH_FAQ[path.id]} index="09" heading="Otázky k této cestě" tone="light" />
+      <Faq items={PATH_FAQ[path.id]} heading="Otázky k této cestě" tone="light" />
 
       {/* 11 — own conversion form, own measurement */}
       <section id="formular" className="relative z-[2] bg-mist py-[var(--space-10)]">
         <div className="mx-auto grid max-w-[var(--max-w)] grid-cols-1 gap-12 px-[var(--gutter)] lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <SectionIndex index="10" label="KONZULTACE" tone="light" />
+            <SectionIndex label="PRVNÍ KROK JE NEZÁVAZNÝ" tone="light" />
             <h2 className="text-display mt-6 max-w-[16ch] text-navy">
               Spočítáme to na vaše čísla.
             </h2>

@@ -76,24 +76,28 @@ export function ButtonPill({
  * makes the site read as a document and reinforces the data thesis.
  */
 export function SectionIndex({
-  index,
   label,
   tone,
   className = "",
 }: {
   /**
-   * Position in the homepage narrative. Omit it on sections that are not
-   * part of that sequence — subpages used to pass an em dash as the index
-   * and got "— — LABEL" out of the separator below.
+   * A short claim about the section, not a category name.
+   *
+   * This line used to carry a running number too ("02 — DŮVĚRYHODNOST").
+   * The numbering was wayfinding nobody asked for — a reader does not need
+   * to know which of nine sections they are in — and the word beside it
+   * spent the most-read line on the page, the one directly above every
+   * heading, on a filing-cabinet label. It now says something about the
+   * content. Mono caps at 11px with wide tracking, so it has to earn its
+   * width in about thirty characters.
    */
-  index?: string;
   label: string;
   tone: "dark" | "light";
   className?: string;
 }) {
   return (
     <p className={`text-label ${tone === "dark" ? "text-silver" : "text-text-muted"} ${className}`}>
-      {index ? `${index} — ${label}` : label}
+      {label}
     </p>
   );
 }

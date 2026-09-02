@@ -6,14 +6,12 @@ import { SectionIndex } from "@/components/ui/primitives";
  * is used where a page opens on a navy hero.
  */
 export function PageIntro({
-  index,
   label,
   title,
   lede,
   tone = "light",
   children,
 }: {
-  index?: string;
   label: string;
   title: string;
   lede?: string;
@@ -26,7 +24,7 @@ export function PageIntro({
       className={`relative z-[2] ${dark ? "bg-navy" : "bg-white"} pb-[var(--space-9)] pt-[calc(var(--space-12)+40px)]`}
     >
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-        <SectionIndex index={index} label={label} tone={dark ? "dark" : "light"} />
+        <SectionIndex label={label} tone={dark ? "dark" : "light"} />
         <h1 className={`text-display-lg mt-6 max-w-[22ch] ${dark ? "text-snow" : "text-navy"}`}>
           {title}
         </h1>

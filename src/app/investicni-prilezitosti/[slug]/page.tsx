@@ -115,7 +115,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       <section className="relative z-[2] bg-white py-[var(--space-10)]">
         <div className="mx-auto grid max-w-[var(--max-w)] grid-cols-1 gap-12 px-[var(--gutter)] lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <SectionIndex index="01" label="INVESTIČNÍ TEZE" tone="light" />
+            <SectionIndex label="PROČ TENTO PROJEKT" tone="light" />
             <h2 className="text-display mt-6 max-w-[18ch] text-navy">Proč právě tento projekt</h2>
             {project.thesis.map((paragraph) => (
               <p key={paragraph} className="text-body mt-5 max-w-[64ch] text-text-secondary">
@@ -126,7 +126,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
           {/* 4 — location */}
           <div className="lg:col-span-5">
-            <SectionIndex index="02" label="LOKALITA" tone="light" />
+            <SectionIndex label="KDE A PROČ PRÁVĚ TAM" tone="light" />
             <dl className="mt-6 border-t border-light-gray">
               {project.locationNotes.map((note) => (
                 <div key={note.title} className="border-b border-light-gray py-5">
@@ -156,7 +156,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       {/* 5 — scenario on the 38.5° vector */}
       <section className="relative z-[2] bg-navy py-[var(--space-10)]">
         <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-          <SectionIndex index="03" label="SCÉNÁŘ INVESTICE" tone="dark" />
+          <SectionIndex label="PROPOČET OD KOUPĚ K PRODEJI" tone="dark" />
           <h2 className="text-display mt-6 max-w-[20ch] text-snow">Jak projekt probíhá v čase</h2>
           <div className="mt-10">
             <ScenarioVector nodes={project.scenario} tone="dark" />
@@ -168,7 +168,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       <section className="relative z-[2] bg-white py-[var(--space-10)]">
         <div className="mx-auto grid max-w-[var(--max-w)] grid-cols-1 gap-12 px-[var(--gutter)] lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <SectionIndex index="04" label="FINANCOVÁNÍ" tone="light" />
+            <SectionIndex label="VLASTNÍ A CIZÍ KAPITÁL" tone="light" />
             <h2 className="text-heading mt-6 text-navy">Dopad páky na výnos z vlastního kapitálu</h2>
             <dl className="mt-6 border-t border-light-gray">
               {project.financing.map((row) => (
@@ -189,7 +189,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           </div>
 
           <div className="lg:col-span-7">
-            <SectionIndex index="05" label="GALERIE" tone="light" />
+            <SectionIndex label="STAV NEMOVITOSTI" tone="light" />
             <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               {project.gallery.map((item) => {
                 // Only the photo slot has real photography so far; the plan
@@ -234,7 +234,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
       <Faq
         items={PATH_FAQ[project.strategy]}
-        index="06"
         heading={`Otázky k této strategii`}
         tone="light"
       />

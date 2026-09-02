@@ -32,7 +32,7 @@ export function CaseProof() {
   return (
     <section className="relative z-[2] bg-white py-[var(--space-10)]">
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-        <SectionIndex index="04" label="DŮKAZ" tone="light" />
+        <SectionIndex label="REALIZOVANÝ PROJEKT, NE MODEL" tone="light" />
         <h2 className="text-display-lg mt-6 max-w-[20ch] text-navy">
           Takto vypadá investice v praxi.
         </h2>

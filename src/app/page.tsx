@@ -46,9 +46,9 @@ export default function HomePage() {
       <TrustNumbers />
       <PathSelector />
       <CaseProof />
-      <Opportunities index="05" compact />
+      <Opportunities compact />
       <HowItWorks />
-      <Calculator index="07" />
+      <Calculator />
       <TeamStrip />
       <FinalCta />
     </>

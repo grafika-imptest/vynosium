@@ -109,7 +109,7 @@ export function PathSelector() {
       {!disabled && <div ref={hostRef} aria-hidden="true" className="absolute inset-0" />}
 
       <div className="relative z-[2] mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-        <SectionIndex index="03" label="ROZCESTNÍK" tone="dark" />
+        <SectionIndex label="CÍL URČUJE STRATEGII" tone="dark" />
         <h2 className="text-display-lg mt-6 max-w-[18ch] text-snow">Jak chcete své peníze zhodnotit?</h2>
         <p className="text-lede mt-6 max-w-[62ch] text-slate-on-dark">
           Každý investor má jiný cíl. Vyberte si cestu, která nejlépe odpovídá vašim možnostem

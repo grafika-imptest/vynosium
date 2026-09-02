@@ -33,10 +33,8 @@ const START_YEAR = 2026;
  */
 export function Calculator({
   defaultType = "income",
-  index,
 }: {
   defaultType?: InvestmentPath;
-  index?: string;
 }) {
   const capitalRef = useRef(DEFAULTS.capital);
   const ltvRef = useRef(DEFAULTS.ltv);
@@ -183,7 +181,7 @@ export function Calculator({
   return (
     <section className="relative z-[2] bg-navy py-[var(--space-10)]">
       <div ref={rootRef} className="relative z-[2] mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-        <SectionIndex index={index} label="KALKULAČKA" tone="dark" />
+        <SectionIndex label="PROPOČET PŘED ROZHODNUTÍM" tone="dark" />
         <h2 className="text-display-lg mt-6 max-w-[18ch] text-snow">
           Co mohou vaše peníze v nemovitostech dokázat?
         </h2>

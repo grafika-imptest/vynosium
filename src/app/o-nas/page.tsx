@@ -37,7 +37,7 @@ export default function AboutPage() {
         <div className="mx-auto grid max-w-[var(--max-w)] grid-cols-1 gap-16 px-[var(--gutter)] lg:grid-cols-12">
           {/* Offset portrait column — never the broker-in-a-suit portrait. */}
           <div className="lg:col-span-5">
-            <SectionIndex index="01" label="TÝM" tone="light" />
+            <SectionIndex label="KDO ZA PROPOČTY STOJÍ" tone="light" />
             <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2">
               {TEAM.map((member) => (
                 <article key={`${member.name}-${member.position}`} style={{ marginTop: member.offset }}>
@@ -91,7 +91,7 @@ export default function AboutPage() {
           </div>
 
           <div className="lg:col-span-7">
-            <SectionIndex index="02" label="HISTORIE OBCHODŮ" tone="light" />
+            <SectionIndex label="CO JSME UŽ ZREALIZOVALI" tone="light" />
             <div className="mt-8 overflow-x-auto rounded-[var(--radius-card)] border border-light-gray">
               <table className="w-full min-w-[420px] border-collapse text-left">
                 <thead>
@@ -117,7 +117,7 @@ export default function AboutPage() {
             <Disclaimer className="mt-4">{DISCLAIMERS.modelValues}</Disclaimer>
 
             <div className="mt-12 max-w-[64ch]">
-              <SectionIndex index="03" label="ZÁZEMÍ" tone="light" />
+              <SectionIndex label="DELŠÍ HORIZONT, MENŠÍ TLAK" tone="light" />
               <h2 className="text-heading mt-6 text-navy">Skupina za Vynosium</h2>
               <p className="text-body mt-4 text-text-secondary">
                 {SITE.group} Zázemí skupiny nám umožňuje plánovat v delším horizontu a nedělat

@@ -53,7 +53,7 @@ export function HowItWorks() {
   return (
     <section className="relative z-[2] bg-navy py-[var(--space-10)]">
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-        <SectionIndex index="06" label="JAK TO FUNGUJE" tone="dark" />
+        <SectionIndex label="OD VÝBĚRU PO VÝPLATU" tone="dark" />
         <h2 className="text-display-lg mt-6 max-w-[20ch] text-snow">Jeden partner pro celou investici.</h2>
 
         <ol className="mt-14 grid grid-cols-1 gap-px bg-steel/40 md:grid-cols-3">

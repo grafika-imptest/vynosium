@@ -90,7 +90,7 @@ export function AboutIntro() {
     <section ref={sectionRef} className="relative z-[2] bg-white py-[var(--space-10)]">
       <div className="mx-auto grid max-w-[var(--max-w)] grid-cols-1 gap-12 px-[var(--gutter)] lg:grid-cols-12">
         <div className="lg:col-span-5">
-          <SectionIndex label="VYNOSIUM" tone="light" />
+          <SectionIndex label="SLUŽBA, KTERÁ NEKONČÍ U KOUPĚ" tone="light" />
           <h2 className="text-display mt-6 max-w-[16ch] text-navy">
             Investování do nemovitostí nemusí být složité.
           </h2>
