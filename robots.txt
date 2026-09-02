@@ -1,0 +1,7 @@
+User-Agent: *
+Allow: /
+Disallow: /gdpr/
+Disallow: /cookies/
+Disallow: /obchodni-podminky/
+
+Sitemap: https://grafika-imptest.github.io/vynosium/sitemap.xml
