@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Disclaimer, Pill, SectionIndex } from "@/components/ui/primitives";
+import { CalculatorLead } from "@/components/sections/CalculatorLead";
+import { Disclaimer, SectionIndex } from "@/components/ui/primitives";
 import { INVESTMENT_PATHS } from "@/lib/data/paths";
 import { DISCLAIMERS } from "@/lib/data/site";
 import { ScenarioChart, buildChart, scenariosFor } from "@/components/sections/ScenarioChart";
@@ -91,6 +93,10 @@ export function Calculator({
       write("yield", `${formatPercent(output.modelYieldPercent)} p.a.`);
       write("finalValue", formatCzk(output.finalValue));
       write("chartCapital", formatCzk(input.capital));
+      // The headline sentence is part of the read-out, not a static label —
+      // it is the number the visitor repeats to someone else.
+      write("headline", formatCzk(output.finalValue));
+      write("headlineYears", String(input.horizonYears));
 
       // Leverage warning above 70 % LTV (§4.3) — text, never colour alone.
       const warning = root.querySelector<HTMLElement>('[data-out="ltvWarning"]');
@@ -254,13 +260,46 @@ export function Calculator({
               />
             </dl>
 
-            <Disclaimer tone="dark" className="mt-6">
+            {/*
+              The result as a sentence, not only a ledger. The client's note
+              was that the calculator should end in "s vaším kapitálem lze
+              modelově vybudovat portfolio cca X" — a number the reader can
+              repeat to someone else. The ledger above stays for anyone who
+              wants to see where it comes from.
+            */}
+            <p className="text-lede mt-8 max-w-[46ch] text-snow">
+              S vaším kapitálem lze modelově vybudovat majetek{" "}
+              <span data-out="headline" className="text-emerald-on-dark">
+                {formatCzk(initialOutput.finalValue)}
+              </span>{" "}
+              za <span data-out="headlineYears">{committed.horizonYears}</span> let.
+            </p>
+
+            <Disclaimer tone="dark" className="mt-4">
               {DISCLAIMERS.calculator}
             </Disclaimer>
 
-            <Pill href={ctaHref} variant="emerald" className="mt-6">
-              Chci individuální propočet
-            </Pill>
+            <CalculatorLead
+              scenario={() => ({
+                kapital: String(capitalRef.current),
+                ltv: String(ltvRef.current),
+                horizont: String(horizonRef.current),
+                cil: INVESTMENT_PATHS.find((p) => p.id === typeRef.current)?.goal ?? typeRef.current,
+                strategie: typeRef.current,
+              })}
+            />
+
+            {/*
+              The long form stays reachable: someone who wants to write a
+              paragraph rather than leave three fields goes to /kontakt, and
+              their numbers travel with them in the URL.
+            */}
+            <Link
+              href={ctaHref}
+              className="focus-ring text-label mt-6 inline-block text-slate-on-dark underline decoration-steel underline-offset-4 hover:text-snow"
+            >
+              Radši napsat víc — přejít na kontaktní formulář
+            </Link>
           </div>
 
           {/* Controls */}
@@ -338,7 +377,7 @@ export function Calculator({
                         color: active ? `var(--color-${path.colorVar}-on-dark)` : "var(--color-slate-on-dark)",
                       }}
                     >
-                      {path.label}
+                      {path.goal}
                     </button>
                   );
                 })}

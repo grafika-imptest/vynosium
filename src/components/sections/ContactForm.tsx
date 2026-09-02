@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Disclaimer } from "@/components/ui/primitives";
 import { INVESTMENT_PATHS } from "@/lib/data/paths";
 import { formatCzk } from "@/lib/format";
+import { submitLead, type LeadResult } from "@/lib/leads";
 
 const RANGES = [
   "do 1 000 000 Kč",
@@ -16,18 +17,17 @@ const RANGES = [
 /**
  * Lead form (§24, §39).
  *
- * Submits to NEXT_PUBLIC_LEAD_ENDPOINT (CRM webhook). When that variable
- * is not configured the form still validates and confirms, but says
- * plainly that it is not connected yet — a form that silently swallows
- * leads is worse than one that admits it.
+ * Submits through submitLead (see lib/leads), which distinguishes "sent"
+ * from "no endpoint configured" — the confirmation only promises a callback
+ * when the lead actually left the browser.
  *
  * Confirmation happens in place: no thank-you redirect, because the
  * conversion event has to fire on the same page.
  */
 export function ContactForm({ defaultPriority }: { defaultPriority?: string }) {
-  const endpoint = process.env.NEXT_PUBLIC_LEAD_ENDPOINT;
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const [result, setResult] = useState<LeadResult>("not-configured");
   const [sending, setSending] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -83,37 +83,48 @@ export function ContactForm({ defaultPriority }: { defaultPriority?: string }) {
     }
 
     setSending(true);
-    try {
-      if (endpoint) {
-        await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(Object.fromEntries(data.entries())),
-        });
-      }
-      setSent(true);
-    } catch {
+    const outcome = await submitLead(
+      Object.fromEntries([...data.entries()].map(([k, v]) => [k, String(v)]))
+    );
+    setSending(false);
+
+    if (outcome === "error") {
       setErrors({ form: "Odeslání se nepodařilo. Zavolejte nám prosím, nebo to zkuste znovu." });
-    } finally {
-      setSending(false);
+      return;
     }
+    setResult(outcome);
+    setSent(true);
   };
 
   if (sent) {
+    /*
+     * The promise in the heading is conditional on the lead having actually
+     * left the browser. The disclaimer underneath was already honest, but
+     * "ozveme se do jednoho pracovního dne" over a form with no endpoint is
+     * the part a demo audience reads and believes.
+     */
+    const delivered = result === "sent";
     return (
       <div
         role="status"
-        className="rounded-[var(--radius-card)] border border-emerald bg-white p-8"
+        className={`rounded-[var(--radius-card)] border bg-white p-8 ${
+          delivered ? "border-emerald" : "border-fn-warning"
+        }`}
       >
-        <h2 className="text-heading text-navy">Děkujeme, ozveme se do jednoho pracovního dne.</h2>
+        <h2 className="text-heading text-navy">
+          {delivered
+            ? "Děkujeme, ozveme se do jednoho pracovního dne."
+            : "Formulář zatím není napojený na CRM."}
+        </h2>
         <p className="text-body mt-4 max-w-[56ch] text-text-secondary">
-          Připravíme modelový propočet pro parametry, které jste uvedl. Pokud chcete cokoli doplnit,
-          odpovězte prosím na potvrzovací e-mail.
+          {delivered
+            ? "Připravíme modelový propočet pro parametry, které jste uvedl. Pokud chcete cokoli doplnit, odpovězte prosím na potvrzovací e-mail."
+            : "Vyplněné údaje prošly kontrolou, ale nikam se neodeslaly — web je zatím prototyp. Ozvěte se prosím telefonicky nebo e-mailem."}
         </p>
-        {!endpoint && (
+        {!delivered && (
           <Disclaimer className="mt-6">
-            Formulář zatím není napojen na CRM (chybí NEXT_PUBLIC_LEAD_ENDPOINT) — odeslaná data se
-            nikam neuložila.
+            Pro spuštění stačí nastavit NEXT_PUBLIC_LEAD_ENDPOINT na adresu, která přijme JSON
+            s poli formuláře.
           </Disclaimer>
         )}
       </div>
