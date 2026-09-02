@@ -34,7 +34,12 @@ $repo = Split-Path -Parent $PSScriptRoot
 Set-Location $repo
 
 $head = (git rev-parse --short HEAD).Trim()
-$ref = (git describe --tags --exact-match HEAD 2>$null)
+# `git describe --exact-match` writes to stderr when HEAD carries no tag, and
+# PowerShell 5.1 turns a native command's stderr into an error record even
+# with 2>$null - which, under ErrorActionPreference Stop, killed the publish
+# on any commit that is not tagged. `tag --points-at` prints nothing and
+# exits 0 instead.
+$ref = (git tag --points-at HEAD | Select-Object -First 1)
 if (-not $ref) { $ref = (git rev-parse --abbrev-ref HEAD).Trim() }
 $dirty = (git status --porcelain)
 
