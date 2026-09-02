@@ -499,6 +499,101 @@ body {
   }
 }
 
+/**
+ * Team video: circular thumbnail plus a native dialog player.
+ *
+ * The circle is 112px - salutemreal.cz uses 96px, and this one carries a
+ * face rather than a screen-recording, so it gets a little more room. The
+ * hairline and the emerald play badge are the only chrome; a rectangular
+ * card here would compete with the four portrait cards below it.
+ */
+.team-video-trigger {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0;
+  background: none;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+}
+.team-video-thumb {
+  position: relative;
+  flex: none;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--color-light-gray);
+}
+.team-video-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The clip is stock and lightly desaturated so it reads as a placeholder
+     rather than as a portrait of anyone at the firm. */
+  filter: saturate(0.75);
+  transition: transform var(--dur-ui) var(--ease-out);
+}
+.team-video-trigger:hover .team-video-poster {
+  transform: scale(1.04);
+}
+.team-video-play {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding-left: 3px;
+  border-radius: 50%;
+  background: var(--color-emerald-cta);
+  color: #fff;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.team-video-trigger:hover .team-video-play {
+  background: var(--color-emerald-cta-hover);
+}
+
+/* The player. ::backdrop is the only way to dim behind a native dialog. */
+.team-video-dialog {
+  padding: 0;
+  border: 0;
+  background: none;
+  max-width: min(960px, calc(100vw - 2 * var(--gutter)));
+  width: 100%;
+}
+.team-video-dialog::backdrop {
+  background: rgba(11, 29, 46, 0.82);
+}
+.team-video-frame {
+  position: relative;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--color-navy);
+}
+.team-video-player {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--color-navy);
+}
+.team-video-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(11, 29, 46, 0.7);
+  color: var(--color-snow);
+  cursor: pointer;
+}
+
 /* Line-mask reveal: the inner span rides y:110% → 0 under GSAP. */
 .mask-line {
   display: block;

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Disclaimer, SectionIndex } from "@/components/ui/primitives";
+import { TeamVideo } from "@/components/sections/TeamVideo";
 import { TEAM } from "@/lib/data/team";
 import { SITE } from "@/lib/data/site";
 import { withBasePath } from "@/lib/seo";
@@ -22,14 +23,26 @@ export function TeamStrip() {
   return (
     <section className="relative z-[2] bg-mist py-[var(--space-10)]">
       <div className="mx-auto max-w-[var(--max-w)] px-[var(--gutter)]">
-        <SectionIndex label="KONKRÉTNÍ LIDÉ, NE ODDĚLENÍ" tone="light" />
-        <h2 className="text-display mt-6 max-w-[22ch] text-navy">
-          Za Vynosiem stojí lidé, kteří sami investují do nemovitostí.
-        </h2>
-        <p className="text-lede mt-6 max-w-[62ch] text-text-secondary">
-          Nejsme fond ani zprostředkovatel. Za každým propočtem je konkrétní člověk, který ho
-          podepsal — a který u projektu zůstává od akvizice po výplatu.
-        </p>
+        {/*
+          The video sits beside the heading, in the space the 22ch headline
+          and 62ch lede leave empty at lg — the same place salutemreal.cz
+          puts theirs, and it costs no vertical room. On a phone it stacks
+          under the lede, above the portraits.
+        */}
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+          <div>
+            <SectionIndex label="KONKRÉTNÍ LIDÉ, NE ODDĚLENÍ" tone="light" />
+            <h2 className="text-display mt-6 max-w-[22ch] text-navy">
+              Za Vynosiem stojí lidé, kteří sami investují do nemovitostí.
+            </h2>
+            <p className="text-lede mt-6 max-w-[62ch] text-text-secondary">
+              Nejsme fond ani zprostředkovatel. Za každým propočtem je konkrétní člověk, který ho
+              podepsal — a který u projektu zůstává od akvizice po výplatu.
+            </p>
+          </div>
+
+          <TeamVideo />
+        </div>
 
         <ul className="mt-12 grid grid-cols-2 gap-6 lg:grid-cols-4">
           {TEAM.map((member) => (
