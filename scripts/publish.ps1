@@ -19,8 +19,12 @@
 #
 #   powershell -ExecutionPolicy Bypass -File scripts/publish.ps1
 #
-# The build writes to .next-deploy, not .next, so a running dev server is not
-# disturbed (see NEXT_DIST_DIR in next.config.ts).
+# NEXT_DIST_DIR only moves the EXPORTED FILES to .next-deploy. The build
+# itself still writes .next, whatever that variable says - measured, see the
+# comment in next.config.mjs. So publishing DOES disturb a running dev server:
+# afterwards it serves a production build it did not make, the chunks 404 and
+# nothing hydrates. Restart the dev server after publishing, or move the build
+# into a throwaway git worktree.
 #
 # WHEN GITHUB ACTIONS IS BACK, this script stops being the deploy path: set
 # Pages back to "GitHub Actions" in the repo settings and pushing master
