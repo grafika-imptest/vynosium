@@ -364,6 +364,87 @@ body {
   }
 }
 
+/**
+ * Hero proof — three figures under the claim.
+ *
+ * A grid rather than a wrapping flex row, because the separators have to know
+ * where the rows break. The old row was `flex-wrap` with a hairline before
+ * every item but the first, and the moment it wrapped, the hairline for the
+ * item that started the second line hung in the left margin with nothing
+ * before it. In a grid the column count is known, so the rule can be
+ * suppressed on whichever item begins a row.
+ *
+ * The rules sit in the middle of the gap as pseudo-elements, so they never
+ * take part in sizing and cannot push a figure onto a second line.
+ */
+.hero-proof {
+  --proof-gap: clamp(26px, 3.6vw, 60px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, auto));
+  justify-content: start;
+  /*
+   * `start`, not the default stretch: the items are column-reverse, so a
+   * stretched box bottom-aligns its content and a figure whose caption fits
+   * on one line sits lower than its neighbour whose caption wraps to two.
+   * With content-height boxes the digits line up across the row.
+   */
+  align-items: start;
+  gap: 20px var(--proof-gap);
+}
+.hero-proof-item {
+  position: relative;
+  display: flex;
+  /* Digits on top, caption under: the number is the hook, and the DOM keeps
+     the order that reads correctly aloud. */
+  flex-direction: column-reverse;
+  gap: 10px;
+  max-width: 22ch;
+}
+/*
+ * The figure's own size, overriding the .text-metric token it carries: on a
+ * phone the figures are two-up with ~150px per column, and 24px digits push
+ * the block into the space the CTAs need. The unit is sized in em, so it
+ * follows.
+ */
+.hero-proof-item dd {
+  font-size: 1.375rem;
+}
+.hero-proof-item + .hero-proof-item::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--proof-gap) / 2);
+  top: 3px;
+  bottom: 3px;
+  width: 1px;
+  background: rgba(188, 204, 220, 0.34);
+}
+/* Two columns: the third figure starts a row, so its rule would be an orphan. */
+.hero-proof-item:nth-child(odd)::before {
+  display: none;
+}
+/* The unit is not part of the number. Smaller and in silver, it stops
+   "mld. Kč" reading as four more digits. */
+.hero-proof-unit {
+  margin-left: 0.4em;
+  font-size: 0.62em;
+  letter-spacing: 0.04em;
+  color: var(--color-silver);
+}
+@media (min-width: 640px) {
+  .hero-proof {
+    grid-template-columns: repeat(3, minmax(0, auto));
+  }
+  .hero-proof-item dd {
+    font-size: var(--text-metric);
+  }
+  .hero-proof-item:nth-child(odd)::before {
+    display: block;
+  }
+  .hero-proof-item:first-child::before {
+    display: none;
+  }
+}
+
 /* Line-mask reveal: the inner span rides y:110% → 0 under GSAP. */
 .mask-line {
   display: block;
